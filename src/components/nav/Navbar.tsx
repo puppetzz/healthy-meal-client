@@ -2,17 +2,12 @@
 
 import { UseAuth } from "@/context/AuthContext";
 import { Black_Ops_One } from "next/font/google";
-import { Button } from "../ui/button";
-import { useState } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "@mantine/core";
+import { useEffect, useRef, useState } from "react";
+import { Menu } from "@mantine/core";
+import { Avatar } from "@mantine/core";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Input } from "../ui/input";
+import { Input } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
 const blackOpsOne = Black_Ops_One({
@@ -23,8 +18,15 @@ const blackOpsOne = Black_Ops_One({
 export const Navbar = () => {
   const { user, signInGoogle, signOut } = UseAuth();
   const [showSearchBox, setShowSearchBox] = useState<boolean>(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (showSearchBox) {
+      searchInputRef.current?.focus();
+    }
+  }, [showSearchBox]);
 
   return (
     <>
@@ -41,7 +43,7 @@ export const Navbar = () => {
           </div>
           <div className="ml-5 flex">
             <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-slate-300"
+              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
               onClick={() => {
                 router.push("/recipes");
               }}
@@ -50,7 +52,7 @@ export const Navbar = () => {
             </div>
 
             <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-slate-300"
+              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
               onClick={() => {
                 router.push("/meal-plans");
               }}
@@ -59,7 +61,7 @@ export const Navbar = () => {
             </div>
 
             <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-slate-300"
+              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
               onClick={() => {
                 router.push("/blog");
               }}
@@ -71,7 +73,13 @@ export const Navbar = () => {
 
         <div className="flex items-center justify-center gap-5">
           {showSearchBox ? (
-            <Input placeholder="Search" />
+            <Input
+              placeholder="Search"
+              onBlur={() => {
+                setShowSearchBox(false);
+              }}
+              ref={searchInputRef}
+            />
           ) : (
             <MagnifyingGlassIcon
               className="h-7 w-7"
@@ -82,24 +90,18 @@ export const Navbar = () => {
           )}
           <div>
             {!user ? (
-              <Button className="w-24" onClick={signInGoogle}>
+              <Button variant="filled" color="orange" onClick={signInGoogle}>
                 Sign In
               </Button>
             ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="outline-none">
-                  <Avatar>
-                    <AvatarImage src={user.photoURL as string} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={signOut}>
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Menu shadow="md" width={200}>
+                <Menu.Target>
+                  <Avatar src={user?.photoURL} alt="avatar" />
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item onClick={signOut}>Sign Out</Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
             )}
           </div>
         </div>

@@ -12,10 +12,10 @@ import {
   firebaseSignOut,
 } from "@/lib/firebase";
 
-import { useToast } from "@/components/ui/use-toast";
+import { notifications } from "@mantine/notifications";
 
 import { login } from "@/api/auth";
-import { QueryKey } from "@/common/enums/queryKey";
+import { QueryKey } from "@/common/constants/queryKey";
 
 type AuthContextType = {
   signInGoogle: () => Promise<void>;
@@ -30,8 +30,6 @@ export const AuthProvider = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const { toast } = useToast();
-
   const {
     data: user,
     refetch,
@@ -65,12 +63,13 @@ export const AuthProvider = ({
   useEffect(() => {
     if (isError) {
       firebaseSignOut();
-      toast({
+      notifications.show({
         title: "Error",
-        description: error?.message,
+        message: error?.message || "An error occurred",
+        color: "red",
       });
     }
-  }, [isError, error, toast]);
+  }, [isError, error]);
 
   useEffect(() => {
     onAuthStateChanged(auth, () => {

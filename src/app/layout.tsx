@@ -1,15 +1,22 @@
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import { AuthProvider } from "@/context/AuthContext";
 import QueryProvider from "@/context/QueryClient";
-import { Toaster } from "@/components/ui/toaster";
 import { Navbar } from "@/components/nav/Navbar";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+
+export const metadata = {
+  title: "Healthy Meals",
+};
 
 export default function RootLayout({
   children,
@@ -18,18 +25,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{metadata.title}</title>
+
+        <ColorSchemeScript />
+      </head>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "bg-background min-h-screen font-sans antialiased",
           fontSans.variable,
         )}
       >
         <QueryProvider>
-          <AuthProvider>
-            <Navbar />
-            {children}
-          </AuthProvider>
-          <Toaster />
+          <MantineProvider>
+            <AuthProvider>
+              <Notifications position="top-right" zIndex={1000} />
+              <Navbar />
+              {children}
+            </AuthProvider>
+          </MantineProvider>
         </QueryProvider>
       </body>
     </html>
