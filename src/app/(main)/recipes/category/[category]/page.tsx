@@ -1,19 +1,19 @@
 "use client";
 
 import { HomeIcon } from "@heroicons/react/24/solid";
-import { useFoodCategoriesQuery, useRecipeQuery } from "../../../../queries";
-import { VerticalCard } from "../../../../components/cards/VerticalCard";
-import { Post } from "../../../../common/types/post";
+import { useFoodCategoriesQuery, useRecipeQuery } from "../../../../../queries";
+import { VerticalCard } from "../../../../../components/cards/VerticalCard";
+import { Post } from "../../../../../common/types/post";
 import { use, useCallback, useEffect, useMemo } from "react";
-import { FoodCategoriesSidebar } from "../../../../components/sidebar/FoodCategories";
-import { FoodCategory } from "../../../../common/types/FoodCategory";
+import { FoodCategoriesSidebar } from "../../../../../components/sidebar/FoodCategories";
+import { FoodCategory } from "../../../../../common/types/FoodCategory";
 import { Breadcrumbs, Anchor } from "@mantine/core";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCreateQueryString } from "../../../../hooks/useCreateQueryString";
+import { useCreateQueryString } from "../../../../../hooks/useCreateQueryString";
 import { Pagination } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { QueryKey } from "../../../../common/constants/queryKey";
-import { getRecipes } from "../../../../api/recipes";
+import { QueryKey } from "../../../../../common/constants/queryKey";
+import { getRecipes } from "../../../../../api/recipes";
 
 export default function CategoryRecipes({
   params,
@@ -55,10 +55,14 @@ export default function CategoryRecipes({
     router.push(pathName + "?" + queryString);
   }, []);
 
+  const handleClickCard = useCallback((id: number) => {
+    router.push(`/recipes/${id}`);
+  }, []);
+
   return (
     <div className="mx-auto max-w-[1200px] px-5">
       <div className="flex justify-between">
-        <div className="flex w-[73%] flex-col items-center">
+        <div className="w-[73%]">
           <div>
             <div className="pb-5">
               <Breadcrumbs>
@@ -85,16 +89,22 @@ export default function CategoryRecipes({
 
             <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
               {recipes?.data.data.map((recipe) => (
-                <VerticalCard key={recipe.id} post={recipe as Post} />
+                <VerticalCard
+                  className="cursor-pointer"
+                  key={recipe.id}
+                  post={recipe as Post}
+                  onClick={() => handleClickCard(recipe.id)}
+                />
               ))}
             </div>
           </div>
-          {recipes?.data.total && recipes?.data.total > 1 && (
-            <div className="my-5">
+          {!!recipes?.data.total && recipes?.data.total > 1 && (
+            <div className="my-5 flex w-full items-center justify-center">
               <Pagination
                 total={recipes?.data.total as number}
                 value={page}
                 onChange={onPageChange}
+                color="orange"
               />
             </div>
           )}

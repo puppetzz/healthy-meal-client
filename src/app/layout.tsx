@@ -1,11 +1,12 @@
-import { Inter as FontSans } from "next/font/google";
-import { cn } from "@/lib/utils";
-import "./globals.css";
+import "../styles/globals.css";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/dropzone/styles.css";
+
+import { Inter as FontSans } from "next/font/google";
+import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/context/AuthContext";
 import QueryProvider from "@/context/QueryClient";
-import { Navbar } from "@/components/nav/Navbar";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 
@@ -42,7 +43,6 @@ export default function RootLayout({
           <MantineProvider>
             <AuthProvider>
               <Notifications position="top-right" zIndex={1000} />
-              <Navbar />
               {children}
             </AuthProvider>
           </MantineProvider>

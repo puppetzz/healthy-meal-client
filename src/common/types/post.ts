@@ -1,5 +1,6 @@
 import { EPostStatus } from "../enums/PostStatus";
 import { Recipe } from "./recipes";
+import { User } from "./User";
 
 export type Post = {
   id: number;
@@ -8,6 +9,8 @@ export type Post = {
   title: string;
   content: string;
   rating: number;
+  numberOfComments?: number;
+  numberOfReviews?: number;
   published: boolean;
   createAt: Date;
   updatedAt: Date;
@@ -15,4 +18,5 @@ export type Post = {
   status: EPostStatus;
   recipe?: Recipe;
   thumbnail: string;
+  author?: User;
 };

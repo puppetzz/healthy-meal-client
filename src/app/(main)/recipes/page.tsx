@@ -1,16 +1,17 @@
 "use client";
 
 import { HomeIcon } from "@heroicons/react/24/solid";
-import { VerticalCard } from "../../components/cards/VerticalCard";
-import { Post } from "../../common/types/post";
-import { useRecipeQuery } from "../../queries";
-import { useFoodCategoriesQuery } from "../../queries/useFoodCategories";
+import { VerticalCard } from "../../../components/cards/VerticalCard";
+import { Post } from "../../../common/types/post";
+import { useRecipeQuery } from "../../../queries";
+import { useFoodCategoriesQuery } from "../../../queries/useFoodCategories";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FoodCategoriesSidebar } from "../../components/sidebar/FoodCategories";
-import { FoodCategory } from "../../common/types/FoodCategory";
+import { FoodCategoriesSidebar } from "../../../components/sidebar/FoodCategories";
+import { FoodCategory } from "../../../common/types/FoodCategory";
 import { Anchor, Breadcrumbs, Button, Pagination } from "@mantine/core";
-import { useCreateQueryString } from "../../hooks/useCreateQueryString";
+import { useCreateQueryString } from "../../../hooks/useCreateQueryString";
 import { useCallback, useEffect } from "react";
+import Image from "next/image";
 
 export default function Recipes() {
   const router = useRouter();
@@ -33,6 +34,10 @@ export default function Recipes() {
     router.push(pathName + "?" + queryString);
   }, []);
 
+  const handleClickCard = useCallback((id: number) => {
+    router.push(`/recipes/${id}`);
+  }, []);
+
   useEffect(() => {
     refetch();
   }, [page]);
@@ -46,7 +51,6 @@ export default function Recipes() {
           </Anchor>
           <span className="cursor-pointer">Recipes</span>
         </Breadcrumbs>
-
         <div className="py-8">
           <h2 className="mb-6 text-3xl font-bold">Browse Recipes</h2>
 
@@ -69,7 +73,14 @@ export default function Recipes() {
           <div className="flex w-[62%] flex-col items-center md:w-[73%]">
             <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
               {recipes?.data.data.map((recipe) => (
-                <VerticalCard key={recipe.id} post={recipe as Post} />
+                <VerticalCard
+                  key={recipe.id}
+                  post={recipe as Post}
+                  onClick={() => {
+                    handleClickCard(recipe.id);
+                  }}
+                  className="cursor-pointer"
+                />
               ))}
             </div>
 
@@ -78,6 +89,7 @@ export default function Recipes() {
                 total={recipes?.data.total as number}
                 value={page}
                 onChange={onPageChange}
+                color="orange"
               />
             </div>
           </div>

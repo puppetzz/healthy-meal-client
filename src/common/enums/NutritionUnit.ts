@@ -13,7 +13,7 @@ export enum NutritionUnit {
   POTASSIUM = "mg",
   CHOLESTEROL = "mg",
   VITAMIN_A = "IU",
-  vitamin_C = "mg",
+  VITAMIN_C = "mg",
   CALCIUM = "mg",
   IRON = "mg",
 }

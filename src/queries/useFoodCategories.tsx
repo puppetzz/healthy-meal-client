@@ -4,7 +4,7 @@ import { getFoodCategories } from "../api/categories";
 
 export const useFoodCategoriesQuery = () => {
   return useQuery({
-    queryKey: [QueryKey.GET_FOOT_CATEGORIES],
+    queryKey: [QueryKey.GET_FOOD_CATEGORIES],
     queryFn: async () => {
       const response = await getFoodCategories();
 

@@ -1,17 +1,30 @@
 import { NutritionUnit } from "../../common/enums/NutritionUnit";
 import { Post } from "../../common/types/post";
 import Image from "next/image";
+import { cn } from "../../lib/utils";
 
 type VerticalCardProps = {
   post: Post;
+  className?: string;
+  onClick?: () => void;
 };
 
-export const VerticalCard = ({ post }: VerticalCardProps) => {
+export const VerticalCard = ({
+  post,
+  className,
+  onClick,
+}: VerticalCardProps) => {
   return (
     <>
-      <div className="flex flex-col rounded-xl border-2 border-solid">
+      <div
+        className={cn(
+          "flex h-[420px] flex-col rounded-xl border-2 border-solid",
+          className,
+        )}
+        onClick={onClick}
+      >
         <img
-          className="mb-4 rounded-tl-xl rounded-tr-xl"
+          className="mb-4 h-[40%] rounded-tl-xl rounded-tr-xl object-cover"
           src={post.thumbnail}
           alt="recipes"
         />

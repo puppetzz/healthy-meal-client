@@ -3,37 +3,46 @@
 import { UseAuth } from "@/context/AuthContext";
 import { Black_Ops_One } from "next/font/google";
 import { Button } from "@mantine/core";
-import { useEffect, useRef, useState } from "react";
 import { Menu } from "@mantine/core";
 import { Avatar } from "@mantine/core";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Input } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import { Burger } from "@mantine/core";
+import { cn } from "../../lib/utils";
 
 const blackOpsOne = Black_Ops_One({
   subsets: ["latin"],
   weight: "400",
 });
 
-export const Navbar = () => {
-  const { user, signInGoogle, signOut } = UseAuth();
-  const [showSearchBox, setShowSearchBox] = useState<boolean>(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+type PostCreateNavProps = {
+  opened: boolean;
+  toggle: () => void;
+  onSaveDraft?: () => void;
+  onPublish?: () => void;
+  className?: string;
+};
 
+export const PostCreateNav = ({
+  opened,
+  toggle,
+  onSaveDraft,
+  onPublish,
+  className,
+}: PostCreateNavProps) => {
   const router = useRouter();
-
-  useEffect(() => {
-    if (showSearchBox) {
-      searchInputRef.current?.focus();
-    }
-  }, [showSearchBox]);
+  const { user, signInGoogle, signOut } = UseAuth();
 
   return (
     <>
-      <nav className="flex h-28 w-full items-center justify-between px-10">
+      <nav
+        className={cn(
+          "flex h-20 w-full items-center justify-between px-10",
+          className,
+        )}
+      >
         <div className="flex items-center">
           <div
-            className={`${blackOpsOne.className} flex cursor-pointer flex-col items-center text-4xl uppercase`}
+            className={`${blackOpsOne.className} flex cursor-pointer flex-col items-center text-2xl uppercase`}
             onClick={() => {
               router.push("/");
             }}
@@ -43,7 +52,7 @@ export const Navbar = () => {
           </div>
           <div className="ml-5 flex">
             <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
+              className="flex h-8 w-32 cursor-pointer items-center justify-center text-sm font-semibold hover:bg-[#f76707] hover:text-white"
               onClick={() => {
                 router.push("/recipes");
               }}
@@ -52,7 +61,7 @@ export const Navbar = () => {
             </div>
 
             <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
+              className="flex h-8 w-32 cursor-pointer items-center justify-center text-sm font-semibold hover:bg-[#f76707] hover:text-white"
               onClick={() => {
                 router.push("/meal-plans");
               }}
@@ -61,7 +70,7 @@ export const Navbar = () => {
             </div>
 
             <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
+              className="flex h-8 w-32 cursor-pointer items-center justify-center text-sm font-semibold hover:bg-[#f76707] hover:text-white"
               onClick={() => {
                 router.push("/blog");
               }}
@@ -72,22 +81,12 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center justify-center gap-5">
-          {showSearchBox ? (
-            <Input
-              placeholder="Search"
-              onBlur={() => {
-                setShowSearchBox(false);
-              }}
-              ref={searchInputRef}
-            />
-          ) : (
-            <MagnifyingGlassIcon
-              className="h-7 w-7"
-              onClick={() => {
-                setShowSearchBox(!showSearchBox);
-              }}
-            />
-          )}
+          <Button onClick={onSaveDraft} variant="default">
+            Save Draft
+          </Button>
+          <Button onClick={onPublish} color="orange">
+            Publish
+          </Button>
           <div>
             {!user ? (
               <Button variant="filled" color="orange" onClick={signInGoogle}>
@@ -110,6 +109,9 @@ export const Navbar = () => {
                 </Menu.Dropdown>
               </Menu>
             )}
+          </div>
+          <div>
+            <Burger opened={opened} onClick={toggle} />
           </div>
         </div>
       </nav>
