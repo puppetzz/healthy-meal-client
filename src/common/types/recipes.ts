@@ -1,5 +1,6 @@
 import { Ingredient } from "./Ingredient";
 import { Nutrition } from "./nutrition";
+import { Post } from "./post";
 import { RecipeFoodCategory } from "./RecipeFoodCategory";
 
 export type Recipe = {
@@ -14,4 +15,5 @@ export type Recipe = {
   nutrition: Nutrition;
   recipeFoodCategory: RecipeFoodCategory[];
   ingredient: Ingredient[];
+  post?: Post;
 };

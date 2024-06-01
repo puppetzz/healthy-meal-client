@@ -63,6 +63,15 @@ export const Navbar = () => {
             <div
               className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
               onClick={() => {
+                router.push("/health-metrics");
+              }}
+            >
+              <span>Heath Metrics</span>
+            </div>
+
+            <div
+              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
+              onClick={() => {
                 router.push("/blog");
               }}
             >

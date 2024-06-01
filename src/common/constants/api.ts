@@ -6,4 +6,6 @@ export const API = {
 
   CREATE_UPLOAD_FILE_SIGNER_URL: "/files/upload",
   COMMENTS: "/comments",
+  MEAL_PLANS: "/meal-plans",
+  CALCULATE_TDEE: "/health-metrics/calculate-tdee",
 };

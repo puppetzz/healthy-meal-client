@@ -7,4 +7,6 @@ export const QueryKey = {
 
   GET_RECIPE_BY_ID: "get-recipe-by-id",
   GET_COMMENTS_BY_POST_ID: "get-comments-by-post-id",
+  GET_MEAL_PLANS: "get-meal-plans",
+  CALCULATE_TDEE: "calculate-tdee",
 };
