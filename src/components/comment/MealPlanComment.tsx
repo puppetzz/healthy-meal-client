@@ -1,26 +1,31 @@
 "use client";
-import { Comment } from "../../common/types/comment";
-import { CommentBlock } from "./CommentBlock";
 
-type CommentProps = {
-  comments: Comment[];
+import { MealPlanComment } from "../../common/types/MealPlanComment";
+import { CommentBlock } from "./CommentBlock";
+import { MealPlanCommentBlock } from "./MealPlanCommnetBlock";
+
+type MealPlanCommentViewProps = {
+  comments: MealPlanComment[];
   setIsReplyComment: (value: boolean) => void;
 };
 
-export function CommentView({ comments, setIsReplyComment }: CommentProps) {
+export function MealPlanCommentView({
+  comments,
+  setIsReplyComment,
+}: MealPlanCommentViewProps) {
   return (
     <div>
       {comments?.map((comment) => {
         return (
           <div>
-            <CommentBlock
+            <MealPlanCommentBlock
               comment={comment}
               setIsReplyComment={setIsReplyComment}
             />
             <div className="ml-5">
               {comment?.comment?.map((reply) => (
                 <div key={reply.id}>
-                  <CommentBlock comment={reply} allowReply={false} />
+                  <MealPlanCommentBlock comment={reply} allowReply={false} />
                 </div>
               ))}
             </div>

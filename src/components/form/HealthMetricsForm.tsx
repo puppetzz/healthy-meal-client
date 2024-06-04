@@ -1,23 +1,23 @@
 "use client";
 
 import { Button, Group, NumberInput, Radio, Select } from "@mantine/core";
-import { ActivityLevel } from "../../common/enums/ActivityLevel";
-import { Gender } from "../../common/enums/Gender";
+import { TActivityLevel } from "../../common/enums/ActivityLevel";
+import { TGender } from "../../common/enums/Gender";
 import { useForm } from "@mantine/form";
 import { useCalculateTDEEMutation } from "../../mutation";
 import { useCallback, useState } from "react";
-import { HealthMetricTDEEResponse } from "../../common/types/response/health-metric-tdee";
+import { THealthMetricTDEEResponse } from "../../common/types/response/health-metric-tdee";
 
 type FormValues = {
-  gender: Gender;
+  gender: TGender;
   age: number;
   weight: number;
   height: number;
-  activityLevel: ActivityLevel;
+  activityLevel: TActivityLevel;
 };
 
 type HealthMetricsFormProps = {
-  setHealthMetricTDEEResponse: (response: HealthMetricTDEEResponse) => void;
+  setHealthMetricTDEEResponse: (response: THealthMetricTDEEResponse) => void;
 };
 
 export function HealthMetricsForm({
@@ -25,11 +25,11 @@ export function HealthMetricsForm({
 }: HealthMetricsFormProps) {
   const form = useForm({
     initialValues: {
-      gender: Gender.MALE,
+      gender: TGender.MALE,
       age: undefined,
       weight: undefined,
       height: undefined,
-      activityLevel: ActivityLevel.SEDENTARY,
+      activityLevel: TActivityLevel.SEDENTARY,
     },
     validate: {
       age: (value) =>
@@ -72,8 +72,8 @@ export function HealthMetricsForm({
                 defaultValue={form.getValues().gender}
               >
                 <Group>
-                  <Radio label="Male" value={Gender.MALE} color="orange" />
-                  <Radio label="Female" value={Gender.FEMALE} color="orange" />
+                  <Radio label="Male" value={TGender.MALE} color="orange" />
+                  <Radio label="Female" value={TGender.FEMALE} color="orange" />
                 </Group>
               </Radio.Group>
             </div>
@@ -122,23 +122,23 @@ export function HealthMetricsForm({
                 className="w-72"
                 data={[
                   {
-                    value: ActivityLevel.SEDENTARY,
+                    value: TActivityLevel.SEDENTARY,
                     label: "Ít vận động (công việc văn phòng)",
                   },
                   {
-                    value: ActivityLevel.LIGHTLY_EXERCISE,
+                    value: TActivityLevel.LIGHTLY_EXERCISE,
                     label: "Tập luyện nhẹ (1-2 ngày/tuần)",
                   },
                   {
-                    value: ActivityLevel.MODERATELY_EXERCISE,
+                    value: TActivityLevel.MODERATELY_EXERCISE,
                     label: "Tập luyện vừa phải (3-5 ngày/tuần)",
                   },
                   {
-                    value: ActivityLevel.HEAVY_EXERCISE,
+                    value: TActivityLevel.HEAVY_EXERCISE,
                     label: "Tập luyện nặng (6-7 ngày/tuần)",
                   },
                   {
-                    value: ActivityLevel.ATHLETE,
+                    value: TActivityLevel.ATHLETE,
                     label: "Vận động viên (2x mỗi ngày)",
                   },
                 ]}

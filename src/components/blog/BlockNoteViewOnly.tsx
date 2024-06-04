@@ -1,13 +1,14 @@
 "use client";
+
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
+import { isJSON } from "../../utils/isJSON";
 
 type BlockNoteViewOnlyProps = {
   content: string;
 };
-
 export default function BlockNoteViewOnly({ content }: BlockNoteViewOnlyProps) {
-  const data = content ? JSON.parse(content) : null;
+  const data = content && isJSON(content) ? JSON.parse(content) : null;
   const editor = useCreateBlockNote({
     initialContent: data,
   });
@@ -17,7 +18,7 @@ export default function BlockNoteViewOnly({ content }: BlockNoteViewOnlyProps) {
       editor={editor}
       editable={false}
       theme="light"
-      className="pe-0 ps-0"
+      className="p-0 pe-0 ps-0"
     />
   );
 }

@@ -1,4 +1,4 @@
-export enum ActivityLevel {
+export enum TActivityLevel {
   SEDENTARY = "SEDENTARY",
   LIGHTLY_EXERCISE = "LIGHTLY_EXERCISE",
   MODERATELY_EXERCISE = "MODERATELY_EXERCISE",

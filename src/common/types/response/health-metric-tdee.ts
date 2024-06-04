@@ -1,4 +1,4 @@
-export type HealthMetricTDEEResponse = {
+export type THealthMetricTDEEResponse = {
   height: number;
   weight: number;
   age: number;
@@ -7,32 +7,32 @@ export type HealthMetricTDEEResponse = {
   bmi: number;
   bmr: number;
   tdee: number;
-  mealCaloriesRecommendation: MealCaloriesRecommendation;
-  idealWeight: idealWeight;
-  anotherTDEE: AnotherTDEE;
-  macronutrients: MacronutrientsForGoals;
+  mealCaloriesRecommendation: TMealCaloriesRecommendation;
+  idealWeight: TIdealWeight;
+  anotherTDEE: TAnotherTDEE;
+  macronutrients: TMacronutrientsForGoals;
 };
 
-export type mealPerDay = {
+export type TMealPerDay = {
   threeMealPerDay: number[];
   fourMealPerDay: number[];
   fiveMealPerDay: number[];
 };
 
-export type MealCaloriesRecommendation = {
-  maintenance: mealPerDay;
-  cutting: mealPerDay;
-  bulking: mealPerDay;
+export type TMealCaloriesRecommendation = {
+  maintenance: TMealPerDay;
+  cutting: TMealPerDay;
+  bulking: TMealPerDay;
 };
 
-export type idealWeight = {
+export type TIdealWeight = {
   hamwi: number;
   devine: number;
   robinson: number;
   miller: number;
 };
 
-export type AnotherTDEE = {
+export type TAnotherTDEE = {
   basalMetabolicRate?: number;
   sedentary?: number;
   lightExercise?: number;
@@ -41,19 +41,19 @@ export type AnotherTDEE = {
   athlete?: number;
 };
 
-export type MacronutrientsForGoals = {
-  maintenance: MacronutrientsVariants;
-  cutting: MacronutrientsVariants;
-  bulking: MacronutrientsVariants;
+export type TMacronutrientsForGoals = {
+  maintenance: TMacronutrientsVariants;
+  cutting: TMacronutrientsVariants;
+  bulking: TMacronutrientsVariants;
 };
 
-export type MacronutrientsVariants = {
-  moderateCarbs: Macronutrients;
-  lowerCarbs: Macronutrients;
-  higherCarbs: Macronutrients;
+export type TMacronutrientsVariants = {
+  moderateCarbs: TMacronutrient;
+  lowerCarbs: TMacronutrient;
+  higherCarbs: TMacronutrient;
 };
 
-export type Macronutrients = {
+export type TMacronutrient = {
   protein: number;
   carbs: number;
   fat: number;

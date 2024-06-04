@@ -1,5 +1,6 @@
 export type GetRecipesReq = {
-  page: number;
-  pageSize: number;
+  page?: number;
+  pageSize?: number;
   categoryId?: number;
+  search?: string;
 };

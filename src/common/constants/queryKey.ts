@@ -9,4 +9,9 @@ export const QueryKey = {
   GET_COMMENTS_BY_POST_ID: "get-comments-by-post-id",
   GET_MEAL_PLANS: "get-meal-plans",
   CALCULATE_TDEE: "calculate-tdee",
+
+  GET_MEAL_PLAN_BY_ID: "get-meal-plan-by-id",
+  GET_MEAL_PLAN_COMMENTS: "meal-plan-comments",
+
+  GET_HEALTH_METRICS: "get-health-metrics",
 };

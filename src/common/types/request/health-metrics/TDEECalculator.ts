@@ -1,10 +1,10 @@
-import { ActivityLevel } from "../../../enums/ActivityLevel";
-import { Gender } from "../../../enums/Gender";
+import { TActivityLevel } from "../../../enums/ActivityLevel";
+import { TGender } from "../../../enums/Gender";
 
 export type TDEECalculatorRequest = {
   weight: number;
   height: number;
   age: number;
-  gender: Gender;
-  activityLevel: ActivityLevel;
+  gender: TGender;
+  activityLevel: TActivityLevel;
 };

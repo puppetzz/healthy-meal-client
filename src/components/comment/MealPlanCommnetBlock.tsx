@@ -6,22 +6,23 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { CommentForm } from "../form/CommentForm";
 import { useState } from "react";
-import { usePostCommentMutation } from "../../mutation/usePostComment";
+import { MealPlanComment } from "../../common/types/MealPlanComment";
+import { useMealPlanCommentMutation } from "../../mutation/useMealPlanComment";
 
-type CommentBlockProps = {
-  comment: Comment;
+type MealPlanCommentBlockProps = {
+  comment: MealPlanComment;
   setIsReplyComment?: (value: boolean) => void;
   allowReply?: boolean;
 };
 
-export function CommentBlock({
+export function MealPlanCommentBlock({
   comment,
   setIsReplyComment,
   allowReply = true,
-}: CommentBlockProps) {
+}: MealPlanCommentBlockProps) {
   const [isReply, setIsReply] = useState<boolean>(false);
 
-  const postCommentMutation = usePostCommentMutation();
+  const mealPlanCommentMutation = useMealPlanCommentMutation();
 
   return (
     <div key={comment.id} className="mb-5 border-b-[1px] border-gray-300">
@@ -74,8 +75,8 @@ export function CommentBlock({
 
           <CommentForm
             onSubmit={(values) => {
-              postCommentMutation.mutate({
-                postId: comment.postId,
+              mealPlanCommentMutation.mutate({
+                mealPlanId: comment.mealPlanId,
                 parentId: comment.id,
                 content: values.content,
               });

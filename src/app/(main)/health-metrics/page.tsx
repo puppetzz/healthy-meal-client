@@ -1,9 +1,9 @@
 "use client";
 
-import { ActivityLevel } from "../../../common/enums/ActivityLevel";
-import { Gender } from "../../../common/enums/Gender";
+import { TActivityLevel } from "../../../common/enums/ActivityLevel";
+import { TGender } from "../../../common/enums/Gender";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { HealthMetricTDEEResponse } from "../../../common/types/response/health-metric-tdee";
+import { THealthMetricTDEEResponse } from "../../../common/types/response/health-metric-tdee";
 import { HealthMetricsForm } from "../../../components/form/HealthMetricsForm";
 import { useForm } from "@mantine/form";
 import {
@@ -21,30 +21,30 @@ import { getBMIStatus } from "../../../utils/getBMIStatus";
 import { Macronutrients } from "../../../components/macronutrients/macronutrients";
 
 type FormValues = {
-  gender: Gender;
+  gender: TGender;
   age?: number;
   weight?: number;
   height?: number;
-  activityLevel: ActivityLevel;
+  activityLevel: TActivityLevel;
 };
 
 export default function HealthMetrics() {
   const [healthMetricsResponse, setHealthMetricsResponse] =
-    useState<HealthMetricTDEEResponse | null>(null);
+    useState<THealthMetricTDEEResponse | null>(null);
 
   const calculateTDEEMutation = useCalculateTDEEMutation();
 
   const form = useForm<FormValues>({
     initialValues: {
       gender: healthMetricsResponse
-        ? (healthMetricsResponse?.gender as Gender)
-        : Gender.MALE,
+        ? (healthMetricsResponse?.gender as TGender)
+        : TGender.MALE,
       age: healthMetricsResponse?.age,
       weight: healthMetricsResponse?.weight,
       height: healthMetricsResponse?.height,
       activityLevel: healthMetricsResponse
-        ? (healthMetricsResponse?.activityLevel as ActivityLevel)
-        : ActivityLevel.SEDENTARY,
+        ? (healthMetricsResponse?.activityLevel as TActivityLevel)
+        : TActivityLevel.SEDENTARY,
     },
   });
 
@@ -58,11 +58,11 @@ export default function HealthMetrics() {
 
   useEffect(() => {
     form.setValues({
-      gender: healthMetricsResponse?.gender as Gender,
+      gender: healthMetricsResponse?.gender as TGender,
       age: healthMetricsResponse?.age,
       weight: healthMetricsResponse?.weight,
       height: healthMetricsResponse?.height,
-      activityLevel: healthMetricsResponse?.activityLevel as ActivityLevel,
+      activityLevel: healthMetricsResponse?.activityLevel as TActivityLevel,
     });
   }, [healthMetricsResponse]);
 
@@ -155,11 +155,11 @@ export default function HealthMetrics() {
                   className="mr-2 w-20"
                   data={[
                     {
-                      value: Gender.MALE,
+                      value: TGender.MALE,
                       label: "Nam",
                     },
                     {
-                      value: Gender.FEMALE,
+                      value: TGender.FEMALE,
                       label: "Nữ",
                     },
                   ]}
@@ -194,23 +194,23 @@ export default function HealthMetrics() {
                   className="mr-3 w-60"
                   data={[
                     {
-                      value: ActivityLevel.SEDENTARY,
+                      value: TActivityLevel.SEDENTARY,
                       label: "Ít vận động (công việc văn phòng)",
                     },
                     {
-                      value: ActivityLevel.LIGHTLY_EXERCISE,
+                      value: TActivityLevel.LIGHTLY_EXERCISE,
                       label: "Tập luyện nhẹ (1-2 ngày/tuần)",
                     },
                     {
-                      value: ActivityLevel.MODERATELY_EXERCISE,
+                      value: TActivityLevel.MODERATELY_EXERCISE,
                       label: "Tập luyện vừa phải (3-5 ngày/tuần)",
                     },
                     {
-                      value: ActivityLevel.HEAVY_EXERCISE,
+                      value: TActivityLevel.HEAVY_EXERCISE,
                       label: "Tập luyện nặng (6-7 ngày/tuần)",
                     },
                     {
-                      value: ActivityLevel.ATHLETE,
+                      value: TActivityLevel.ATHLETE,
                       label: "Vận động viên (2x mỗi ngày)",
                     },
                   ]}

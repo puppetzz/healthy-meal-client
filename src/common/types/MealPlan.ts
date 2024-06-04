@@ -1,5 +1,5 @@
-import { MealPlanFrequency } from "../enums/MealPlanFrequency";
-import { MealPlanStatus } from "../enums/MealPlanStatus";
+import { EMealPlanFrequency } from "../enums/MealPlanFrequency";
+import { EMealPlanStatus } from "../enums/MealPlanStatus";
 import { MealPlanRecipe } from "./MealPlanRecipe";
 import { User } from "./User";
 
@@ -8,10 +8,14 @@ export type MealPlan = {
   authorId: string;
   title: string;
   content: string;
-  status: MealPlanStatus;
-  frequency: MealPlanFrequency;
+  status: EMealPlanStatus;
+  frequency: EMealPlanFrequency;
   createdAt: Date;
   updatedAt: Date;
+  publishedAt: Date;
+  rating: number;
+  numberOfComments?: number;
+  numberOfReviews?: number;
   mealPlanRecipe: MealPlanRecipe[];
   author: User;
 };

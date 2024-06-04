@@ -1,4 +1,4 @@
-export enum NutritionUnit {
+export enum TNutritionUnit {
   CALORIES = "cal",
   PROTEIN = "g",
   CARBOHYDRATES = "g",

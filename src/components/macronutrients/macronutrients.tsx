@@ -1,10 +1,10 @@
 import { Tabs } from "@mantine/core";
-import { MacronutrientsForGoals } from "../../common/types/response/health-metric-tdee";
+import { TMacronutrientsForGoals } from "../../common/types/response/health-metric-tdee";
 import { numberWithCommas } from "../../utils/numberCommasFormat";
 
 type MacronutrientsProps = {
   tdee: number;
-  macronutrients: MacronutrientsForGoals;
+  macronutrients: TMacronutrientsForGoals;
 };
 
 export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {

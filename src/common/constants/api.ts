@@ -8,4 +8,6 @@ export const API = {
   COMMENTS: "/comments",
   MEAL_PLANS: "/meal-plans",
   CALCULATE_TDEE: "/health-metrics/calculate-tdee",
+  MEAL_PLAN_COMMENTS: "/comments/meal-plan",
+  GET_HEALTH_METRICS: "/health-metrics",
 };

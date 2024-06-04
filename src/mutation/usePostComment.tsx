@@ -11,14 +11,14 @@ export const usePostCommentMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    onMutate: async (createCommentRequest: CreateCommentRequest) => {
+    mutationFn: async (createCommentRequest: CreateCommentRequest) => {
       const response = await createComment(createCommentRequest);
 
       return response;
     },
-    onSuccess: (data: ResponseType<Comment>) => {
+    onSuccess: () => {
       queryClient.refetchQueries({
-        queryKey: [QueryKey.GET_COMMENTS_BY_POST_ID, data.data.postId],
+        queryKey: [QueryKey.GET_COMMENTS_BY_POST_ID],
       });
     },
   });

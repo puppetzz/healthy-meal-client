@@ -1,4 +1,4 @@
-import { NutritionUnit } from "../../common/enums/NutritionUnit";
+import { TNutritionUnit } from "../../common/enums/NutritionUnit";
 import { Post } from "../../common/types/post";
 import Image from "next/image";
 import { cn } from "../../lib/utils";
@@ -34,7 +34,7 @@ export const VerticalCard = ({
               {post.recipe?.recipeFoodCategory.map((category) => (
                 <span
                   key={category.foodCategory.id}
-                  className="rounded-full bg-gray-200 px-2 py-[2px] text-sm"
+                  className="h-fit rounded-full bg-gray-200 px-2 py-[2px] text-sm"
                 >
                   {category.foodCategory.name}
                 </span>
@@ -66,15 +66,15 @@ export const VerticalCard = ({
             </div>
             <div className="flex flex-col">
               <span>Carbs</span>
-              <span>{`${post.recipe?.nutrition.carbohydrates}${NutritionUnit.CARBOHYDRATES}`}</span>
+              <span>{`${post.recipe?.nutrition.carbohydrates}${TNutritionUnit.CARBOHYDRATES}`}</span>
             </div>
             <div className="flex flex-col">
               <span>Fats</span>
-              <span>{`${post.recipe?.nutrition.fat}${NutritionUnit.FAT}`}</span>
+              <span>{`${post.recipe?.nutrition.fat}${TNutritionUnit.FAT}`}</span>
             </div>
             <div className="flex flex-col">
               <span>Protein</span>
-              <span>{`${post.recipe?.nutrition.protein}${NutritionUnit.PROTEIN}`}</span>
+              <span>{`${post.recipe?.nutrition.protein}${TNutritionUnit.PROTEIN}`}</span>
             </div>
           </div>
         </div>

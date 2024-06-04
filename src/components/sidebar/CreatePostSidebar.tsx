@@ -14,7 +14,7 @@ import { useState } from "react";
 import { PostCategory } from "../../common/types/PostCategory";
 import { FoodCategory } from "../../common/types/FoodCategory";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
-import { NutritionUnit } from "../../common/enums/NutritionUnit";
+import { TNutritionUnit } from "../../common/enums/NutritionUnit";
 import { NutritionInputFields } from "../../common/types/form/NutritionInputField";
 import { RecipeOptionInputField } from "../../common/types/form/RecipeOptionInputField";
 
@@ -272,7 +272,7 @@ export function CreatePostSidebar({
                   <div className="mb-10 mt-1 flex w-full flex-col gap-1 px-2">
                     <NumberInput
                       withAsterisk
-                      label={`Calories (${NutritionUnit.CALORIES})`}
+                      label={`Calories (${TNutritionUnit.CALORIES})`}
                       placeholder="Calories"
                       value={nutrition.calories}
                       onChange={(value) =>
@@ -281,7 +281,7 @@ export function CreatePostSidebar({
                     />
                     <NumberInput
                       withAsterisk
-                      label={`Protein (${NutritionUnit.PROTEIN})`}
+                      label={`Protein (${TNutritionUnit.PROTEIN})`}
                       placeholder="Protein"
                       value={nutrition.protein}
                       onChange={(value) =>
@@ -290,7 +290,7 @@ export function CreatePostSidebar({
                     />
                     <NumberInput
                       withAsterisk
-                      label={`Cabs (${NutritionUnit.CARBOHYDRATES})`}
+                      label={`Cabs (${TNutritionUnit.CARBOHYDRATES})`}
                       placeholder="Cabs"
                       value={nutrition.carbohydrates}
                       onChange={(value) =>
@@ -302,7 +302,7 @@ export function CreatePostSidebar({
                     />
                     <NumberInput
                       withAsterisk
-                      label={`Fat (${NutritionUnit.FAT})`}
+                      label={`Fat (${TNutritionUnit.FAT})`}
                       placeholder="Fat"
                       value={nutrition.fat}
                       onChange={(value) =>
@@ -310,7 +310,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Saturated Fat (${NutritionUnit.SATURATED_FAT})`}
+                      label={`Saturated Fat (${TNutritionUnit.SATURATED_FAT})`}
                       placeholder="Saturated Fat"
                       value={nutrition.saturatedFat}
                       onChange={(value) =>
@@ -321,7 +321,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Polyunsaturated Fat (${NutritionUnit.POLYUNSATURATED_FAT})`}
+                      label={`Polyunsaturated Fat (${TNutritionUnit.POLYUNSATURATED_FAT})`}
                       placeholder="Polyunsaturated Fat"
                       value={nutrition.polyunsaturatedFat}
                       onChange={(value) =>
@@ -332,7 +332,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Monounsaturated Fat (${NutritionUnit.MONOUNSATURATED_FAT})`}
+                      label={`Monounsaturated Fat (${TNutritionUnit.MONOUNSATURATED_FAT})`}
                       placeholder="Monounsaturated Fat"
                       value={nutrition.monounsaturatedFat}
                       onChange={(value) =>
@@ -343,7 +343,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Trans Fat (${NutritionUnit.TRANS_FAT})`}
+                      label={`Trans Fat (${TNutritionUnit.TRANS_FAT})`}
                       placeholder="Trans Fat"
                       value={nutrition.transFat}
                       onChange={(value) =>
@@ -351,7 +351,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Cholesterol (${NutritionUnit.CHOLESTEROL})`}
+                      label={`Cholesterol (${TNutritionUnit.CHOLESTEROL})`}
                       placeholder="Cholesterol"
                       value={nutrition.cholesterol}
                       onChange={(value) =>
@@ -362,7 +362,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Sodium (${NutritionUnit.SODIUM})`}
+                      label={`Sodium (${TNutritionUnit.SODIUM})`}
                       placeholder="Sodium"
                       value={nutrition.sodium}
                       onChange={(value) =>
@@ -370,7 +370,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Potassium (${NutritionUnit.POTASSIUM})`}
+                      label={`Potassium (${TNutritionUnit.POTASSIUM})`}
                       placeholder="Potassium"
                       value={nutrition.potassium}
                       onChange={(value) =>
@@ -378,7 +378,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Fiber (${NutritionUnit.FIBER})`}
+                      label={`Fiber (${TNutritionUnit.FIBER})`}
                       placeholder="Fiber"
                       value={nutrition.fiber}
                       onChange={(value) =>
@@ -386,7 +386,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Sugar (${NutritionUnit.SUGAR})`}
+                      label={`Sugar (${TNutritionUnit.SUGAR})`}
                       placeholder="Sugar"
                       value={nutrition.sugar}
                       onChange={(value) =>
@@ -394,7 +394,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Vitamin A (${NutritionUnit.VITAMIN_A})`}
+                      label={`Vitamin A (${TNutritionUnit.VITAMIN_A})`}
                       placeholder="Vitamin A"
                       value={nutrition.vitaminA}
                       onChange={(value) =>
@@ -402,7 +402,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Vitamin C (${NutritionUnit.VITAMIN_C})`}
+                      label={`Vitamin C (${TNutritionUnit.VITAMIN_C})`}
                       placeholder="Vitamin C"
                       value={nutrition.vitaminC}
                       onChange={(value) =>
@@ -410,7 +410,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Calcium (${NutritionUnit.CALCIUM})`}
+                      label={`Calcium (${TNutritionUnit.CALCIUM})`}
                       placeholder="Calcium"
                       value={nutrition.calcium}
                       onChange={(value) =>
@@ -418,7 +418,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Iron (${NutritionUnit.IRON})`}
+                      label={`Iron (${TNutritionUnit.IRON})`}
                       placeholder="Iron"
                       value={nutrition.iron}
                       onChange={(value) =>

@@ -10,9 +10,15 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 type BlockNoteProps = {
   className?: string;
+  content?: string;
+  setContent?: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export default function BlockNote({ className }: BlockNoteProps) {
+export default function BlockNote({
+  className,
+  content,
+  setContent,
+}: BlockNoteProps) {
   const [initialContent, setInitialContent] = useState<
     PartialBlock[] | undefined | "loading"
   >("loading");
@@ -41,9 +47,13 @@ export default function BlockNote({ className }: BlockNoteProps) {
   }, []);
 
   useEffect(() => {
-    loadFromStorage().then((content) => {
-      setInitialContent(content);
-    });
+    if (content) {
+      setInitialContent(JSON.parse(content));
+    } else {
+      loadFromStorage().then((content) => {
+        setInitialContent(content);
+      });
+    }
   }, []);
 
   if (editor === undefined) {
@@ -56,7 +66,11 @@ export default function BlockNote({ className }: BlockNoteProps) {
       editor={editor}
       theme="light"
       onChange={() => {
-        saveToLocalStorage(editor.document);
+        if (setContent) {
+          setContent(JSON.stringify(editor.document));
+        } else {
+          saveToLocalStorage(editor.document);
+        }
       }}
     />
   );

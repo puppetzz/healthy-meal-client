@@ -72,7 +72,16 @@ export default function MealPlans() {
 
         <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
           {mealPlans?.data.map((mealPlan) => {
-            return <MealPlanCard key={mealPlan.id} mealPlan={mealPlan} />;
+            return (
+              <MealPlanCard
+                className="cursor-pointer"
+                key={mealPlan.id}
+                mealPlan={mealPlan}
+                onClick={() => {
+                  router.push(`/meal-plans/${mealPlan.id}`);
+                }}
+              />
+            );
           })}
         </div>
       </div>

@@ -7,7 +7,7 @@ import { GetRecipesReq } from "../common/types/request/recipes/GetRecipes";
 
 export const useRecipeQuery = (getRecipeReq: GetRecipesReq) => {
   return useQuery({
-    queryKey: [QueryKey.RECIPES],
+    queryKey: [QueryKey.RECIPES, getRecipeReq],
     queryFn: async () => {
       const recipes = await getRecipes(getRecipeReq);
 

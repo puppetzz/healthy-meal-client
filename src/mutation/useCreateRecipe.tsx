@@ -4,7 +4,7 @@ import { createRecipes } from "../api/recipes";
 
 export function useCreateRecipeMutation() {
   return useMutation({
-    onMutate: async (recipe: CreateRecipeRequest) => {
+    mutationFn: async (recipe: CreateRecipeRequest) => {
       const response = await createRecipes(recipe);
 
       return response;

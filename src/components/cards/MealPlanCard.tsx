@@ -3,11 +3,13 @@
 import Image from "next/image";
 import { MealPlan } from "../../common/types/MealPlan";
 import { cn } from "../../lib/utils";
+import { EMealPlanFrequency } from "../../common/enums/MealPlanFrequency";
+import { useMemo } from "react";
 
 type MealPlanCardProps = {
   mealPlan: MealPlan;
-  onClick: () => void;
-  className: string;
+  onClick?: () => void;
+  className?: string;
 };
 
 export function MealPlanCard({
@@ -15,6 +17,17 @@ export function MealPlanCard({
   onClick,
   className,
 }: MealPlanCardProps) {
+  const mealPlanFrequency = useMemo(() => {
+    switch (mealPlan.frequency) {
+      case EMealPlanFrequency.DAILY:
+        return "Hằng Ngày";
+      case EMealPlanFrequency.WEEKLY:
+        return "Hằng Tuần";
+      case EMealPlanFrequency.MONTHLY:
+        return "Hằng Tháng";
+    }
+  }, []);
+
   return (
     <div
       className={cn(
@@ -53,19 +66,26 @@ export function MealPlanCard({
         <div className="mb-auto mt-3">
           <span className="text-xl font-semibold">{mealPlan.title}</span>
         </div>
-        <div className="mt-auto flex h-fit items-center gap-2">
-          <Image
-            src="/svg/fork-and-knife.svg"
-            alt="fork-and-knife"
-            height={25}
-            width={25}
-          />
+        <div className="flex justify-between">
+          <div className="mt-auto flex h-fit items-center gap-2">
+            <Image
+              src="/svg/fork-and-knife.svg"
+              alt="fork-and-knife"
+              height={25}
+              width={25}
+            />
 
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold text-[#98a2b3]">
-              Number of Recipes
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-[#98a2b3]">
+                Số Công Thức
+              </span>
+              <span className="font-semibold">{`${mealPlan.mealPlanRecipe.length} Công thức`}</span>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <span className="text-sm font-semibold capitalize text-[#98a2b3]">
+              {mealPlanFrequency}
             </span>
-            <span className="font-semibold">{`${mealPlan.mealPlanRecipe.length} Recipes`}</span>
           </div>
         </div>
       </div>

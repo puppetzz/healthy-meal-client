@@ -1,4 +1,4 @@
-export enum MealPlanStatus {
+export enum EMealPlanStatus {
   DRAFT = "DRAFT",
   PENDING = "PENDING",
   PUBLISHED = "PUBLISHED",
