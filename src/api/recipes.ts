@@ -3,6 +3,7 @@ import { ResponseType } from "../common/types";
 import { Post } from "../common/types/post";
 import { CreateRecipeRequest } from "../common/types/request/recipes/CreateRecipe";
 import { GetRecipesReq } from "../common/types/request/recipes/GetRecipes";
+import { TUpdateRecipeRequest } from "../common/types/request/recipes/UpdateRecipe";
 import { PostPagination } from "../common/types/response/PostPagination";
 import axiosClient from "../lib/axiosClient";
 
@@ -34,6 +35,16 @@ export const createRecipes = async (data: CreateRecipeRequest) => {
   const response = await axiosClient({
     url: API.RECIPES,
     method: "POST",
+    data,
+  });
+
+  return response.data;
+};
+
+export const updateRecipes = async (data: TUpdateRecipeRequest) => {
+  const response = await axiosClient({
+    url: API.RECIPES,
+    method: "PUT",
     data,
   });
 

@@ -6,7 +6,7 @@ import { VerticalCard } from "../../../../../components/cards/VerticalCard";
 import { Post } from "../../../../../common/types/post";
 import { use, useCallback, useEffect, useMemo } from "react";
 import { FoodCategoriesSidebar } from "../../../../../components/sidebar/FoodCategories";
-import { FoodCategory } from "../../../../../common/types/FoodCategory";
+import { TFoodCategory } from "../../../../../common/types/FoodCategory";
 import { Breadcrumbs, Anchor } from "@mantine/core";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCreateQueryString } from "../../../../../hooks/useCreateQueryString";
@@ -112,7 +112,7 @@ export default function CategoryRecipes({
 
         <div className="w-[25%]">
           <FoodCategoriesSidebar
-            foodCategories={foodCategories?.data as FoodCategory[]}
+            foodCategories={foodCategories?.data as TFoodCategory[]}
           />
         </div>
       </div>

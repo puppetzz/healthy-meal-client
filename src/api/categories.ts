@@ -1,13 +1,13 @@
 import { API } from "../common/constants/api";
 import { ResponseType } from "../common/types";
-import { FoodCategory } from "../common/types/FoodCategory";
-import { PostCategory } from "../common/types/PostCategory";
+import { TFoodCategory } from "../common/types/FoodCategory";
+import { TPostCategory } from "../common/types/PostCategory";
 import axiosClient from "../lib/axiosClient";
 
 export const getFoodCategories = async (): Promise<
-  ResponseType<FoodCategory[]>
+  ResponseType<TFoodCategory[]>
 > => {
-  const response = await axiosClient.get<ResponseType<FoodCategory[]>>(
+  const response = await axiosClient.get<ResponseType<TFoodCategory[]>>(
     API.GET_FOOD_CATEGORIES,
   );
 
@@ -15,9 +15,9 @@ export const getFoodCategories = async (): Promise<
 };
 
 export const getPostCategories = async (): Promise<
-  ResponseType<PostCategory[]>
+  ResponseType<TPostCategory[]>
 > => {
-  const response = await axiosClient.get<ResponseType<PostCategory[]>>(
+  const response = await axiosClient.get<ResponseType<TPostCategory[]>>(
     API.GET_POST_CATEGORIES,
   );
 

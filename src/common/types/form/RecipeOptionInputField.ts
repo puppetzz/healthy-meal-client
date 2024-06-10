@@ -1,4 +1,4 @@
-export type RecipeOptionInputField = {
+export type TRecipeOptionInputField = {
   prepTime: number;
   cookTime: number;
   servings: number;

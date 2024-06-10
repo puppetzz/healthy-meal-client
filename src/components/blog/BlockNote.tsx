@@ -7,6 +7,7 @@ import { useUploadFile } from "../../hooks/useUploadFile";
 import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { POST_CONTENT_LOCAL_STORAGE_KEY } from "../../common/constants/general";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { isJSON } from "../../utils/isJSON";
 
 type BlockNoteProps = {
   className?: string;
@@ -48,7 +49,7 @@ export default function BlockNote({
 
   useEffect(() => {
     if (content) {
-      setInitialContent(JSON.parse(content));
+      setInitialContent(isJSON(content) ? JSON.parse(content) : "");
     } else {
       loadFromStorage().then((content) => {
         setInitialContent(content);

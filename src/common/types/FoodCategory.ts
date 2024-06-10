@@ -1,4 +1,4 @@
-export type FoodCategory = {
+export type TFoodCategory = {
   id: number;
   key: string;
   name: string;

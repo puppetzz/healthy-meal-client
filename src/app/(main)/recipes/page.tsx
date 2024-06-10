@@ -7,7 +7,7 @@ import { useRecipeQuery } from "../../../queries";
 import { useFoodCategoriesQuery } from "../../../queries/useFoodCategories";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FoodCategoriesSidebar } from "../../../components/sidebar/FoodCategories";
-import { FoodCategory } from "../../../common/types/FoodCategory";
+import { TFoodCategory } from "../../../common/types/FoodCategory";
 import { Anchor, Breadcrumbs, Button, Pagination } from "@mantine/core";
 import { useCreateQueryString } from "../../../hooks/useCreateQueryString";
 import { useCallback, useEffect } from "react";
@@ -96,7 +96,7 @@ export default function Recipes() {
 
           <div className="w-[35%] md:w-[25%]">
             <FoodCategoriesSidebar
-              foodCategories={foodCategories?.data as FoodCategory[]}
+              foodCategories={foodCategories?.data as TFoodCategory[]}
             />
           </div>
         </div>

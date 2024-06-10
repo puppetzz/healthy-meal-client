@@ -1,4 +1,4 @@
-import { TNutritionUnit } from "../../common/enums/NutritionUnit";
+import { ENutritionUnit } from "../../common/enums/NutritionUnit";
 import { Post } from "../../common/types/post";
 import Image from "next/image";
 import { cn } from "../../lib/utils";
@@ -66,15 +66,15 @@ export const VerticalCard = ({
             </div>
             <div className="flex flex-col">
               <span>Carbs</span>
-              <span>{`${post.recipe?.nutrition.carbohydrates}${TNutritionUnit.CARBOHYDRATES}`}</span>
+              <span>{`${post.recipe?.nutrition.carbohydrates}${ENutritionUnit.CARBOHYDRATES}`}</span>
             </div>
             <div className="flex flex-col">
               <span>Fats</span>
-              <span>{`${post.recipe?.nutrition.fat}${TNutritionUnit.FAT}`}</span>
+              <span>{`${post.recipe?.nutrition.fat}${ENutritionUnit.FAT}`}</span>
             </div>
             <div className="flex flex-col">
               <span>Protein</span>
-              <span>{`${post.recipe?.nutrition.protein}${TNutritionUnit.PROTEIN}`}</span>
+              <span>{`${post.recipe?.nutrition.protein}${ENutritionUnit.PROTEIN}`}</span>
             </div>
           </div>
         </div>

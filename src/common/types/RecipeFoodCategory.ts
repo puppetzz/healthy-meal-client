@@ -1,5 +1,5 @@
-import { FoodCategory } from "./FoodCategory";
+import { TFoodCategory } from "./FoodCategory";
 
 export type RecipeFoodCategory = {
-  foodCategory: FoodCategory;
+  foodCategory: TFoodCategory;
 };

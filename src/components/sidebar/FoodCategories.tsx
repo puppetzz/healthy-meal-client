@@ -1,8 +1,8 @@
 import { useRouter } from "next/navigation";
-import { FoodCategory } from "../../common/types/FoodCategory";
+import { TFoodCategory } from "../../common/types/FoodCategory";
 
 type FoodCategoriesSidebarProps = {
-  foodCategories: FoodCategory[];
+  foodCategories: TFoodCategory[];
 };
 
 export const FoodCategoriesSidebar = ({

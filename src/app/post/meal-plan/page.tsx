@@ -1,6 +1,15 @@
 "use client";
 
-import { Button, Group, List, Radio, Select, Stepper } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Collapse,
+  Group,
+  List,
+  Radio,
+  Select,
+  Stepper,
+} from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { MealPlanCreationNav } from "../../../components/nav/MealPlanCreationNav";
@@ -21,10 +30,11 @@ import { TMealPlanRecipeRequest } from "../../../common/types/request/meal-plan/
 import { EMealPlanStatus } from "../../../common/enums/MealPlanStatus";
 import { Post } from "../../../common/types/post";
 import Image from "next/image";
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { numberWithCommas } from "../../../utils/numberCommasFormat";
 import { notifications } from "@mantine/notifications";
 import { useMealPlanMutation } from "../../../mutation/useMealPlan";
+import { MealPlanPreviewBlock } from "../../../components/meal-plan/MealPlanPreviewBlock";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 
 const BlockNote = dynamic(
   () => import("../../../components/blog/BlockNote").then((mod) => mod.default),
@@ -51,6 +61,9 @@ export default function MealPlanCreation() {
   const [content, setContent] = useState<string>("");
   const [frequency, setFrequency] = useState<string>(EMealPlanFrequency.DAILY);
   const [selectedRecipes, setSelectedRecipes] = useState<Post[][]>([[]]);
+  const [openedMealPlan, setOpenedMealPlan] = useState<boolean[]>(
+    [...Array(7)].map(() => true),
+  );
 
   const [opened, { toggle }] = useDisclosure(true);
   const [numberOfMeals, setNumberOfMeals] = useState<string>("3");
@@ -528,110 +541,63 @@ export default function MealPlanCreation() {
                 <div>
                   <BlockNoteViewOnly content={content} />
                 </div>
-                <div className="flex flex-col items-center gap-4 px-[52px]">
-                  {selectedRecipes[0].map((recipe, index) => {
-                    return (
-                      <div className="w-full rounded-xl border-[1px] p-5 ">
-                        <div className="mb-5 flex justify-between">
-                          <div className="flex gap-2">
-                            <Image
-                              src="/svg/fork-and-knife.svg"
-                              alt="Fork and knife"
-                              width={28}
-                              height={28}
-                            />
-                            <div className="flex flex-col">
-                              <span className="text-sm font-semibold text-[#6B7280]">{`Công thức ${index + 1}`}</span>
-                              <a
-                                className="text-2xl font-bold underline"
-                                href={`/recipes/${recipe.id}`}
-                              >
-                                {recipe.title}
-                              </a>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Image
-                              src="/svg/fire.svg"
-                              alt="Fire"
-                              width={16}
-                              height={16}
-                            />
-                            <span className="text-xl font-semibold">{`${recipe.recipe?.nutrition.calories}Cal`}</span>
-                          </div>
-                        </div>
+                {frequency === EMealPlanFrequency.DAILY ? (
+                  <div className="flex flex-col items-center gap-4 px-[52px]">
+                    {selectedRecipes[0].map((recipe, index) => {
+                      return (
+                        <MealPlanPreviewBlock
+                          recipe={recipe}
+                          meal={index + 1}
+                        />
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div>
+                    {selectedRecipes.map((recipePerDay, index) => {
+                      return (
+                        <Box mx="auto" className="px-[52px]">
+                          <Group mb={5}>
+                            <div
+                              className="flex w-full cursor-pointer justify-between border-b-[1px]"
+                              onClick={() => {
+                                setOpenedMealPlan((prev) => {
+                                  prev[index] = !prev[index];
 
-                        <div className="flex w-full gap-5">
-                          <div className="h-[350px] w-[50%]">
-                            <img
-                              src={recipe.thumbnail}
-                              alt=""
-                              className="h-full w-full rounded-xl object-cover"
-                            />
-                          </div>
-                          <div className="flex flex-1 flex-col">
-                            <span className="text-xl font-bold">
-                              Nguyên Liệu
-                            </span>
-                            <List listStyleType="disc">
-                              {recipe.recipe?.ingredient &&
-                                recipe.recipe?.ingredient
-                                  .slice(0, 8)
-                                  .map((ingredient) => (
-                                    <List.Item>
-                                      {`${ingredient.amount} ${ingredient.unit} ${ingredient.name}`}
-                                    </List.Item>
-                                  ))}
-                              {recipe.recipe?.ingredient?.length &&
-                                recipe.recipe?.ingredient?.length > 8 && (
-                                  <List.Item>...</List.Item>
-                                )}
-                            </List>
-                            <div className="mt-auto">
-                              <div className="mb-2 flex justify-end">
-                                <a
-                                  className="flex items-center gap-1 font-bold underline"
-                                  href={`/recipes/${recipe.id}`}
-                                >
-                                  Xem chi tiết
-                                  <ChevronRightIcon className="h-4 w-4" />
-                                </a>
-                              </div>
-                              <div className="h-fit w-full rounded-lg bg-[#ed8537] p-5 text-white">
-                                <div className="flex justify-between">
-                                  <div className="flex flex-col font-semibold">
-                                    <span className="text-sm text-[#f7c7b3]">
-                                      Calories
-                                    </span>
-                                    <span className="text-xl">{`${recipe.recipe?.nutrition.calories}Cal`}</span>
-                                  </div>
-                                  <div className="flex flex-col font-semibold">
-                                    <span className="text-sm text-[#f7c7b3]">
-                                      Protein
-                                    </span>
-                                    <span className="text-xl">{`${recipe.recipe?.nutrition.protein}g`}</span>
-                                  </div>
-                                  <div className="flex flex-col font-semibold">
-                                    <span className="text-sm text-[#f7c7b3]">
-                                      Fats
-                                    </span>
-                                    <span className="text-xl">{`${recipe.recipe?.nutrition.fat}g`}</span>
-                                  </div>
-                                  <div className="flex flex-col font-semibold">
-                                    <span className="text-sm text-[#f7c7b3]">
-                                      Carbs
-                                    </span>
-                                    <span className="text-xl">{`${recipe.recipe?.nutrition.carbohydrates}g`}</span>
-                                  </div>
-                                </div>
-                              </div>
+                                  console.log(prev);
+
+                                  return [...prev];
+                                });
+                              }}
+                            >
+                              <span className="ml-2 text-xl font-bold">
+                                Ngày {index + 1}
+                              </span>
+                              {openedMealPlan[index] ? (
+                                <ChevronUpIcon className="mr-2 h-5 w-5" />
+                              ) : (
+                                <ChevronDownIcon className="mr-2 h-5 w-5" />
+                              )}
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                          </Group>
+
+                          <Collapse in={openedMealPlan[index]}>
+                            <div className="flex flex-col items-center gap-4">
+                              {recipePerDay.map((recipe, index) => {
+                                return (
+                                  <MealPlanPreviewBlock
+                                    recipe={recipe}
+                                    meal={index + 1}
+                                  />
+                                );
+                              })}
+                            </div>
+                          </Collapse>
+                        </Box>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
               <div className="w-[300px]">
                 <div className="h-fit w-full rounded-xl bg-gray-100 p-4 font-semibold">

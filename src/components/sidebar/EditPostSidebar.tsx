@@ -2,9 +2,9 @@
 
 import {
   Box,
+  Button,
   Checkbox,
   Collapse,
-  Divider,
   NumberInput,
   Tabs,
   TextInput,
@@ -12,12 +12,12 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { TPostCategory } from "../../common/types/PostCategory";
 import { TFoodCategory } from "../../common/types/FoodCategory";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { ENutritionUnit } from "../../common/enums/NutritionUnit";
 import { TNutritionInputFields } from "../../common/types/form/NutritionInputField";
 import { TRecipeOptionInputField } from "../../common/types/form/RecipeOptionInputField";
+import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 
-type CreatePostSidebarProps = {
+type EditPostSidebarProps = {
   postCategories: TPostCategory[];
   foodCategories: TFoodCategory[];
   setIsRecipe: (isRecipe: boolean) => void;
@@ -30,9 +30,10 @@ type CreatePostSidebarProps = {
   setFoodCategoriesSelected: (categories: string[]) => void;
   postCategoriesSelected: string[];
   setPostCategoriesSelected: (categories: string[]) => void;
+  handleUpdate: () => void;
 };
 
-export function CreatePostSidebar({
+export function EditPostSidebar({
   postCategories,
   foodCategories,
   setIsRecipe,
@@ -45,7 +46,8 @@ export function CreatePostSidebar({
   setFoodCategoriesSelected,
   postCategoriesSelected,
   setPostCategoriesSelected,
-}: CreatePostSidebarProps) {
+  handleUpdate,
+}: EditPostSidebarProps) {
   const [postCategoriesOpened, { toggle: togglePostCategories }] =
     useDisclosure(false);
   const [foodCategoriesOpened, { toggle: toggleFoodCategories }] =
@@ -56,15 +58,15 @@ export function CreatePostSidebar({
   const [nutritionOpened, { toggle: toggleNutrition }] = useDisclosure(true);
 
   return (
-    <div className="h-[calc(100vh-80px)] min-w-[300px] border-l-[1px]">
+    <div className="h-[calc(100vh-57px)] min-w-[300px] border-l-[1px]">
       <Tabs defaultValue="post" color="orange" className="pt-1">
         <Tabs.List>
-          <Tabs.Tab value="post">Post</Tabs.Tab>
-          <Tabs.Tab value="categories">categories</Tabs.Tab>
-          {isRecipe && <Tabs.Tab value="recipe">Recipe</Tabs.Tab>}
+          <Tabs.Tab value="post">Bài Viết</Tabs.Tab>
+          <Tabs.Tab value="categories">Thể Loại</Tabs.Tab>
+          {isRecipe && <Tabs.Tab value="recipe">Công Thức</Tabs.Tab>}
         </Tabs.List>
 
-        <div className="h-[calc(100vh-120px)] overflow-y-auto">
+        <div className="h-[calc(100vh-150px)] overflow-y-auto">
           <Tabs.Panel value="post">
             <div
               className="flex h-11 w-full items-center justify-between px-3 hover:bg-gray-100"
@@ -72,23 +74,23 @@ export function CreatePostSidebar({
             >
               <span>Summary</span>
               {summaryOpened ? (
-                <ChevronUpIcon className="h-5 w-5" />
+                <IconChevronUp className="h-5 w-5" />
               ) : (
-                <ChevronDownIcon className="h-5 w-5" />
+                <IconChevronDown className="h-5 w-5" />
               )}
             </div>
-            <div className="mt-1 px-3">
+            {/* <div className="mt-1 px-3">
               <Checkbox
                 label="The post is recipe"
                 checked={isRecipe}
                 onChange={(event) => setIsRecipe(event.currentTarget.checked)}
                 color="orange"
               />
-            </div>
+            </div> */}
           </Tabs.Panel>
 
           <Tabs.Panel value="categories">
-            <div className="mb-1">
+            {/* <div className="mb-1">
               <Box maw={400} mx="auto">
                 <div
                   className="flex h-11 w-full items-center justify-between px-3 hover:bg-gray-100"
@@ -96,9 +98,9 @@ export function CreatePostSidebar({
                 >
                   <span>Post categories</span>
                   {postCategoriesOpened ? (
-                    <ChevronUpIcon className="h-5 w-5" />
+                    <IconChevronUp className="h-5 w-5" />
                   ) : (
-                    <ChevronDownIcon className="h-5 w-5" />
+                    <IconChevronDown className="h-5 w-5" />
                   )}
                 </div>
 
@@ -122,18 +124,18 @@ export function CreatePostSidebar({
                   </div>
                 </Collapse>
               </Box>
-            </div>
+            </div> */}
             <div className="mb-1">
               <Box maw={400} mx="auto">
                 <div
                   className="flex h-11 w-full items-center justify-between px-3 hover:bg-gray-100"
                   onClick={toggleFoodCategories}
                 >
-                  <span>Food categories</span>
+                  <span>Thể Loại</span>
                   {foodCategoriesOpened ? (
-                    <ChevronUpIcon className="h-5 w-5" />
+                    <IconChevronUp className="h-5 w-5" />
                   ) : (
-                    <ChevronDownIcon className="h-5 w-5" />
+                    <IconChevronDown className="h-5 w-5" />
                   )}
                 </div>
 
@@ -167,11 +169,11 @@ export function CreatePostSidebar({
                   className="flex h-11 w-full items-center justify-between px-3 hover:bg-gray-100"
                   onClick={toggleRecipeOption}
                 >
-                  <span>Options</span>
+                  <span className="font-bold">Tuỳ Chọn</span>
                   {recipeOptionOpened ? (
-                    <ChevronUpIcon className="h-5 w-5" />
+                    <IconChevronUp className="h-5 w-5" />
                   ) : (
-                    <ChevronDownIcon className="h-5 w-5" />
+                    <IconChevronDown className="h-5 w-5" />
                   )}
                 </div>
 
@@ -179,7 +181,7 @@ export function CreatePostSidebar({
                   <div className="mt-1 flex w-full flex-col gap-1 px-2">
                     <NumberInput
                       withAsterisk
-                      label="Prep Time"
+                      label="Thời gian chuẩn bị"
                       value={recipeOptions.prepTime}
                       onChange={(value) =>
                         setRecipeOptions({
@@ -190,7 +192,7 @@ export function CreatePostSidebar({
                     />
                     <NumberInput
                       withAsterisk
-                      label="Cook Time"
+                      label="Thời gian nấu"
                       value={recipeOptions.cookTime}
                       onChange={(value) =>
                         setRecipeOptions({
@@ -202,7 +204,7 @@ export function CreatePostSidebar({
                     <div className="flex w-full justify-between">
                       <NumberInput
                         withAsterisk
-                        label="Servings"
+                        label="Khẩu phần"
                         className="w-[130px]"
                         value={recipeOptions.servings}
                         onChange={(value) =>
@@ -214,7 +216,7 @@ export function CreatePostSidebar({
                       />
                       <TextInput
                         withAsterisk
-                        label="Unit"
+                        label="Đơn vị đo"
                         className="w-[130px]"
                         value={recipeOptions.unit}
                         onChange={(event) =>
@@ -227,7 +229,7 @@ export function CreatePostSidebar({
                     </div>
                     <TextInput
                       withAsterisk
-                      label="Keeping Time"
+                      label="Thời gian có thể để lại"
                       className=""
                       value={recipeOptions.keeping}
                       onChange={(event) =>
@@ -239,7 +241,7 @@ export function CreatePostSidebar({
                     />
                     <TextInput
                       withAsterisk
-                      label="Freezer Time"
+                      label="Thời gian có thể bảo quản lạnh"
                       className=""
                       value={recipeOptions.freezer}
                       onChange={(event) =>
@@ -259,11 +261,11 @@ export function CreatePostSidebar({
                   className="flex h-11 w-full items-center justify-between px-3 hover:bg-gray-100"
                   onClick={toggleNutrition}
                 >
-                  <span>Nutrition</span>
+                  <span className="font-bold">Dinh Dưỡng</span>
                   {nutritionOpened ? (
-                    <ChevronUpIcon className="h-5 w-5" />
+                    <IconChevronUp className="h-5 w-5" />
                   ) : (
-                    <ChevronDownIcon className="h-5 w-5" />
+                    <IconChevronDown className="h-5 w-5" />
                   )}
                 </div>
 
@@ -271,7 +273,7 @@ export function CreatePostSidebar({
                   <div className="mb-10 mt-1 flex w-full flex-col gap-1 px-2">
                     <NumberInput
                       withAsterisk
-                      label={`Calories (${ENutritionUnit.CALORIES})`}
+                      label={`Calo (${ENutritionUnit.CALORIES})`}
                       placeholder="Calories"
                       value={nutrition.calories}
                       onChange={(value) =>
@@ -280,7 +282,7 @@ export function CreatePostSidebar({
                     />
                     <NumberInput
                       withAsterisk
-                      label={`Protein (${ENutritionUnit.PROTEIN})`}
+                      label={`Đạm (${ENutritionUnit.PROTEIN})`}
                       placeholder="Protein"
                       value={nutrition.protein}
                       onChange={(value) =>
@@ -301,7 +303,7 @@ export function CreatePostSidebar({
                     />
                     <NumberInput
                       withAsterisk
-                      label={`Fat (${ENutritionUnit.FAT})`}
+                      label={`Chất béo (${ENutritionUnit.FAT})`}
                       placeholder="Fat"
                       value={nutrition.fat}
                       onChange={(value) =>
@@ -309,7 +311,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Saturated Fat (${ENutritionUnit.SATURATED_FAT})`}
+                      label={`Chất béo bão hoà (${ENutritionUnit.SATURATED_FAT})`}
                       placeholder="Saturated Fat"
                       value={nutrition.saturatedFat}
                       onChange={(value) =>
@@ -320,7 +322,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Polyunsaturated Fat (${ENutritionUnit.POLYUNSATURATED_FAT})`}
+                      label={`Chất béo không bão hòa đa (${ENutritionUnit.POLYUNSATURATED_FAT})`}
                       placeholder="Polyunsaturated Fat"
                       value={nutrition.polyunsaturatedFat}
                       onChange={(value) =>
@@ -331,7 +333,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Monounsaturated Fat (${ENutritionUnit.MONOUNSATURATED_FAT})`}
+                      label={`Chất béo không bão hòa đơn (${ENutritionUnit.MONOUNSATURATED_FAT})`}
                       placeholder="Monounsaturated Fat"
                       value={nutrition.monounsaturatedFat}
                       onChange={(value) =>
@@ -343,7 +345,7 @@ export function CreatePostSidebar({
                     />
                     <NumberInput
                       label={`Trans Fat (${ENutritionUnit.TRANS_FAT})`}
-                      placeholder="Trans Fat"
+                      placeholder="Chất béo Trans"
                       value={nutrition.transFat}
                       onChange={(value) =>
                         setNutrition({ ...nutrition, transFat: Number(value) })
@@ -361,7 +363,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Sodium (${ENutritionUnit.SODIUM})`}
+                      label={`Natri (${ENutritionUnit.SODIUM})`}
                       placeholder="Sodium"
                       value={nutrition.sodium}
                       onChange={(value) =>
@@ -369,7 +371,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Potassium (${ENutritionUnit.POTASSIUM})`}
+                      label={`Kali (${ENutritionUnit.POTASSIUM})`}
                       placeholder="Potassium"
                       value={nutrition.potassium}
                       onChange={(value) =>
@@ -377,7 +379,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Fiber (${ENutritionUnit.FIBER})`}
+                      label={`Chất xơ (${ENutritionUnit.FIBER})`}
                       placeholder="Fiber"
                       value={nutrition.fiber}
                       onChange={(value) =>
@@ -385,7 +387,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Sugar (${ENutritionUnit.SUGAR})`}
+                      label={`Đường (${ENutritionUnit.SUGAR})`}
                       placeholder="Sugar"
                       value={nutrition.sugar}
                       onChange={(value) =>
@@ -409,7 +411,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Calcium (${ENutritionUnit.CALCIUM})`}
+                      label={`Canxi (${ENutritionUnit.CALCIUM})`}
                       placeholder="Calcium"
                       value={nutrition.calcium}
                       onChange={(value) =>
@@ -417,7 +419,7 @@ export function CreatePostSidebar({
                       }
                     />
                     <NumberInput
-                      label={`Iron (${ENutritionUnit.IRON})`}
+                      label={`Sắt (${ENutritionUnit.IRON})`}
                       placeholder="Iron"
                       value={nutrition.iron}
                       onChange={(value) =>
@@ -431,6 +433,16 @@ export function CreatePostSidebar({
           </Tabs.Panel>
         </div>
       </Tabs>
+      <div className="flex justify-center gap-3 px-3 pt-1">
+        <Button
+          variant="filled"
+          color="orange"
+          className="w-full"
+          onClick={handleUpdate}
+        >
+          Cập Nhật
+        </Button>
+      </div>
     </div>
   );
 }

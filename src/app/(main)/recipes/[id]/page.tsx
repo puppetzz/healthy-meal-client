@@ -10,7 +10,7 @@ import {
   PrinterIcon,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
-import { TNutritionUnit } from "../../../../common/enums/NutritionUnit";
+import { ENutritionUnit } from "../../../../common/enums/NutritionUnit";
 import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
@@ -238,103 +238,103 @@ export default function RecipePage({ params }: { params: { id: string } }) {
               {!!recipe?.data.recipe?.nutrition.calories && (
                 <div className="mr-3">
                   <span className="font-semibold">Calories: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.calories}${TNutritionUnit.CALORIES}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.calories}${ENutritionUnit.CALORIES}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.carbohydrates && (
                 <div className="mr-3">
                   <span className="font-semibold">Carbohydrates: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.carbohydrates}${TNutritionUnit.CARBOHYDRATES}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.carbohydrates}${ENutritionUnit.CARBOHYDRATES}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.protein && (
                 <div className="mr-3">
                   <span className="font-semibold">Protein: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.protein}${TNutritionUnit.PROTEIN}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.protein}${ENutritionUnit.PROTEIN}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.fat && (
                 <div className="mr-3">
                   <span className="font-semibold">Fat: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.fat}${TNutritionUnit.FAT}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.fat}${ENutritionUnit.FAT}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.saturatedFat && (
                 <div className="mr-3">
                   <span className="font-semibold">Saturated Fat: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.saturatedFat}${TNutritionUnit.SATURATED_FAT}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.saturatedFat}${ENutritionUnit.SATURATED_FAT}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.polyunsaturatedFat && (
                 <div className="mr-3">
                   <span className="font-semibold">Polyunsaturated Fat: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.polyunsaturatedFat}${TNutritionUnit.POLYUNSATURATED_FAT}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.polyunsaturatedFat}${ENutritionUnit.POLYUNSATURATED_FAT}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.monounsaturatedFat && (
                 <div className="mr-3">
                   <span className="font-semibold">Monounsaturated Fat: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.monounsaturatedFat}${TNutritionUnit.MONOUNSATURATED_FAT}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.monounsaturatedFat}${ENutritionUnit.MONOUNSATURATED_FAT}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.transFat && (
                 <div className="mr-3">
                   <span className="font-semibold">Trans Fat: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.transFat}${TNutritionUnit.TRANS_FAT}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.transFat}${ENutritionUnit.TRANS_FAT}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.cholesterol && (
                 <div className="mr-3">
                   <span className="font-semibold">Cholesterol: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.cholesterol}${TNutritionUnit.CHOLESTEROL}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.cholesterol}${ENutritionUnit.CHOLESTEROL}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.sodium && (
                 <div className="mr-3">
                   <span className="font-semibold">Sodium: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.sodium}${TNutritionUnit.SODIUM}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.sodium}${ENutritionUnit.SODIUM}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.potassium && (
                 <div className="mr-3">
                   <span className="font-semibold">Potassium: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.potassium}${TNutritionUnit.POTASSIUM}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.potassium}${ENutritionUnit.POTASSIUM}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.fiber && (
                 <div className="mr-3">
                   <span className="font-semibold">Fiber: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.fiber}${TNutritionUnit.FIBER}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.fiber}${ENutritionUnit.FIBER}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.sugar && (
                 <div className="mr-3">
                   <span className="font-semibold">Sugar: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.sugar}${TNutritionUnit.SUGAR}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.sugar}${ENutritionUnit.SUGAR}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.vitaminA && (
                 <div className="mr-3">
                   <span className="font-semibold">Vitamin A: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.vitaminA}${TNutritionUnit.VITAMIN_A}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.vitaminA}${ENutritionUnit.VITAMIN_A}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.vitaminC && (
                 <div className="mr-3">
                   <span className="font-semibold">Vitamin C: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.vitaminC}${TNutritionUnit.VITAMIN_C}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.vitaminC}${ENutritionUnit.VITAMIN_C}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.calcium && (
                 <div className="mr-3">
                   <span className="font-semibold">Calcium: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.calcium}${TNutritionUnit.CALCIUM}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.calcium}${ENutritionUnit.CALCIUM}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.iron && (
                 <div className="mr-3">
                   <span className="font-semibold">Iron: </span>
-                  <span>{`${recipe?.data.recipe?.nutrition.iron}${TNutritionUnit.IRON}`}</span>
+                  <span>{`${recipe?.data.recipe?.nutrition.iron}${ENutritionUnit.IRON}`}</span>
                 </div>
               )}
             </div>
@@ -419,27 +419,27 @@ export default function RecipePage({ params }: { params: { id: string } }) {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Protein</span>
-              <span>{`${recipe?.data.recipe?.nutrition.protein}${TNutritionUnit.CALORIES}`}</span>
+              <span>{`${recipe?.data.recipe?.nutrition.protein}${ENutritionUnit.CALORIES}`}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Fats</span>
-              <span>{`${recipe?.data.recipe?.nutrition.fat}${TNutritionUnit.FAT}`}</span>
+              <span>{`${recipe?.data.recipe?.nutrition.fat}${ENutritionUnit.FAT}`}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Carbs</span>
-              <span>{`${recipe?.data.recipe?.nutrition.carbohydrates}${TNutritionUnit.CARBOHYDRATES}`}</span>
+              <span>{`${recipe?.data.recipe?.nutrition.carbohydrates}${ENutritionUnit.CARBOHYDRATES}`}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Sodium</span>
-              <span>{`${recipe?.data.recipe?.nutrition.sodium}${TNutritionUnit.SODIUM}`}</span>
+              <span>{`${recipe?.data.recipe?.nutrition.sodium}${ENutritionUnit.SODIUM}`}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Fiber</span>
-              <span>{`${recipe?.data.recipe?.nutrition.fiber}${TNutritionUnit.FIBER}`}</span>
+              <span>{`${recipe?.data.recipe?.nutrition.fiber}${ENutritionUnit.FIBER}`}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Sugar</span>
-              <span>{`${recipe?.data.recipe?.nutrition.sugar}${TNutritionUnit.SUGAR}`}</span>
+              <span>{`${recipe?.data.recipe?.nutrition.sugar}${ENutritionUnit.SUGAR}`}</span>
             </div>
           </div>
           <div className="rotate-image mb-2 mt-4 flex w-full justify-center">

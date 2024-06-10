@@ -6,7 +6,7 @@ import { Button } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { Menu } from "@mantine/core";
 import { Avatar } from "@mantine/core";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Input } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
@@ -18,6 +18,7 @@ const blackOpsOne = Black_Ops_One({
 export const Navbar = () => {
   const { user, signInGoogle, signOut } = UseAuth();
   const [showSearchBox, setShowSearchBox] = useState<boolean>(false);
+  const [searchBoxValue, setSearchBoxValue] = useState<string>("");
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
@@ -48,7 +49,7 @@ export const Navbar = () => {
                 router.push("/recipes");
               }}
             >
-              <span>Recipes</span>
+              <span>Công Thức</span>
             </div>
 
             <div
@@ -57,7 +58,7 @@ export const Navbar = () => {
                 router.push("/meal-plans");
               }}
             >
-              <span>Meal Plans</span>
+              <span>Kế Hoạch</span>
             </div>
 
             <div
@@ -66,29 +67,49 @@ export const Navbar = () => {
                 router.push("/health-metrics");
               }}
             >
-              <span>Heath Metrics</span>
+              <span>TDEE</span>
             </div>
 
-            <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
-              onClick={() => {
-                router.push("/blog");
-              }}
-            >
-              <span>Blog</span>
-            </div>
+            {user && (
+              <div
+                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
+                onClick={() => {
+                  router.push("/me");
+                }}
+              >
+                <span>Của Tôi</span>
+              </div>
+            )}
           </div>
         </div>
 
         <div className="flex items-center justify-center gap-5">
           {showSearchBox ? (
-            <Input
-              placeholder="Search"
-              onBlur={() => {
-                setShowSearchBox(false);
-              }}
-              ref={searchInputRef}
-            />
+            <div className="flex items-center">
+              <XMarkIcon
+                className="mr-2 h-7 w-7 cursor-pointer text-[#9aa2b1] transition-opacity"
+                onClick={() => setShowSearchBox(!showSearchBox)}
+              />
+              <div className="flex items-center rounded-lg border-[1px] px-1 pl-2 shadow-lg">
+                <Input
+                  placeholder="Search"
+                  variant="unstyled"
+                  size="md"
+                  value={searchBoxValue}
+                  onChange={(event) => {
+                    setSearchBoxValue(event.target.value);
+                  }}
+                />
+                <div
+                  className="my-1 rounded-lg bg-[#ed8537] p-2"
+                  onClick={() => {
+                    router.push(`/search?q=${searchBoxValue}`);
+                  }}
+                >
+                  <MagnifyingGlassIcon className="h-5 w-5 text-white" />
+                </div>
+              </div>
+            </div>
           ) : (
             <MagnifyingGlassIcon
               className="h-7 w-7"

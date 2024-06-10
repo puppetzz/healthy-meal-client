@@ -1,4 +1,18 @@
-export type TNutritionInputFields = {
+import { TIngredientRequest } from "./Ingredient";
+
+export type TUpdateRecipeRequest = {
+  id: number;
+  thumbnail: string;
+  title: string;
+  content: string;
+  prepTime: number;
+  cookTime: number;
+  servings: number;
+  calculationUnit: string;
+  keeping: string;
+  freezer: string;
+  ingredients?: TIngredientRequest[];
+  foodCategoryIds: number[];
   calories: number;
   protein: number;
   carbohydrates: number;

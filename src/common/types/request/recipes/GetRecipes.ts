@@ -3,4 +3,12 @@ export type GetRecipesReq = {
   pageSize?: number;
   categoryId?: number;
   search?: string;
+  category?: string;
+  calories?: number[];
+  protein?: number[];
+  fat?: number[];
+  carbs?: number[];
+  sodium?: number[];
+  fiber?: number[];
+  sugar?: number[];
 };
