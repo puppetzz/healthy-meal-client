@@ -6,13 +6,14 @@ import { useState } from "react";
 import { TMealPlanRecipeRequest } from "../../common/types/request/meal-plan/CreateMealPlan";
 import { Post } from "../../common/types/post";
 import { TNutritionPerMeal } from "../../common/types/form/HealthMetricsTarget";
+import { Recipe } from "../../common/types/recipes";
 
 type SearchRecipesModalProps = {
   opened: boolean;
   close: () => void;
   onClickRecipe: (
     mealPlanRecipe: TMealPlanRecipeRequest,
-    recipe: Post,
+    recipe: Recipe,
     day: number,
     meal: number,
   ) => void;
@@ -54,7 +55,7 @@ export function SearchRecipesModal({
           />
         </div>
         <div className="flex h-full flex-col gap-3 overflow-auto">
-          {recipes?.data.data.map((recipe) => (
+          {recipes?.data.recipes.map((recipe) => (
             <div
               className="flex cursor-pointer gap-2 rounded-xl bg-[#f9fafb] p-2"
               onClick={() => {
@@ -69,44 +70,41 @@ export function SearchRecipesModal({
                   meal - 1,
                 );
                 setTotalMacronutrient((prev) => ({
-                  calories:
-                    prev.calories + (recipe.recipe?.nutrition.calories || 0),
-                  protein:
-                    prev.protein + (recipe.recipe?.nutrition.protein || 0),
-                  fat: prev.fat + (recipe.recipe?.nutrition.fat || 0),
-                  carbs:
-                    prev.carbs + (recipe.recipe?.nutrition.carbohydrates || 0),
+                  calories: prev.calories + (recipe.nutrition.calories || 0),
+                  protein: prev.protein + (recipe.nutrition.protein || 0),
+                  fat: prev.fat + (recipe.nutrition.fat || 0),
+                  carbs: prev.carbs + (recipe.nutrition.carbohydrates || 0),
                 }));
                 setRecipeSearchBoxValue("");
                 close();
               }}
             >
-              <Avatar size="125" src={recipe.thumbnail} radius="md" />
+              <Avatar size="125" src={recipe.post.thumbnail} radius="md" />
               <div className="flex flex-col">
                 <div className="h-[60px] overflow-hidden">
-                  <span className="text-xl font-bold">{recipe.title}</span>
+                  <span className="text-xl font-bold">{recipe.post.title}</span>
                 </div>
                 <div className="mt-auto flex w-[400px] rounded-xl bg-[#ed8537] px-4 py-2 text-white">
                   <div className="flex w-1/4 flex-col items-center border-r-[0.5px]">
-                    <span className="text-lg font-semibold">{`${recipe.recipe?.nutrition.calories}cal`}</span>
+                    <span className="text-lg font-semibold">{`${recipe.nutrition.calories}cal`}</span>
                     <span className="text-sm font-semibold text-[#f7c7b3]">
                       calories
                     </span>
                   </div>
                   <div className="flex w-1/4 flex-col items-center border-x-[0.5px]">
-                    <span className="text-lg font-semibold">{`${recipe.recipe?.nutrition.protein}g`}</span>
+                    <span className="text-lg font-semibold">{`${recipe.nutrition.protein}g`}</span>
                     <span className="text-sm font-semibold text-[#f7c7b3]">
                       protein
                     </span>
                   </div>
                   <div className="flex w-1/4 flex-col items-center border-x-[0.5px]">
-                    <span className="text-lg font-semibold">{`${recipe.recipe?.nutrition.fat}g`}</span>
+                    <span className="text-lg font-semibold">{`${recipe.nutrition.fat}g`}</span>
                     <span className="text-sm font-semibold text-[#f7c7b3]">
                       fat
                     </span>
                   </div>
                   <div className="flex w-1/4 flex-col items-center border-l-[0.5px]">
-                    <span className="text-lg font-semibold">{`${recipe.recipe?.nutrition.carbohydrates}g`}</span>
+                    <span className="text-lg font-semibold">{`${recipe.nutrition.carbohydrates}g`}</span>
                     <span className="text-sm font-semibold text-[#f7c7b3]">
                       carbs
                     </span>

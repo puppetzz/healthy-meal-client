@@ -2,9 +2,10 @@ import { Post } from "@/common/types/post";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { List } from "@mantine/core";
 import Image from "next/image";
+import { Recipe } from "../../common/types/recipes";
 
 type MealPlanPreviewBlockProps = {
-  recipe: Post;
+  recipe: Recipe;
   meal: number;
 };
 
@@ -28,20 +29,20 @@ export function MealPlanPreviewBlock({
               className="text-2xl font-bold underline"
               href={`/recipes/${recipe.id}`}
             >
-              {recipe.title}
+              {recipe.post.title}
             </a>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Image src="/svg/fire.svg" alt="Fire" width={16} height={16} />
-          <span className="text-xl font-semibold">{`${recipe.recipe?.nutrition.calories}Cal`}</span>
+          <span className="text-xl font-semibold">{`${recipe.nutrition.calories}Cal`}</span>
         </div>
       </div>
 
       <div className="flex w-full gap-5">
         <div className="h-[350px] w-[50%]">
           <img
-            src={recipe.thumbnail}
+            src={recipe.post.thumbnail}
             alt=""
             className="h-full w-full rounded-xl object-cover"
           />
@@ -49,24 +50,23 @@ export function MealPlanPreviewBlock({
         <div className="flex flex-1 flex-col">
           <span className="text-xl font-bold">Nguyên Liệu</span>
           <List listStyleType="disc">
-            {recipe.recipe?.ingredient &&
-              recipe.recipe?.ingredient
+            {recipe.ingredient &&
+              recipe.ingredient
                 .slice(0, 8)
                 .map((ingredient) => (
                   <List.Item>
                     {`${ingredient.amount} ${ingredient.unit} ${ingredient.name}`}
                   </List.Item>
                 ))}
-            {recipe.recipe?.ingredient?.length &&
-              recipe.recipe?.ingredient?.length > 8 && (
-                <List.Item>...</List.Item>
-              )}
+            {recipe.ingredient?.length && recipe.ingredient?.length > 8 && (
+              <List.Item>...</List.Item>
+            )}
           </List>
           <div className="mt-auto">
             <div className="mb-2 flex justify-end">
               <a
                 className="flex items-center gap-1 font-bold underline"
-                href={`/recipes/${recipe.id}`}
+                href={`/recipes/${recipe.post.id}`}
               >
                 Xem chi tiết
                 <ChevronRightIcon className="h-4 w-4" />
@@ -76,19 +76,19 @@ export function MealPlanPreviewBlock({
               <div className="flex justify-between">
                 <div className="flex flex-col font-semibold">
                   <span className="text-sm text-[#f7c7b3]">Calories</span>
-                  <span className="text-xl">{`${recipe.recipe?.nutrition.calories}Cal`}</span>
+                  <span className="text-xl">{`${recipe.nutrition.calories}Cal`}</span>
                 </div>
                 <div className="flex flex-col font-semibold">
                   <span className="text-sm text-[#f7c7b3]">Protein</span>
-                  <span className="text-xl">{`${recipe.recipe?.nutrition.protein}g`}</span>
+                  <span className="text-xl">{`${recipe.nutrition.protein}g`}</span>
                 </div>
                 <div className="flex flex-col font-semibold">
                   <span className="text-sm text-[#f7c7b3]">Fats</span>
-                  <span className="text-xl">{`${recipe.recipe?.nutrition.fat}g`}</span>
+                  <span className="text-xl">{`${recipe.nutrition.fat}g`}</span>
                 </div>
                 <div className="flex flex-col font-semibold">
                   <span className="text-sm text-[#f7c7b3]">Carbs</span>
-                  <span className="text-xl">{`${recipe.recipe?.nutrition.carbohydrates}g`}</span>
+                  <span className="text-xl">{`${recipe.nutrition.carbohydrates}g`}</span>
                 </div>
               </div>
             </div>

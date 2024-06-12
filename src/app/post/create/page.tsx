@@ -28,6 +28,7 @@ import { IngredientForm } from "../../../components/form/IngredientForm";
 import { TNutritionInputFields } from "../../../common/types/form/NutritionInputField";
 import { TRecipeOptionInputField } from "../../../common/types/form/RecipeOptionInputField";
 import { useCreateRecipeMutation } from "../../../mutation/useCreateRecipe";
+import { useRouter } from "next/navigation";
 
 const BlockNote = dynamic(
   () => import("../../../components/blog/BlockNote").then((mod) => mod.default),
@@ -37,6 +38,7 @@ const BlockNote = dynamic(
 );
 
 export default function CreatePost() {
+  const router = useRouter();
   const [opened, { toggle }] = useDisclosure(true);
   const uploadFile = useUploadFile();
 
@@ -216,7 +218,14 @@ export default function CreatePost() {
       postCategoryIds: postCategories,
     };
 
-    createRecipeMutation.mutate(data);
+    createRecipeMutation.mutateAsync(data).then(() => {
+      router.push("/me/meal-plans");
+      notifications.show({
+        title: "Create Recipes",
+        color: "green",
+        message: "Create Successfully!",
+      });
+    });
   };
 
   return (

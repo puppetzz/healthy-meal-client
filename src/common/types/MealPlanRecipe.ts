@@ -1,9 +1,9 @@
 import { Recipe } from "./recipes";
 
 export type MealPlanRecipe = {
-  id: string;
+  id: number;
   mealPlanId: string;
-  recipeId: string;
+  recipeId: number;
   day: number;
   meal: number;
   recipe: Recipe;

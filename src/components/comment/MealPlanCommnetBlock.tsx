@@ -1,7 +1,6 @@
 "use client";
 
 import { Rating } from "@mantine/core";
-import { Comment } from "../../common/types/comment";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { CommentForm } from "../form/CommentForm";

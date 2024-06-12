@@ -1,7 +1,6 @@
 "use client";
 
 import { MealPlanComment } from "../../common/types/MealPlanComment";
-import { CommentBlock } from "./CommentBlock";
 import { MealPlanCommentBlock } from "./MealPlanCommnetBlock";
 
 type MealPlanCommentViewProps = {

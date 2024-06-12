@@ -7,6 +7,7 @@ export type TCreateMealPlanRequest = {
   status: EMealPlanStatus;
   frequency: EMealPlanFrequency;
   mealPlanRecipes: TMealPlanRecipeRequest[];
+  mealPerDay: number;
 };
 
 export type TMealPlanRecipeRequest = {

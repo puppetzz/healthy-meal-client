@@ -2,7 +2,6 @@
 
 import { HomeIcon } from "@heroicons/react/24/solid";
 import { VerticalCard } from "../../../components/cards/VerticalCard";
-import { Post } from "../../../common/types/post";
 import { useRecipeQuery } from "../../../queries";
 import { useFoodCategoriesQuery } from "../../../queries/useFoodCategories";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -11,7 +10,7 @@ import { TFoodCategory } from "../../../common/types/FoodCategory";
 import { Anchor, Breadcrumbs, Button, Pagination } from "@mantine/core";
 import { useCreateQueryString } from "../../../hooks/useCreateQueryString";
 import { useCallback, useEffect } from "react";
-import Image from "next/image";
+import { Recipe } from "../../../common/types/recipes";
 
 export default function Recipes() {
   const router = useRouter();
@@ -72,12 +71,12 @@ export default function Recipes() {
         <div className="flex justify-between">
           <div className="flex w-[62%] flex-col items-center md:w-[73%]">
             <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {recipes?.data.data.map((recipe) => (
+              {recipes?.data.recipes.map((recipe) => (
                 <VerticalCard
                   key={recipe.id}
-                  post={recipe as Post}
+                  recipe={recipe as Recipe}
                   onClick={() => {
-                    handleClickCard(recipe.id);
+                    handleClickCard(recipe.post.id);
                   }}
                   className="cursor-pointer"
                 />

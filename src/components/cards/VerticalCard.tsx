@@ -1,16 +1,16 @@
 import { ENutritionUnit } from "../../common/enums/NutritionUnit";
-import { Post } from "../../common/types/post";
 import Image from "next/image";
 import { cn } from "../../lib/utils";
+import { Recipe } from "../../common/types/recipes";
 
 type VerticalCardProps = {
-  post: Post;
+  recipe: Recipe;
   className?: string;
   onClick?: () => void;
 };
 
 export const VerticalCard = ({
-  post,
+  recipe,
   className,
   onClick,
 }: VerticalCardProps) => {
@@ -25,13 +25,13 @@ export const VerticalCard = ({
       >
         <img
           className="mb-4 h-[40%] rounded-tl-xl rounded-tr-xl object-cover"
-          src={post.thumbnail}
+          src={recipe.post.thumbnail}
           alt="recipes"
         />
         <div className="flex flex-1 flex-col px-6 pb-6">
           <div className="flex justify-between">
             <div className="flex w-full flex-wrap gap-[6px]">
-              {post.recipe?.recipeFoodCategory.map((category) => (
+              {recipe.recipeFoodCategory.map((category) => (
                 <span
                   key={category.foodCategory.id}
                   className="h-fit rounded-full bg-gray-200 px-2 py-[2px] text-sm"
@@ -40,15 +40,15 @@ export const VerticalCard = ({
                 </span>
               ))}
             </div>
-            {post.rating && (
+            {recipe.post.rating && (
               <div>
                 <Image src="svg/star.svg" alt="star" width={14} height={14} />
-                <span className="text-sm">{post.rating}</span>
+                <span className="text-sm">{recipe.post.rating}</span>
               </div>
             )}
           </div>
           <span className="mb-auto mt-1 text-lg font-semibold">
-            {post.title}
+            {recipe.post.title}
           </span>
           <div className="mt-auto flex justify-between">
             <div className="flex flex-col">
@@ -62,19 +62,19 @@ export const VerticalCard = ({
                 />
                 <span>Cal</span>
               </div>
-              <span>{post.recipe?.nutrition.calories}</span>
+              <span>{recipe.nutrition.calories}</span>
             </div>
             <div className="flex flex-col">
               <span>Carbs</span>
-              <span>{`${post.recipe?.nutrition.carbohydrates}${ENutritionUnit.CARBOHYDRATES}`}</span>
+              <span>{`${recipe.nutrition.carbohydrates}${ENutritionUnit.CARBOHYDRATES}`}</span>
             </div>
             <div className="flex flex-col">
               <span>Fats</span>
-              <span>{`${post.recipe?.nutrition.fat}${ENutritionUnit.FAT}`}</span>
+              <span>{`${recipe.nutrition.fat}${ENutritionUnit.FAT}`}</span>
             </div>
             <div className="flex flex-col">
               <span>Protein</span>
-              <span>{`${post.recipe?.nutrition.protein}${ENutritionUnit.PROTEIN}`}</span>
+              <span>{`${recipe.nutrition.protein}${ENutritionUnit.PROTEIN}`}</span>
             </div>
           </div>
         </div>

@@ -5,3 +5,4 @@ export * from "./useMealPlanDetail";
 export * from "./useHealthMetrics";
 export * from "./usePostCategories";
 export * from "./useRecipeById";
+export * from "./useRecipesByUser";

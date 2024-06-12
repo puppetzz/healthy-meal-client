@@ -93,7 +93,7 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
                 <div className="flex w-72  flex-col items-center border-b-[1px] border-black py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
-                      macronutrients.maintenance.moderateCarbs.protein,
+                      macronutrients.maintenance.higherCarbs.protein,
                     )}g`}
                   </span>
                   <span>protein</span>
@@ -101,7 +101,7 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
                 <div className="flex flex-col items-center border-b-[1px] border-black py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
-                      macronutrients.maintenance.moderateCarbs.fat,
+                      macronutrients.maintenance.higherCarbs.fat,
                     )}g`}
                   </span>
                   <span>fats</span>
@@ -109,7 +109,7 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
                 <div className="flex flex-col items-center py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
-                      macronutrients.maintenance.moderateCarbs.carbs,
+                      macronutrients.maintenance.higherCarbs.carbs,
                     )}g`}
                   </span>
                   <span>carbs</span>
@@ -203,7 +203,7 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
                 <div className="flex w-72  flex-col items-center border-b-[1px] border-black py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
-                      macronutrients.cutting.moderateCarbs.protein,
+                      macronutrients.cutting.higherCarbs.protein,
                     )}g`}
                   </span>
                   <span>protein</span>
@@ -211,7 +211,7 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
                 <div className="flex flex-col items-center border-b-[1px] border-black py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
-                      macronutrients.cutting.moderateCarbs.fat,
+                      macronutrients.cutting.higherCarbs.fat,
                     )}g`}
                   </span>
                   <span>fats</span>
@@ -219,7 +219,7 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
                 <div className="flex flex-col items-center py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
-                      macronutrients.cutting.moderateCarbs.carbs,
+                      macronutrients.cutting.higherCarbs.carbs,
                     )}g`}
                   </span>
                   <span>carbs</span>
@@ -313,7 +313,7 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
                 <div className="flex w-72  flex-col items-center border-b-[1px] border-black py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
-                      macronutrients.bulking.moderateCarbs.protein,
+                      macronutrients.bulking.higherCarbs.protein,
                     )}g`}
                   </span>
                   <span>protein</span>
@@ -321,7 +321,7 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
                 <div className="flex flex-col items-center border-b-[1px] border-black py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
-                      macronutrients.bulking.moderateCarbs.fat,
+                      macronutrients.bulking.higherCarbs.fat,
                     )}g`}
                   </span>
                   <span>fats</span>
@@ -329,7 +329,7 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
                 <div className="flex flex-col items-center py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
-                      macronutrients.bulking.moderateCarbs.carbs,
+                      macronutrients.bulking.higherCarbs.carbs,
                     )}g`}
                   </span>
                   <span>carbs</span>

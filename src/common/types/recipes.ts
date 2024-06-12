@@ -15,5 +15,5 @@ export type Recipe = {
   nutrition: Nutrition;
   recipeFoodCategory: RecipeFoodCategory[];
   ingredient: Ingredient[];
-  post?: Post;
+  post: Post;
 };

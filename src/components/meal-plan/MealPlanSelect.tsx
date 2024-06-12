@@ -3,16 +3,14 @@ import {
   THealthMetricsTarget,
   TNutritionPerMeal,
 } from "../../common/types/form/HealthMetricsTarget";
-import {
-  TCreateMealPlanRequest,
-  TMealPlanRecipeRequest,
-} from "../../common/types/request/meal-plan/CreateMealPlan";
+import { TMealPlanRecipeRequest } from "../../common/types/request/meal-plan/CreateMealPlan";
 import { numberWithCommas } from "../../utils/numberCommasFormat";
 import { useState } from "react";
 import { SearchRecipesModal } from "../modals/SearchRecipesModal";
 import { Post } from "../../common/types/post";
 import { RecipeSelectedBox } from "./RecipeSelectedBox";
 import { EMealPlanFrequency } from "../../common/enums/MealPlanFrequency";
+import { Recipe } from "../../common/types/recipes";
 
 type MealPlanSelectProps = {
   tdee: number;
@@ -21,8 +19,8 @@ type MealPlanSelectProps = {
     React.SetStateAction<TMealPlanRecipeRequest[][]>
   >;
   healthMetricsForGoals: THealthMetricsTarget;
-  selectedRecipes: Post[][];
-  setSelectedRecipes: React.Dispatch<React.SetStateAction<Post[][]>>;
+  selectedRecipes: Recipe[][];
+  setSelectedRecipes: React.Dispatch<React.SetStateAction<Recipe[][]>>;
   totalMacronutrient: TNutritionPerMeal;
   setTotalMacronutrient: React.Dispatch<
     React.SetStateAction<TNutritionPerMeal>
@@ -43,11 +41,11 @@ export function MealPlanSelect({
 }: MealPlanSelectProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const [meal, setMeal] = useState(1);
-  const [recipeEditing, setRecipeEditing] = useState<Post>();
+  const [recipeEditing, setRecipeEditing] = useState<Recipe>();
 
   const handleClickRecipe = (
     mealPlanRecipe: TMealPlanRecipeRequest,
-    recipe: Post,
+    recipe: Recipe,
     day: number,
     meal: number,
   ) => {
@@ -70,13 +68,10 @@ export function MealPlanSelect({
     setTotalMacronutrient((prev) => {
       if (recipeEditing) {
         return {
-          calories:
-            prev.calories - (recipeEditing.recipe?.nutrition.calories || 0),
-          protein:
-            prev.protein - (recipeEditing.recipe?.nutrition.protein || 0),
-          fat: prev.fat - (recipeEditing.recipe?.nutrition.fat || 0),
-          carbs:
-            prev.carbs - (recipeEditing.recipe?.nutrition.carbohydrates || 0),
+          calories: prev.calories - (recipeEditing.nutrition.calories || 0),
+          protein: prev.protein - (recipeEditing.nutrition.protein || 0),
+          fat: prev.fat - (recipeEditing.nutrition.fat || 0),
+          carbs: prev.carbs - (recipeEditing.nutrition.carbohydrates || 0),
         };
       }
       return prev;
@@ -103,6 +98,8 @@ export function MealPlanSelect({
                   healthMetricsForGoals.detailCaloriesOfMeals.breakfast
                 }
                 setRecipeEditing={setRecipeEditing}
+                currentDay={1}
+                setCurrentDay={setCurrentDay}
               />
               <RecipeSelectedBox
                 recipe={selectedRecipes[0][1]}
@@ -114,6 +111,8 @@ export function MealPlanSelect({
                   healthMetricsForGoals.detailCaloriesOfMeals.lunch
                 }
                 setRecipeEditing={setRecipeEditing}
+                currentDay={1}
+                setCurrentDay={setCurrentDay}
               />
               <RecipeSelectedBox
                 recipe={selectedRecipes[0][2]}
@@ -125,6 +124,8 @@ export function MealPlanSelect({
                   healthMetricsForGoals.detailCaloriesOfMeals.dinner
                 }
                 setRecipeEditing={setRecipeEditing}
+                currentDay={1}
+                setCurrentDay={setCurrentDay}
               />
               {numberOfMeals === 4 && (
                 <RecipeSelectedBox
@@ -137,6 +138,8 @@ export function MealPlanSelect({
                     healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[0]
                   }
                   setRecipeEditing={setRecipeEditing}
+                  currentDay={1}
+                  setCurrentDay={setCurrentDay}
                 />
               )}
             </div>
@@ -152,6 +155,8 @@ export function MealPlanSelect({
                   healthMetricsForGoals.detailCaloriesOfMeals.breakfast
                 }
                 setRecipeEditing={setRecipeEditing}
+                currentDay={1}
+                setCurrentDay={setCurrentDay}
               />
               <RecipeSelectedBox
                 recipe={selectedRecipes[0][3]}
@@ -163,6 +168,8 @@ export function MealPlanSelect({
                   healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[0]
                 }
                 setRecipeEditing={setRecipeEditing}
+                currentDay={1}
+                setCurrentDay={setCurrentDay}
               />
               <RecipeSelectedBox
                 recipe={selectedRecipes[0][1]}
@@ -174,6 +181,8 @@ export function MealPlanSelect({
                   healthMetricsForGoals.detailCaloriesOfMeals.lunch
                 }
                 setRecipeEditing={setRecipeEditing}
+                currentDay={1}
+                setCurrentDay={setCurrentDay}
               />
               <RecipeSelectedBox
                 recipe={selectedRecipes[0][4]}
@@ -185,6 +194,8 @@ export function MealPlanSelect({
                   healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[1]
                 }
                 setRecipeEditing={setRecipeEditing}
+                currentDay={1}
+                setCurrentDay={setCurrentDay}
               />
               <RecipeSelectedBox
                 recipe={selectedRecipes[0][2]}
@@ -196,6 +207,8 @@ export function MealPlanSelect({
                   healthMetricsForGoals.detailCaloriesOfMeals.dinner
                 }
                 setRecipeEditing={setRecipeEditing}
+                currentDay={1}
+                setCurrentDay={setCurrentDay}
               />
             </div>
           )

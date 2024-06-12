@@ -10,36 +10,43 @@ import {
   Select,
   Stepper,
 } from "@mantine/core";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { MealPlanCreationNav } from "../../../components/nav/MealPlanCreationNav";
-import { EMealPlanFrequency } from "../../../common/enums/MealPlanFrequency";
-import { EGoal } from "../../../common/enums/Goal";
-import { ECarbsType } from "../../../common/enums/CarbsType";
+import { MealPlanCreationNav } from "../../../../../components/nav/MealPlanCreationNav";
+import { EMealPlanFrequency } from "../../../../../common/enums/MealPlanFrequency";
+import { EGoal } from "../../../../../common/enums/Goal";
+import { ECarbsType } from "../../../../../common/enums/CarbsType";
 import {
   TDetailCaloriesOfMeals,
   THealthMetricsTarget,
   TNutritionPerMeal,
-} from "../../../common/types/form/HealthMetricsTarget";
-import { TMacronutrient } from "../../../common/types/response/health-metric-tdee";
-import { MealMacronutrientBlock } from "../../../components/meal-plan/MealMacronutrientBlock";
-import { MealPlanSelect } from "../../../components/meal-plan/MealPlanSelect";
+} from "../../../../../common/types/form/HealthMetricsTarget";
+import { TMacronutrient } from "../../../../../common/types/response/health-metric-tdee";
+import { MealMacronutrientBlock } from "../../../../../components/meal-plan/MealMacronutrientBlock";
+import { MealPlanSelect } from "../../../../../components/meal-plan/MealPlanSelect";
 import dynamic from "next/dynamic";
-import { useHealthMetricsQuery } from "../../../queries";
-import { TMealPlanRecipeRequest } from "../../../common/types/request/meal-plan/CreateMealPlan";
-import { EMealPlanStatus } from "../../../common/enums/MealPlanStatus";
-import { Post } from "../../../common/types/post";
+import {
+  useHealthMetricsQuery,
+  useMealPlanDetailQuery,
+} from "../../../../../queries";
+import { TMealPlanRecipeRequest } from "../../../../../common/types/request/meal-plan/CreateMealPlan";
+import { EMealPlanStatus } from "../../../../../common/enums/MealPlanStatus";
 import Image from "next/image";
-import { numberWithCommas } from "../../../utils/numberCommasFormat";
+import { numberWithCommas } from "../../../../../utils/numberCommasFormat";
 import { notifications } from "@mantine/notifications";
-import { useMealPlanMutation } from "../../../mutation/useMealPlan";
-import { MealPlanPreviewBlock } from "../../../components/meal-plan/MealPlanPreviewBlock";
+import { useMealPlanMutation } from "../../../../../mutation/useMealPlan";
+import { MealPlanPreviewBlock } from "../../../../../components/meal-plan/MealPlanPreviewBlock";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
-import { Recipe } from "../../../common/types/recipes";
+import { Recipe } from "../../../../../common/types/recipes";
+import { useMealPlansByUserQuery } from "../../../../../queries/useMealPlanByUser";
+import { useUpdateMealPlan } from "../../../../../mutation";
 
 const BlockNote = dynamic(
-  () => import("../../../components/blog/BlockNote").then((mod) => mod.default),
+  () =>
+    import("../../../../../components/blog/BlockNote").then(
+      (mod) => mod.default,
+    ),
   {
     ssr: false,
   },
@@ -47,7 +54,7 @@ const BlockNote = dynamic(
 
 const BlockNoteViewOnly = dynamic(
   () =>
-    import("../../../components/blog/BlockNoteViewOnly").then(
+    import("../../../../../components/blog/BlockNoteViewOnly").then(
       (mod) => mod.default,
     ),
   {
@@ -57,8 +64,10 @@ const BlockNoteViewOnly = dynamic(
 
 type GoalType = "cutting" | "maintenance" | "bulking";
 
-export default function MealPlanCreation() {
+export default function UpdateMealPlan({ params }: { params: { id: number } }) {
   const router = useRouter();
+
+  const isInitialDataRef = useRef<boolean>(true);
 
   const [active, setActive] = useState(0);
   const [title, setTitle] = useState<string>("");
@@ -86,8 +95,9 @@ export default function MealPlanCreation() {
   >([[]]);
 
   const { data: healthMetrics } = useHealthMetricsQuery();
+  const { data: mealPlan } = useMealPlanDetailQuery(Number(params.id));
 
-  const mealPlanMutation = useMealPlanMutation();
+  const updateMealPlanMutation = useUpdateMealPlan();
 
   const calDetailMacronutrientPerMeal = useCallback(
     (calories: number, carbsType: ECarbsType) => {
@@ -290,15 +300,22 @@ export default function MealPlanCreation() {
       return;
     }
 
-    const status = EMealPlanStatus.DRAFT;
-
     const recipes = mealPlanRecipes.flat();
 
-    mealPlanMutation
+    if (!mealPlan?.data.id) {
+      notifications.show({
+        title: "Meal Plan Error",
+        color: "red",
+        message: "Update Meal Plan Failed!",
+      });
+      return;
+    }
+
+    updateMealPlanMutation
       .mutateAsync({
+        id: mealPlan?.data.id,
         title,
         content,
-        status,
         frequency: frequency as EMealPlanFrequency,
         mealPlanRecipes: recipes,
         mealPerDay: Number(numberOfMeals),
@@ -312,6 +329,63 @@ export default function MealPlanCreation() {
         });
       });
   };
+
+  useEffect(() => {
+    if (isInitialDataRef.current && mealPlan?.data) {
+      setTitle(mealPlan.data.title);
+      setContent(mealPlan.data.content);
+      setFrequency(mealPlan.data.frequency);
+
+      switch (mealPlan.data.frequency) {
+        case EMealPlanFrequency.DAILY: {
+          const recipes: Recipe[] = [];
+
+          const mealPlanRecipes: TMealPlanRecipeRequest[] =
+            mealPlan.data.mealPlanRecipe.map((mealPlanRecipe) => {
+              recipes.push(mealPlanRecipe.recipe);
+
+              return {
+                recipeId: mealPlanRecipe.recipeId,
+                day: mealPlanRecipe.day,
+                meal: mealPlanRecipe.meal,
+              } as TMealPlanRecipeRequest;
+            });
+
+          setMealPlanRecipes([mealPlanRecipes]);
+          setSelectedRecipes([recipes]);
+          break;
+        }
+        case EMealPlanFrequency.WEEKLY: {
+          const recipes: Recipe[][] = [[]];
+          const mealPlanRecipes: TMealPlanRecipeRequest[][] =
+            mealPlan.data.mealPlanRecipe.reduce(
+              (result, mealPlanRecipe) => {
+                const mealPlanRequest: TMealPlanRecipeRequest = {
+                  recipeId: mealPlanRecipe.recipeId,
+                  day: mealPlanRecipe.day,
+                  meal: mealPlanRecipe.meal,
+                };
+
+                if (!result[mealPlanRecipe.day - 1]) {
+                  result.push([mealPlanRequest]);
+                  recipes.push([mealPlanRecipe.recipe]);
+                }
+
+                result[mealPlanRecipe.day - 1].push(mealPlanRequest);
+                recipes[mealPlanRecipe.day - 1].push(mealPlanRecipe.recipe);
+
+                return result;
+              },
+              [[]] as TMealPlanRecipeRequest[][],
+            );
+          setMealPlanRecipes(mealPlanRecipes);
+          setSelectedRecipes(recipes);
+          break;
+        }
+        case EMealPlanFrequency.MONTHLY:
+      }
+    }
+  }, [mealPlan?.data]);
 
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));

@@ -2,7 +2,7 @@
 
 import { UseAuth } from "@/context/AuthContext";
 import { Black_Ops_One } from "next/font/google";
-import { Button } from "@mantine/core";
+import { Button, Group, HoverCard } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { Menu } from "@mantine/core";
 import { Avatar } from "@mantine/core";
@@ -31,7 +31,7 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="flex h-28 w-full items-center justify-between px-10">
+      <nav className="sticky top-0 z-[100] flex h-28 w-full items-center justify-between bg-white px-10">
         <div className="flex items-center">
           <div
             className={`${blackOpsOne.className} flex cursor-pointer flex-col items-center text-4xl uppercase`}
@@ -43,43 +43,45 @@ export const Navbar = () => {
             <span>meals</span>
           </div>
           <div className="ml-5 flex">
-            <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
-              onClick={() => {
-                router.push("/recipes");
-              }}
-            >
-              <span>Công Thức</span>
-            </div>
-
-            <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
-              onClick={() => {
-                router.push("/meal-plans");
-              }}
-            >
-              <span>Kế Hoạch</span>
-            </div>
-
-            <div
-              className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
-              onClick={() => {
-                router.push("/health-metrics");
-              }}
-            >
-              <span>TDEE</span>
-            </div>
-
-            {user && (
-              <div
-                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#f76707] hover:text-white"
-                onClick={() => {
-                  router.push("/me");
-                }}
+            <ul className="flex">
+              <li
+                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#ffa16c] hover:text-white"
+                onClick={() => router.push("/recipes")}
               >
-                <span>Của Tôi</span>
-              </div>
-            )}
+                Công Thức
+              </li>
+              <li
+                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#ffa16c] hover:text-white"
+                onClick={() => router.push("/meal-plans")}
+              >
+                Kế Hoạch
+              </li>
+              <li
+                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#ffa16c] hover:text-white"
+                onClick={() => router.push("/health-metrics")}
+              >
+                TDEE
+              </li>
+              <li className="group hover:bg-[#ffa16c] hover:text-white">
+                <span className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold">
+                  Của Tôi
+                </span>
+                <div className="absolute hidden h-auto bg-[#ffa16c] group-hover:block">
+                  <ul className="top-0 w-48 bg-[#ffa16c]">
+                    <li onClick={() => router.push("/me/recipes")}>
+                      <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#ffa16c]">
+                        Công Thức
+                      </span>
+                    </li>
+                    <li onClick={() => router.push("/me/meal-plans")}>
+                      <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#ffa16c]">
+                        Kế Hoạch
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -131,12 +133,33 @@ export const Navbar = () => {
                 <Menu.Dropdown>
                   <Menu.Item
                     onClick={() => {
+                      router.push("/me/recipes");
+                    }}
+                  >
+                    Công Thức
+                  </Menu.Item>
+                  <Menu.Item
+                    onClick={() => {
+                      router.push("/me/meal-plans");
+                    }}
+                  >
+                    Kế Hoạch
+                  </Menu.Item>
+                  <Menu.Item
+                    onClick={() => {
                       router.push("/post/create");
                     }}
                   >
-                    New Recipe
+                    Tạo Công Thức mới
                   </Menu.Item>
-                  <Menu.Item onClick={signOut}>Sign Out</Menu.Item>
+                  <Menu.Item
+                    onClick={() => {
+                      router.push("/post/meal-plan");
+                    }}
+                  >
+                    Tạo Kế Hoạch Mới
+                  </Menu.Item>
+                  <Menu.Item onClick={signOut}>Đăng Xuất</Menu.Item>
                 </Menu.Dropdown>
               </Menu>
             )}

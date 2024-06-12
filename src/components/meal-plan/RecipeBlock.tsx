@@ -28,7 +28,7 @@ export function RecipeBlock({ mealPlanRecipes, className }: RecipeBlockProps) {
                 <span className="text-sm font-semibold text-[#6B7280]">{`Công thức ${mealPlanRecipe.meal}`}</span>
                 <a
                   className="text-2xl font-bold underline"
-                  href={`/recipes/${mealPlanRecipe.recipe.post?.id}`}
+                  href={`/recipes/${mealPlanRecipe.recipe.post.id}`}
                 >
                   {mealPlanRecipe.recipe.post?.title}
                 </a>

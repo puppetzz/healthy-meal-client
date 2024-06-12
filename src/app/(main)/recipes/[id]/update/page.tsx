@@ -23,6 +23,8 @@ import { EditPostSidebar } from "../../../../../components/sidebar/EditPostSideb
 import { TUpdateRecipeRequest } from "../../../../../common/types/request/recipes/UpdateRecipe";
 import { useUpdateRecipeMutation } from "../../../../../mutation/useUpdateRecipe";
 import { TIngredientRequest } from "../../../../../common/types/request/recipes/Ingredient";
+import { routeModule } from "next/dist/build/templates/app-page";
+import { useRouter } from "next/navigation";
 
 const BlockNote = dynamic(
   () =>
@@ -35,6 +37,7 @@ const BlockNote = dynamic(
 );
 
 export default function EditRecipes({ params }: { params: { id: string } }) {
+  const router = useRouter();
   const { data: recipe } = useRecipeByIdQuery(params.id);
 
   const isInitialDataRef = useRef<boolean>(true);
@@ -208,7 +211,14 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
       foodCategoryIds: foodCategories,
     };
 
-    updateRecipeMutation.mutate(data);
+    updateRecipeMutation.mutateAsync(data).then(() => {
+      router.push("/me/recipes");
+      notifications.show({
+        title: "Update Recipes",
+        color: "green",
+        message: "Update Successfully!",
+      });
+    });
   };
 
   useEffect(() => {
@@ -264,8 +274,6 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
           iron: recipe.data.recipe.nutrition.iron || 0,
         });
       }
-
-      console.log("akjlkwjlk");
 
       isInitialDataRef.current = false;
     }

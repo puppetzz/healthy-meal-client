@@ -4,13 +4,13 @@ import { Post } from "../common/types/post";
 import { CreateRecipeRequest } from "../common/types/request/recipes/CreateRecipe";
 import { GetRecipesReq } from "../common/types/request/recipes/GetRecipes";
 import { TUpdateRecipeRequest } from "../common/types/request/recipes/UpdateRecipe";
-import { PostPagination } from "../common/types/response/PostPagination";
+import { TRecipesPaginationResponse } from "../common/types/response/RecipesPagination";
 import axiosClient from "../lib/axiosClient";
 
 export const getRecipes = async (
   getRecipeReq: GetRecipesReq,
-): Promise<ResponseType<PostPagination>> => {
-  const response = await axiosClient<ResponseType<PostPagination>>(
+): Promise<ResponseType<TRecipesPaginationResponse>> => {
+  const response = await axiosClient<ResponseType<TRecipesPaginationResponse>>(
     API.RECIPES,
     {
       params: getRecipeReq,
@@ -47,6 +47,19 @@ export const updateRecipes = async (data: TUpdateRecipeRequest) => {
     method: "PUT",
     data,
   });
+
+  return response.data;
+};
+
+export const getRecipesByUser = async (
+  getRecipeReq: GetRecipesReq,
+): Promise<ResponseType<TRecipesPaginationResponse>> => {
+  const response = await axiosClient<ResponseType<TRecipesPaginationResponse>>(
+    API.GET_RECIPES_BY_USER,
+    {
+      params: getRecipeReq,
+    },
+  );
 
   return response.data;
 };

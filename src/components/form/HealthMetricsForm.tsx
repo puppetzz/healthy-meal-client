@@ -72,8 +72,8 @@ export function HealthMetricsForm({
                 defaultValue={form.getValues().gender}
               >
                 <Group>
-                  <Radio label="Male" value={TGender.MALE} color="orange" />
-                  <Radio label="Female" value={TGender.FEMALE} color="orange" />
+                  <Radio label="Nam" value={TGender.MALE} color="orange" />
+                  <Radio label="Nữ" value={TGender.FEMALE} color="orange" />
                 </Group>
               </Radio.Group>
             </div>

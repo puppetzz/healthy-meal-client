@@ -14,6 +14,7 @@ import { Pagination } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { QueryKey } from "../../../../../common/constants/queryKey";
 import { getRecipes } from "../../../../../api/recipes";
+import { Recipe } from "../../../../../common/types/recipes";
 
 export default function CategoryRecipes({
   params,
@@ -88,12 +89,12 @@ export default function CategoryRecipes({
             <div className="p-2" />
 
             <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {recipes?.data.data.map((recipe) => (
+              {recipes?.data.recipes.map((recipe) => (
                 <VerticalCard
                   className="cursor-pointer"
                   key={recipe.id}
-                  post={recipe as Post}
-                  onClick={() => handleClickCard(recipe.id)}
+                  recipe={recipe as Recipe}
+                  onClick={() => handleClickCard(recipe.post.id)}
                 />
               ))}
             </div>
