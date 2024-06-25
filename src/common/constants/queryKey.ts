@@ -15,4 +15,7 @@ export const QueryKey = {
 
   GET_HEALTH_METRICS: "get-health-metrics",
   GET_RECIPES_BY_USER: "get-recipes-by-user",
+  GET_RECOMMENDED_RECIPES: "get-recommended-recipes",
+  GET_LATEST_RECIPE: "get-latest-recipe",
+  GET_RECIPES_RANKING: "get-recipes-ranking",
 };

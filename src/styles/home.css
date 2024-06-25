@@ -1,0 +1,11 @@
+.tag:hover .title {
+  color: #fd7e14 !important;
+}
+
+.tag:hover .chevron {
+  background-color: #fd7e14 !important;
+}
+
+.tag:hover {
+  border-color: #fd7e14 !important;
+}

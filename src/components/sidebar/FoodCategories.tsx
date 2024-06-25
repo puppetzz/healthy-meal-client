@@ -12,7 +12,7 @@ export const FoodCategoriesSidebar = ({
 
   return (
     <div className="min-w-[215px] rounded-lg bg-gray-100 p-7 pb-5">
-      <h2 className="mb-4 text-2xl font-bold">All Categories</h2>
+      <h2 className="mb-4 text-2xl font-bold">Thể Loại</h2>
       {foodCategories?.map((category) => (
         <div className="flex">
           <div

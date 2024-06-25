@@ -1,12 +1,16 @@
 "use client";
 
 import { Avatar, Input, Modal } from "@mantine/core";
-import { useRecipeQuery } from "../../queries";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { TMealPlanRecipeRequest } from "../../common/types/request/meal-plan/CreateMealPlan";
-import { Post } from "../../common/types/post";
-import { TNutritionPerMeal } from "../../common/types/form/HealthMetricsTarget";
+import {
+  THealthMetricsTarget,
+  TNutritionPerMeal,
+} from "../../common/types/form/HealthMetricsTarget";
 import { Recipe } from "../../common/types/recipes";
+import { useRecommendedRecipesQuery } from "../../queries/useRecommenedRecipes";
+import { EMeal } from "../../common/enums/meal.enum";
+import { TTargetNutrition } from "../../common/types/TargetNutrition.type";
 
 type SearchRecipesModalProps = {
   opened: boolean;
@@ -21,6 +25,7 @@ type SearchRecipesModalProps = {
   setTotalMacronutrient: React.Dispatch<
     React.SetStateAction<TNutritionPerMeal>
   >;
+  healthMetricsForGoals: THealthMetricsTarget;
   currentDay?: number;
 };
 
@@ -30,15 +35,78 @@ export function SearchRecipesModal({
   onClickRecipe,
   meal,
   setTotalMacronutrient,
+  healthMetricsForGoals,
   currentDay = 1,
 }: SearchRecipesModalProps) {
   const [recipeSearchBoxValue, setRecipeSearchBoxValue] = useState("");
 
-  const { data: recipes } = useRecipeQuery({
-    search: recipeSearchBoxValue,
-  });
+  const target = useMemo(() => {
+    switch (meal) {
+      case 1:
+        return {
+          meal: EMeal.BREAKFAST,
+          calories:
+            healthMetricsForGoals.detailCaloriesOfMeals.breakfast.calories,
+          protein:
+            healthMetricsForGoals.detailCaloriesOfMeals.breakfast.protein,
+          fat: healthMetricsForGoals.detailCaloriesOfMeals.breakfast.fat,
+          carbs: healthMetricsForGoals.detailCaloriesOfMeals.breakfast.carbs,
+        };
+      case 2:
+        return {
+          meal: EMeal.LUNCH,
+          calories: healthMetricsForGoals.detailCaloriesOfMeals.lunch.calories,
+          protein: healthMetricsForGoals.detailCaloriesOfMeals.lunch.protein,
+          fat: healthMetricsForGoals.detailCaloriesOfMeals.lunch.fat,
+          carbs: healthMetricsForGoals.detailCaloriesOfMeals.lunch.carbs,
+        };
+      case 3:
+        return {
+          meal: EMeal.DINNER,
+          calories: healthMetricsForGoals.detailCaloriesOfMeals.dinner.calories,
+          protein: healthMetricsForGoals.detailCaloriesOfMeals.dinner.protein,
+          fat: healthMetricsForGoals.detailCaloriesOfMeals.dinner.fat,
+          carbs: healthMetricsForGoals.detailCaloriesOfMeals.dinner.carbs,
+        };
+      case 4:
+        return {
+          meal: EMeal.SNACKS,
+          calories:
+            healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[0].calories,
+          protein:
+            healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[0].protein,
+          fat: healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[0].fat,
+          carbs: healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[0].carbs,
+        };
+      case 5:
+        return {
+          meal: EMeal.SNACKS,
+          calories:
+            healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[1].calories,
+          protein:
+            healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[1].protein,
+          fat: healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[1].fat,
+          carbs: healthMetricsForGoals.detailCaloriesOfMeals.snacks?.[1].carbs,
+        };
+    }
 
-  console.log(currentDay);
+    return {
+      meal: EMeal.BREAKFAST,
+      calories: healthMetricsForGoals.detailCaloriesOfMeals.breakfast.calories,
+      protein: healthMetricsForGoals.detailCaloriesOfMeals.breakfast.protein,
+      fat: healthMetricsForGoals.detailCaloriesOfMeals.breakfast.fat,
+      carbs: healthMetricsForGoals.detailCaloriesOfMeals.breakfast.carbs,
+    };
+  }, [meal]);
+
+  const { data: recipes } = useRecommendedRecipesQuery({
+    search: recipeSearchBoxValue,
+    meal: target.meal,
+    calories: target.calories || 0,
+    protein: target.protein || 0,
+    fat: target.fat || 0,
+    carbs: target.carbs || 0,
+  });
 
   return (
     <Modal opened={opened} onClose={close} title="Recipes" size="xl">
@@ -55,7 +123,7 @@ export function SearchRecipesModal({
           />
         </div>
         <div className="flex h-full flex-col gap-3 overflow-auto">
-          {recipes?.data.recipes.map((recipe) => (
+          {recipes?.data.map((recipe) => (
             <div
               className="flex cursor-pointer gap-2 rounded-xl bg-[#f9fafb] p-2"
               onClick={() => {

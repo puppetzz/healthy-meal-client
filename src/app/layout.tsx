@@ -9,6 +9,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import QueryProvider from "@/context/QueryClient";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import { SocketProvider } from "../context/SocketContext";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -42,8 +43,10 @@ export default function RootLayout({
         <QueryProvider>
           <MantineProvider>
             <AuthProvider>
-              <Notifications position="top-right" zIndex={1000} />
-              {children}
+              <SocketProvider>
+                <Notifications position="top-right" zIndex={1000} />
+                {children}
+              </SocketProvider>
             </AuthProvider>
           </MantineProvider>
         </QueryProvider>

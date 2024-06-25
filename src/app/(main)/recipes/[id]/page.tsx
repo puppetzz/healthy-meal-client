@@ -1,7 +1,7 @@
 "use client";
 
 import "../../../../styles/recipe.css";
-import { Anchor, Breadcrumbs, Button, List, Rating } from "@mantine/core";
+import { Anchor, Breadcrumbs, Button, List, Pill, Rating } from "@mantine/core";
 import { useRecipeByIdQuery } from "../../../../queries/useRecipeById";
 import {
   ClockIcon,
@@ -20,6 +20,9 @@ import { useCommentByPostIdQuery } from "../../../../queries/useGetPostByPostId"
 import { Comment } from "../../../../common/types/comment";
 import { CommentInputField } from "../../../../common/types/form/CommentInputField";
 import { usePostCommentMutation } from "../../../../mutation/usePostComment";
+import { UseAuth } from "../../../../context/AuthContext";
+import { EPostStatus } from "../../../../common/enums/PostStatus";
+import { IconHeart } from "@tabler/icons-react";
 
 const BlockNoteViewOnly = dynamic(
   () =>
@@ -32,6 +35,7 @@ const BlockNoteViewOnly = dynamic(
 );
 
 export default function RecipePage({ params }: { params: { id: string } }) {
+  const { user } = UseAuth();
   const [isReplyComment, setIsReplyComment] = useState(false);
 
   const { data: recipe } = useRecipeByIdQuery(params.id);
@@ -67,6 +71,14 @@ export default function RecipePage({ params }: { params: { id: string } }) {
     });
   };
 
+  const isOwner = useMemo(() => {
+    if (recipe?.data) {
+      if (recipe.data.authorId === user?.uid) return true;
+    }
+
+    return false;
+  }, [recipe?.data, user]);
+
   return (
     <div className="mx-auto flex max-w-[1200px] px-7">
       <div className="mb-32 mr-7 flex-1">
@@ -77,7 +89,7 @@ export default function RecipePage({ params }: { params: { id: string } }) {
                 <HomeIcon className="h-5 w-5" />
               </Anchor>
               <Anchor href="/recipes" className="text-gray-500">
-                Recipes
+                Công Thức
               </Anchor>
               <span className="w-[25vw] cursor-pointer overflow-hidden truncate">
                 {recipe?.data?.title}
@@ -86,12 +98,9 @@ export default function RecipePage({ params }: { params: { id: string } }) {
 
             <div>
               {recipe?.data.recipe?.recipeFoodCategory.map((foodCategory) => (
-                <span
-                  key={foodCategory.foodCategory.id}
-                  className="mr-2 rounded-full bg-gray-200 px-3 py-[2px] text-sm"
-                >
+                <Pill className="font-semibold">
                   {foodCategory.foodCategory.name}
-                </span>
+                </Pill>
               ))}
             </div>
           </div>
@@ -102,7 +111,7 @@ export default function RecipePage({ params }: { params: { id: string } }) {
               className="h-14 w-14 rounded-full"
             />
             <div className="flex flex-col">
-              <span className="font-semibold text-gray-400">author:</span>
+              <span className="font-semibold text-gray-400">Tác giả:</span>
               <span className="font-semibold">
                 {recipe?.data.author?.fullName}
               </span>
@@ -146,7 +155,7 @@ export default function RecipePage({ params }: { params: { id: string } }) {
                   className="h-14 w-14 rounded-full"
                 />
                 <div className="flex flex-col">
-                  <span className="font-semibold text-gray-400">author:</span>
+                  <span className="font-semibold text-gray-400">Tác giả:</span>
                   <span className="font-semibold">
                     {recipe?.data.author?.fullName}
                   </span>
@@ -154,21 +163,21 @@ export default function RecipePage({ params }: { params: { id: string } }) {
               </div>
               <div className="mt-5 flex flex-col gap-1">
                 <div className="flex items-center">
-                  <span className="w-40 text-lg font-semibold">Servings</span>
+                  <span className="w-52 text-lg font-semibold">Khẩu phần</span>
                   <div className="flex gap-1">
                     <span className="">{recipe?.data.recipe?.servings}</span>
-                    <span>{`(~ 1 ${recipe?.data.recipe?.calculationUnit} servings)`}</span>
+                    <span>{`(~ 1 ${recipe?.data.recipe?.calculationUnit} mỗi khẩu phần)`}</span>
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <span className="w-40 text-lg font-semibold">
-                    Serving size
+                  <span className="w-52 text-lg font-semibold">
+                    Một khẩu phần
                   </span>
                   <span>{`${recipe?.data.recipe?.servingSize}g`}</span>
                 </div>
                 <div className="flex items-center">
-                  <span className="w-40 text-lg font-semibold">
-                    Does it keep?
+                  <span className="w-52 text-lg font-semibold">
+                    Có thể bảo quản trong
                   </span>
                   <span>{recipe?.data.recipe?.keeping}</span>
                 </div>
@@ -176,12 +185,8 @@ export default function RecipePage({ params }: { params: { id: string } }) {
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex h-10 w-52 items-center justify-center gap-2 border-[1px] border-black">
-                <PrinterIcon className="h-6 w-6" />
-                <span>Print</span>
-              </div>
-              <div className="flex h-10 w-52 items-center justify-center gap-2 border-[1px] border-black">
-                <HeartIcon className="h-6 w-6" />
-                <span>Save</span>
+                <IconHeart className="h-6 w-6" />
+                <span>Lưu</span>
               </div>
               <div>
                 <img
@@ -195,7 +200,7 @@ export default function RecipePage({ params }: { params: { id: string } }) {
                   <Rating readOnly size="lg" value={recipe?.data.rating} />
                 </div>
                 <div className="flex justify-end text-sm">
-                  <span>{`${recipe?.data.rating || 0} from ${recipe?.data.numberOfReviews} reviews`}</span>
+                  <span>{`${recipe?.data.rating || 0} từ ${recipe?.data.numberOfReviews} lượt đánh giá`}</span>
                 </div>
               </div>
             </div>
@@ -209,7 +214,7 @@ export default function RecipePage({ params }: { params: { id: string } }) {
                 <span className="mr-1 text-xl font-bold">
                   {recipe?.data.recipe?.prepTime}
                 </span>
-                <span className="text-xs">minutes</span>
+                <span className="text-xs">phút</span>
               </span>
             </div>
             <div className="flex w-1/2 flex-col items-center border-y-[1px] border-black">
@@ -220,12 +225,12 @@ export default function RecipePage({ params }: { params: { id: string } }) {
                 <span className="mr-1 text-xl font-bold">
                   {recipe?.data.recipe?.cookTime}
                 </span>
-                <span className="text-xs">minutes</span>
+                <span className="text-xs">phút</span>
               </span>
             </div>
           </div>
           <div className="mt-5">
-            <span className="text-xl font-semibold">Ingredients</span>
+            <span className="text-xl font-semibold">Thành Phần</span>
             <List className="mt-5 pl-5" listStyleType="disc">
               {recipe?.data.recipe?.ingredient?.map((ingredient) => (
                 <List.Item>{`${ingredient.amount} ${ingredient.unit} ${ingredient.name} ${ingredient.description}`}</List.Item>
@@ -233,11 +238,11 @@ export default function RecipePage({ params }: { params: { id: string } }) {
             </List>
           </div>
           <div className="mt-5">
-            <span className="text-xl font-semibold">{`Nutrition (1 of ${recipe?.data.recipe?.servings} servings)`}</span>
+            <span className="text-xl font-semibold">{`Dinh Dưỡng (1 trong ${recipe?.data.recipe?.servings} khẩu phần)`}</span>
             <div className="flex flex-wrap break-words">
               {!!recipe?.data.recipe?.nutrition.calories && (
                 <div className="mr-3">
-                  <span className="font-semibold">Calories: </span>
+                  <span className="font-semibold">Calo: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.calories}${ENutritionUnit.CALORIES}`}</span>
                 </div>
               )}
@@ -255,31 +260,35 @@ export default function RecipePage({ params }: { params: { id: string } }) {
               )}
               {!!recipe?.data.recipe?.nutrition.fat && (
                 <div className="mr-3">
-                  <span className="font-semibold">Fat: </span>
+                  <span className="font-semibold">Chất béo: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.fat}${ENutritionUnit.FAT}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.saturatedFat && (
                 <div className="mr-3">
-                  <span className="font-semibold">Saturated Fat: </span>
+                  <span className="font-semibold">Chất béo bão hòa: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.saturatedFat}${ENutritionUnit.SATURATED_FAT}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.polyunsaturatedFat && (
                 <div className="mr-3">
-                  <span className="font-semibold">Polyunsaturated Fat: </span>
+                  <span className="font-semibold">
+                    Chất béo không bão hòa đa:{" "}
+                  </span>
                   <span>{`${recipe?.data.recipe?.nutrition.polyunsaturatedFat}${ENutritionUnit.POLYUNSATURATED_FAT}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.monounsaturatedFat && (
                 <div className="mr-3">
-                  <span className="font-semibold">Monounsaturated Fat: </span>
+                  <span className="font-semibold">
+                    Chất béo không bão hòa đơn:{" "}
+                  </span>
                   <span>{`${recipe?.data.recipe?.nutrition.monounsaturatedFat}${ENutritionUnit.MONOUNSATURATED_FAT}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.transFat && (
                 <div className="mr-3">
-                  <span className="font-semibold">Trans Fat: </span>
+                  <span className="font-semibold">Chất béo trans: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.transFat}${ENutritionUnit.TRANS_FAT}`}</span>
                 </div>
               )}
@@ -291,25 +300,25 @@ export default function RecipePage({ params }: { params: { id: string } }) {
               )}
               {!!recipe?.data.recipe?.nutrition.sodium && (
                 <div className="mr-3">
-                  <span className="font-semibold">Sodium: </span>
+                  <span className="font-semibold">Natri: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.sodium}${ENutritionUnit.SODIUM}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.potassium && (
                 <div className="mr-3">
-                  <span className="font-semibold">Potassium: </span>
+                  <span className="font-semibold">Kali: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.potassium}${ENutritionUnit.POTASSIUM}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.fiber && (
                 <div className="mr-3">
-                  <span className="font-semibold">Fiber: </span>
+                  <span className="font-semibold">Chất xơ: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.fiber}${ENutritionUnit.FIBER}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.sugar && (
                 <div className="mr-3">
-                  <span className="font-semibold">Sugar: </span>
+                  <span className="font-semibold">Đường: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.sugar}${ENutritionUnit.SUGAR}`}</span>
                 </div>
               )}
@@ -327,13 +336,13 @@ export default function RecipePage({ params }: { params: { id: string } }) {
               )}
               {!!recipe?.data.recipe?.nutrition.calcium && (
                 <div className="mr-3">
-                  <span className="font-semibold">Calcium: </span>
+                  <span className="font-semibold">Canxi: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.calcium}${ENutritionUnit.CALCIUM}`}</span>
                 </div>
               )}
               {!!recipe?.data.recipe?.nutrition.iron && (
                 <div className="mr-3">
-                  <span className="font-semibold">Iron: </span>
+                  <span className="font-semibold">Sắt: </span>
                   <span>{`${recipe?.data.recipe?.nutrition.iron}${ENutritionUnit.IRON}`}</span>
                 </div>
               )}
@@ -342,14 +351,14 @@ export default function RecipePage({ params }: { params: { id: string } }) {
 
           <div>
             <div className="mt-5 flex items-center justify-between">
-              <span className="text-2xl font-bold">Reviews</span>
+              <span className="text-2xl font-bold">Đánh Giá</span>
               <div className="flex items-center">
                 <span className="mr-2 text-2xl font-bold">
                   {recipe?.data.numberOfComments}
                 </span>
                 <div>
                   <Rating readOnly value={recipe?.data.rating} />
-                  <span>{`(Base on ${recipe?.data.numberOfReviews} reviews)`}</span>
+                  <span>{`(Dựa trên ${recipe?.data.numberOfReviews} đánh giá)`}</span>
                 </div>
               </div>
             </div>
@@ -365,12 +374,12 @@ export default function RecipePage({ params }: { params: { id: string } }) {
         </div>
       </div>
 
-      <div className="w-[300px]">
+      <div className="flex w-[300px] flex-col">
         <div className="h-fit w-full rounded-xl bg-gray-100 p-4 font-semibold">
           <div className="flex gap-2 text-gray-400">
             <Rating value={recipe?.data.rating || 0} readOnly size="md" />
             <span>{recipe?.data.rating || 0}</span>
-            <span>{`(${recipe?.data.numberOfReviews || 0} reviews)`}</span>
+            <span>{`(${recipe?.data.numberOfReviews || 0} đánh giá)`}</span>
           </div>
           <div className="mb-1 mt-5">
             <span className="text-lg">Chi tiết</span>
@@ -391,12 +400,12 @@ export default function RecipePage({ params }: { params: { id: string } }) {
             </div>
           </div>
           <div className="mb-1 mt-2 flex w-full justify-between">
-            <span className="text-gray-400"># of servings</span>
+            <span className="text-gray-400">Số lượng khẩu phần</span>
             <span>{recipe?.data.recipe?.servings}</span>
           </div>
           {!!recipe?.data.recipe?.servingSize && (
             <div className="mb-1 flex justify-between">
-              <span className="text-gray-400">Serving size</span>
+              <span className="text-gray-400">Một khẩu phần</span>
               <span>{`${recipe?.data.recipe?.servingSize}g`}</span>
             </div>
           )}
@@ -405,7 +414,7 @@ export default function RecipePage({ params }: { params: { id: string } }) {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <span className="text-gray-400">Calories</span>
+              <span className="text-gray-400">Calo</span>
               <span className="flex gap-2">
                 <Image
                   src="/svg/fire.svg"
@@ -414,15 +423,15 @@ export default function RecipePage({ params }: { params: { id: string } }) {
                   height={12}
                   className="mb-1"
                 />
-                {recipe?.data.recipe?.nutrition.calories}
+                {`${recipe?.data.recipe?.nutrition.protein}${ENutritionUnit.CALORIES}`}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Protein</span>
-              <span>{`${recipe?.data.recipe?.nutrition.protein}${ENutritionUnit.CALORIES}`}</span>
+              <span>{`${recipe?.data.recipe?.nutrition.protein}${ENutritionUnit.PROTEIN}`}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Fats</span>
+              <span className="text-gray-400">Chất Béo</span>
               <span>{`${recipe?.data.recipe?.nutrition.fat}${ENutritionUnit.FAT}`}</span>
             </div>
             <div className="flex justify-between">
@@ -430,15 +439,15 @@ export default function RecipePage({ params }: { params: { id: string } }) {
               <span>{`${recipe?.data.recipe?.nutrition.carbohydrates}${ENutritionUnit.CARBOHYDRATES}`}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Sodium</span>
+              <span className="text-gray-400">Natri</span>
               <span>{`${recipe?.data.recipe?.nutrition.sodium}${ENutritionUnit.SODIUM}`}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Fiber</span>
+              <span className="text-gray-400">Chất Xơ</span>
               <span>{`${recipe?.data.recipe?.nutrition.fiber}${ENutritionUnit.FIBER}`}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Sugar</span>
+              <span className="text-gray-400">Đường</span>
               <span>{`${recipe?.data.recipe?.nutrition.sugar}${ENutritionUnit.SUGAR}`}</span>
             </div>
           </div>
@@ -459,6 +468,13 @@ export default function RecipePage({ params }: { params: { id: string } }) {
               <span className="ml-2">Đi đến công thức</span>
             </Button>
           </div>
+        </div>
+        <div className="mt-5 flex justify-center">
+          {isOwner && recipe?.data.status === EPostStatus.DRAFT && (
+            <Button onClick={() => {}} className="ư-full" color="orange">
+              Chia Sẻ Công Thức
+            </Button>
+          )}
         </div>
       </div>
     </div>

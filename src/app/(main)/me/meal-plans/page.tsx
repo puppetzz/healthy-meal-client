@@ -47,7 +47,7 @@ export default function MealPlans() {
                 <HomeIcon className="h-5 w-5" />
               </Anchor>
               <span className="w-[25vw] cursor-pointer overflow-hidden truncate">
-                Meal Plans
+                Kế Hoạch
               </span>
             </Breadcrumbs>
           </div>

@@ -94,7 +94,7 @@ export default function UpdateMealPlan({ params }: { params: { id: number } }) {
     TMealPlanRecipeRequest[][]
   >([[]]);
 
-  const { data: healthMetrics } = useHealthMetricsQuery();
+  const { data: healthMetrics } = useHealthMetricsQuery(1);
   const { data: mealPlan } = useMealPlanDetailQuery(Number(params.id));
 
   const updateMealPlanMutation = useUpdateMealPlan();
@@ -651,8 +651,6 @@ export default function UpdateMealPlan({ params }: { params: { id: number } }) {
                               onClick={() => {
                                 setOpenedMealPlan((prev) => {
                                   prev[index] = !prev[index];
-
-                                  console.log(prev);
 
                                   return [...prev];
                                 });

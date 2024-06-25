@@ -62,8 +62,6 @@ export function IngredientForm({
     }
   };
 
-  console.log();
-
   return (
     <div>
       <form>
@@ -72,7 +70,7 @@ export function IngredientForm({
             <TextInput
               name="name"
               className="w-3/5"
-              placeholder="name"
+              placeholder="Tên thành phần"
               onChange={(event) => handleFormChange(index, event)}
               value={input.name}
               onBlur={() => handleBlur("name", index, input.name)}
@@ -81,16 +79,15 @@ export function IngredientForm({
             <TextInput
               name="description"
               className="w-3/5"
-              placeholder="description"
+              placeholder="Mô tả chi tiết"
               onChange={(event) => handleFormChange(index, event)}
               value={input.description}
-              onBlur={() => handleBlur("description", index, input.description)}
               error={errors[`description${index}`]}
             />
             <TextInput
               name="amount"
               className="w-1/6"
-              placeholder="amount"
+              placeholder="liều lượng"
               onChange={(event) => handleFormChange(index, event)}
               value={input.amount}
               onBlur={() => handleBlur("amount", index, input.amount)}
@@ -99,7 +96,7 @@ export function IngredientForm({
             <TextInput
               name="unit"
               className="w-1/6"
-              placeholder="unit"
+              placeholder="đơn vị"
               onChange={(event) => handleFormChange(index, event)}
               value={input.unit}
               onBlur={() => handleBlur("unit", index, input.unit)}
@@ -110,8 +107,8 @@ export function IngredientForm({
               onClick={() => {
                 if (inputFields.length === 1) {
                   notifications.show({
-                    title: "Cannot remove the last field",
-                    message: "You must have at least one ingredient",
+                    title: "Không thể xoá thành phần",
+                    message: "Công thức nấu ăn phải có ít nhất 1 thành phần",
                     color: "red",
                   });
                   return;
@@ -123,7 +120,7 @@ export function IngredientForm({
         ))}
       </form>
       <Button className="mt-4" onClick={onAddField} color="orange">
-        Add More
+        Thêm
       </Button>
     </div>
   );

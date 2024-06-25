@@ -2,6 +2,7 @@ import { ENutritionUnit } from "../../common/enums/NutritionUnit";
 import Image from "next/image";
 import { cn } from "../../lib/utils";
 import { Recipe } from "../../common/types/recipes";
+import { Pill } from "@mantine/core";
 
 type VerticalCardProps = {
   recipe: Recipe;
@@ -32,12 +33,12 @@ export const VerticalCard = ({
           <div className="flex justify-between">
             <div className="flex w-full flex-wrap gap-[6px]">
               {recipe.recipeFoodCategory.map((category) => (
-                <span
-                  key={category.foodCategory.id}
-                  className="h-fit rounded-full bg-gray-200 px-2 py-[2px] text-sm"
+                <Pill
+                  className="bg-[#eaecf0] text-[13px] font-semibold text-[#364052]"
+                  size="md"
                 >
                   {category.foodCategory.name}
-                </span>
+                </Pill>
               ))}
             </div>
             {recipe.post.rating && (

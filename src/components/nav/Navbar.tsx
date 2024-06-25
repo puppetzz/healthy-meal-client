@@ -2,13 +2,20 @@
 
 import { UseAuth } from "@/context/AuthContext";
 import { Black_Ops_One } from "next/font/google";
-import { Button, Group, HoverCard } from "@mantine/core";
+import { Button, Group, HoverCard, rem } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { Menu } from "@mantine/core";
 import { Avatar } from "@mantine/core";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Input } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import {
+  IconCalendarEvent,
+  IconLogout,
+  IconPlaylistAdd,
+  IconToolsKitchen2,
+} from "@tabler/icons-react";
+import Image from "next/image";
 
 const blackOpsOne = Black_Ops_One({
   subsets: ["latin"],
@@ -29,19 +36,20 @@ export const Navbar = () => {
     }
   }, [showSearchBox]);
 
+  console.log(user?.photoURL);
+
   return (
     <>
-      <nav className="sticky top-0 z-[100] flex h-28 w-full items-center justify-between bg-white px-10">
+      <nav className="sticky top-0 z-[100] flex h-24 w-full items-center justify-between bg-white px-10">
         <div className="flex items-center">
-          <div
-            className={`${blackOpsOne.className} flex cursor-pointer flex-col items-center text-4xl uppercase`}
-            onClick={() => {
-              router.push("/");
-            }}
-          >
-            <span>heathy</span>
-            <span>meals</span>
-          </div>
+          <a href="/">
+            <Image
+              src="/svg/healthy-meals-logo.svg"
+              alt="logo"
+              height={60}
+              width={150}
+            />
+          </a>
           <div className="ml-5 flex">
             <ul className="flex">
               <li
@@ -62,25 +70,27 @@ export const Navbar = () => {
               >
                 TDEE
               </li>
-              <li className="group hover:bg-[#ffa16c] hover:text-white">
-                <span className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold">
-                  Của Tôi
-                </span>
-                <div className="absolute hidden h-auto bg-[#ffa16c] group-hover:block">
-                  <ul className="top-0 w-48 bg-[#ffa16c]">
-                    <li onClick={() => router.push("/me/recipes")}>
-                      <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#ffa16c]">
-                        Công Thức
-                      </span>
-                    </li>
-                    <li onClick={() => router.push("/me/meal-plans")}>
-                      <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#ffa16c]">
-                        Kế Hoạch
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              </li>
+              {!!user && (
+                <li className="group hover:bg-[#ffa16c] hover:text-white">
+                  <span className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold">
+                    Của Tôi
+                  </span>
+                  <div className="absolute hidden h-auto bg-[#ffa16c] group-hover:block">
+                    <ul className="top-0 w-48 bg-[#ffa16c]">
+                      <li onClick={() => router.push("/me/recipes")}>
+                        <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#ffa16c]">
+                          Công Thức
+                        </span>
+                      </li>
+                      <li onClick={() => router.push("/me/meal-plans")}>
+                        <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#ffa16c]">
+                          Kế Hoạch
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -131,7 +141,13 @@ export const Navbar = () => {
                   <Avatar src={user?.photoURL} alt="avatar" />
                 </Menu.Target>
                 <Menu.Dropdown>
+                  <Menu.Label>công thức</Menu.Label>
                   <Menu.Item
+                    leftSection={
+                      <IconToolsKitchen2
+                        style={{ width: rem(14), height: rem(14) }}
+                      />
+                    }
                     onClick={() => {
                       router.push("/me/recipes");
                     }}
@@ -139,6 +155,24 @@ export const Navbar = () => {
                     Công Thức
                   </Menu.Item>
                   <Menu.Item
+                    leftSection={
+                      <IconPlaylistAdd
+                        style={{ width: rem(14), height: rem(14) }}
+                      />
+                    }
+                    onClick={() => {
+                      router.push("/create/recipes");
+                    }}
+                  >
+                    Tạo Công Thức Mới
+                  </Menu.Item>
+                  <Menu.Label>kế hoạch</Menu.Label>
+                  <Menu.Item
+                    leftSection={
+                      <IconCalendarEvent
+                        style={{ width: rem(14), height: rem(14) }}
+                      />
+                    }
                     onClick={() => {
                       router.push("/me/meal-plans");
                     }}
@@ -146,20 +180,27 @@ export const Navbar = () => {
                     Kế Hoạch
                   </Menu.Item>
                   <Menu.Item
+                    leftSection={
+                      <IconPlaylistAdd
+                        style={{ width: rem(14), height: rem(14) }}
+                      />
+                    }
                     onClick={() => {
-                      router.push("/post/create");
-                    }}
-                  >
-                    Tạo Công Thức mới
-                  </Menu.Item>
-                  <Menu.Item
-                    onClick={() => {
-                      router.push("/post/meal-plan");
+                      router.push("/create/meal-plan");
                     }}
                   >
                     Tạo Kế Hoạch Mới
                   </Menu.Item>
-                  <Menu.Item onClick={signOut}>Đăng Xuất</Menu.Item>
+                  <Menu.Label>cài đặt</Menu.Label>
+                  <Menu.Item
+                    leftSection={
+                      <IconLogout style={{ width: rem(14), height: rem(14) }} />
+                    }
+                    color="red"
+                    onClick={signOut}
+                  >
+                    Đăng Xuất
+                  </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
             )}

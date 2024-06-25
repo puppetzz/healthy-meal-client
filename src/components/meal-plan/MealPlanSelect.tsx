@@ -7,10 +7,10 @@ import { TMealPlanRecipeRequest } from "../../common/types/request/meal-plan/Cre
 import { numberWithCommas } from "../../utils/numberCommasFormat";
 import { useState } from "react";
 import { SearchRecipesModal } from "../modals/SearchRecipesModal";
-import { Post } from "../../common/types/post";
 import { RecipeSelectedBox } from "./RecipeSelectedBox";
 import { EMealPlanFrequency } from "../../common/enums/MealPlanFrequency";
 import { Recipe } from "../../common/types/recipes";
+import { TTargetNutrition } from "../../common/types/TargetNutrition.type";
 
 type MealPlanSelectProps = {
   tdee: number;
@@ -357,6 +357,7 @@ export function MealPlanSelect({
         onClickRecipe={handleClickRecipe}
         meal={meal}
         setTotalMacronutrient={setTotalMacronutrient}
+        healthMetricsForGoals={healthMetricsForGoals}
         currentDay={currentDay}
       />
       <div className="mt-10 h-[500px] w-[300px] rounded-xl bg-[#f9fafb]">

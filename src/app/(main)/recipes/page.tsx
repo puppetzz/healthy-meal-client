@@ -7,12 +7,25 @@ import { useFoodCategoriesQuery } from "../../../queries/useFoodCategories";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FoodCategoriesSidebar } from "../../../components/sidebar/FoodCategories";
 import { TFoodCategory } from "../../../common/types/FoodCategory";
-import { Anchor, Breadcrumbs, Button, Pagination } from "@mantine/core";
+import {
+  Anchor,
+  Breadcrumbs,
+  Button,
+  Group,
+  Modal,
+  NumberInput,
+  Pagination,
+  Radio,
+  Select,
+} from "@mantine/core";
 import { useCreateQueryString } from "../../../hooks/useCreateQueryString";
 import { useCallback, useEffect } from "react";
 import { Recipe } from "../../../common/types/recipes";
+import { useDisclosure } from "@mantine/hooks";
+import { EGender } from "../../../common/enums/Gender";
 
 export default function Recipes() {
+  const [opened, { open, close }] = useDisclosure(true);
   const router = useRouter();
   const searchParams = useSearchParams();
   const createQueryString = useCreateQueryString();
@@ -48,10 +61,10 @@ export default function Recipes() {
           <Anchor href="/" className="text-gray-500">
             <HomeIcon className="h-5 w-5" />
           </Anchor>
-          <span className="cursor-pointer">Recipes</span>
+          <span className="cursor-pointer">Công Thức</span>
         </Breadcrumbs>
         <div className="py-8">
-          <h2 className="mb-6 text-3xl font-bold">Browse Recipes</h2>
+          <h2 className="mb-6 text-3xl font-bold">Công Thức</h2>
 
           <div className="flex flex-wrap justify-between">
             {foodCategories?.data.slice(0, 6).map((category) => (

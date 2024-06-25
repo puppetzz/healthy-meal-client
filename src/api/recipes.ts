@@ -1,8 +1,10 @@
 import { API } from "../common/constants/api";
 import { ResponseType } from "../common/types";
 import { Post } from "../common/types/post";
+import { Recipe } from "../common/types/recipes";
 import { CreateRecipeRequest } from "../common/types/request/recipes/CreateRecipe";
 import { GetRecipesReq } from "../common/types/request/recipes/GetRecipes";
+import { TRecommendRecipesRequest } from "../common/types/request/recipes/RecommendRecipes";
 import { TUpdateRecipeRequest } from "../common/types/request/recipes/UpdateRecipe";
 import { TRecipesPaginationResponse } from "../common/types/response/RecipesPagination";
 import axiosClient from "../lib/axiosClient";
@@ -60,6 +62,45 @@ export const getRecipesByUser = async (
       params: getRecipeReq,
     },
   );
+
+  return response.data;
+};
+
+export const getRecommendedRecipes = async (
+  query: TRecommendRecipesRequest,
+): Promise<ResponseType<Recipe[]>> => {
+  const response = await axiosClient<ResponseType<Recipe[]>>({
+    url: API.RECOMMENDED_RECIPES,
+    method: "GET",
+    params: query,
+  });
+
+  return response.data;
+};
+
+export const getLatestRecipe = async () => {
+  const response = await axiosClient<ResponseType<Recipe>>({
+    url: API.GET_LATEST_RECIPE,
+    method: "GET",
+  });
+
+  return response.data;
+};
+
+export const getRecipesRanking = async () => {
+  const response = await axiosClient<ResponseType<Recipe[]>>({
+    url: API.GET_RECIPES_RANKING,
+    method: "GET",
+  });
+
+  return response.data;
+};
+
+export const deleteRecipe = async (id: number) => {
+  const response = await axiosClient({
+    url: `${API.RECIPES}/${id}`,
+    method: "DELETE",
+  });
 
   return response.data;
 };

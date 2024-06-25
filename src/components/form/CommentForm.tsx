@@ -7,9 +7,13 @@ import { CommentInputField } from "../../common/types/form/CommentInputField";
 
 type CommentFormProps = {
   onSubmit: (values: CommentInputField) => void;
+  isReply?: boolean;
 };
 
-export function CommentForm({ onSubmit: handleSubmit }: CommentFormProps) {
+export function CommentForm({
+  onSubmit: handleSubmit,
+  isReply = false,
+}: CommentFormProps) {
   const [isCommentRating, setIsCommentRating] = useState(false);
 
   const form = useForm({
@@ -23,49 +27,53 @@ export function CommentForm({ onSubmit: handleSubmit }: CommentFormProps) {
 
   return (
     <div className="rounded-xl bg-[#f9fafb] p-4">
-      <span className="text-lg font-semibold">Leaving a comment</span>
+      <span className="text-lg font-semibold">Để lại bình luận của bạn</span>
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <div className="mt-4">
           <Textarea
             resize="vertical"
-            label="Your comment"
-            placeholder="Share your thoughts on the recipe here! Rate below if you've made it"
+            label="Nội dung"
+            placeholder="Chia sẻ suy nghĩ của bạn về công thức ở đây! Đánh giá bên dưới nếu bạn đã thực hiện công thức"
             minRows={3}
             required
             key={form.key("content")}
             {...form.getInputProps("content")}
           />
         </div>
-        <Checkbox
-          className="mt-2"
-          label="I have made this recipe"
-          color="orange"
-          onChange={(event) => {
-            setIsCommentRating(event.target.checked);
-            form.setValues({ isReview: event.target.checked });
-          }}
-          key={form.key("isReview")}
-          checked={form.getValues().isReview}
-        />
+        {!isReply && (
+          <>
+            <Checkbox
+              className="mt-2"
+              label="Tôi đã nấu món này"
+              color="orange"
+              onChange={(event) => {
+                setIsCommentRating(event.target.checked);
+                form.setValues({ isReview: event.target.checked });
+              }}
+              key={form.key("isReview")}
+              checked={form.getValues().isReview}
+            />
 
-        <div className="mt-2 flex items-center">
-          <span
-            className={`mr-3 text-gray-600 ${!isCommentRating ? "text-gray-300" : ""}`}
-          >
-            Rate the recipe:{" "}
-          </span>
-          <Rating
-            size="lg"
-            readOnly={!isCommentRating}
-            onChange={(value) => {
-              form.setValues({ rating: value });
-            }}
-          />
-        </div>
+            <div className="mt-2 flex items-center">
+              <span
+                className={`mr-3 text-gray-600 ${!isCommentRating ? "text-gray-300" : ""}`}
+              >
+                Đánh giá công thức:{" "}
+              </span>
+              <Rating
+                size="lg"
+                readOnly={!isCommentRating}
+                onChange={(value) => {
+                  form.setValues({ rating: value });
+                }}
+              />
+            </div>
+          </>
+        )}
 
         <div className="flex justify-end">
           <Button color="orange" type="submit">
-            Post Comment
+            Đăng
           </Button>
         </div>
       </form>

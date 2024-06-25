@@ -6,12 +6,11 @@ export type CreateRecipeRequest = {
   prepTime: number;
   cookTime: number;
   servings: number;
+  servingSize: number;
   calculationUnit: string;
   keeping: string;
-  freezer: string;
   ingredients?: IngredientRequest[];
   foodCategoryIds: number[];
-  postCategoryIds: number[];
   calories: number;
   protein: number;
   carbohydrates: number;

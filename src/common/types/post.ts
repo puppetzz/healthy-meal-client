@@ -4,7 +4,7 @@ import { User } from "./User";
 
 export type Post = {
   id: number;
-  authorId: number;
+  authorId: string;
   parentId: number;
   title: string;
   content: string;

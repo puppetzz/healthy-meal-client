@@ -46,12 +46,12 @@ export default function MealPlans() {
                 <HomeIcon className="h-5 w-5" />
               </Anchor>
               <span className="w-[25vw] cursor-pointer overflow-hidden truncate">
-                Meal Plans
+                Kế Hoạch
               </span>
             </Breadcrumbs>
           </div>
           <div className="mb-3">
-            <span className="text-5xl font-bold">Meal Plans</span>
+            <span className="text-5xl font-bold">Kế Hoạch Cho Bữa Ăn</span>
           </div>
           <p>
             Hãy chọn cho mình một chế độ ăn uống phù hợp để có một cơ thể khỏe

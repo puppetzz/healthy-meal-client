@@ -1,3 +1,4 @@
+import { Footer } from "../../components/footer/footer";
 import { Navbar } from "../../components/nav/Navbar";
 
 export default function RootLayout({
@@ -7,9 +8,10 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <div className="relative">
+      <div className="relative flex min-h-screen flex-col">
         <Navbar />
-        {children}
+        <div className="flex-grow">{children}</div>
+        <Footer />
       </div>
     </>
   );

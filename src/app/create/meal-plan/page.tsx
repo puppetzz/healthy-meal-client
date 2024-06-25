@@ -5,14 +5,12 @@ import {
   Button,
   Collapse,
   Group,
-  List,
   Radio,
   Select,
   Stepper,
 } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { MealPlanCreationNav } from "../../../components/nav/MealPlanCreationNav";
 import { EMealPlanFrequency } from "../../../common/enums/MealPlanFrequency";
 import { EGoal } from "../../../common/enums/Goal";
 import { ECarbsType } from "../../../common/enums/CarbsType";
@@ -37,6 +35,7 @@ import { MealPlanPreviewBlock } from "../../../components/meal-plan/MealPlanPrev
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import { Recipe } from "../../../common/types/recipes";
+import { Navbar } from "../../../components/nav/Navbar";
 
 const BlockNote = dynamic(
   () => import("../../../components/blog/BlockNote").then((mod) => mod.default),
@@ -85,7 +84,7 @@ export default function MealPlanCreation() {
     TMealPlanRecipeRequest[][]
   >([[]]);
 
-  const { data: healthMetrics } = useHealthMetricsQuery();
+  const { data: healthMetrics } = useHealthMetricsQuery(1000);
 
   const mealPlanMutation = useMealPlanMutation();
 
@@ -320,8 +319,8 @@ export default function MealPlanCreation() {
 
   return (
     <>
-      <MealPlanCreationNav opened={opened} toggle={toggle} />
-      <div className="mx-auto mt-5 max-w-[1200px] p-2">
+      <Navbar />
+      <div className="mx-auto max-w-[1200px] p-2">
         <Stepper active={active} onStepClick={setActive}>
           <Stepper.Step label="Mô tả">
             <div className="mx-auto h-[calc(100vh-240px)] max-w-[1100px] overflow-auto">
@@ -577,8 +576,6 @@ export default function MealPlanCreation() {
                               onClick={() => {
                                 setOpenedMealPlan((prev) => {
                                   prev[index] = !prev[index];
-
-                                  console.log(prev);
 
                                   return [...prev];
                                 });

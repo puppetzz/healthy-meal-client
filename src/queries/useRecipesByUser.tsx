@@ -9,7 +9,6 @@ export const useRecipesByUserQuery = (getRecipeReq: GetRecipesReq) => {
   return useQuery({
     queryKey: [QueryKey.GET_RECIPES_BY_USER, getRecipeReq],
     queryFn: async () => {
-      console.log(getRecipeReq);
       const recipes = await getRecipesByUser(getRecipeReq);
 
       return recipes;

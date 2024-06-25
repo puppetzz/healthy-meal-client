@@ -1,13 +1,227 @@
 import { Tabs } from "@mantine/core";
-import { TMacronutrientsForGoals } from "../../common/types/response/health-metric-tdee";
+import {
+  TMacronutrient,
+  TMacronutrientsForGoals,
+} from "../../common/types/response/health-metric-tdee";
 import { numberWithCommas } from "../../utils/numberCommasFormat";
+import { useDisclosure } from "@mantine/hooks";
+import { useCallback, useMemo, useState } from "react";
+import { RecommendRecipesModal } from "../modals/RecommendRecipesModal";
+import { useHealthMetricsQuery } from "../../queries";
+import { ECarbsType } from "../../common/enums/CarbsType";
+import {
+  TDetailCaloriesOfMeals,
+  THealthMetricsTarget,
+} from "../../common/types/form/HealthMetricsTarget";
+import { EGoal } from "../../common/enums/Goal";
 
 type MacronutrientsProps = {
   tdee: number;
   macronutrients: TMacronutrientsForGoals;
 };
 
+type GoalType = "cutting" | "maintenance" | "bulking";
+
 export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
+  const [opened, { toggle, close }] = useDisclosure(false);
+
+  const { data: healthMetrics } = useHealthMetricsQuery(tdee);
+  const [carbsType, setCarbsType] = useState<string>(ECarbsType.MODERATE_CARBS);
+  const [goal, setGoal] = useState<string>(EGoal.MAINTENANCE);
+
+  const calDetailMacronutrientPerMeal = useCallback(
+    (calories: number, carbsType: ECarbsType) => {
+      let macronutrient = {
+        calories: calories,
+        protein: 0,
+        fat: 0,
+        carbs: 0,
+      };
+
+      let proportion = {
+        protein: 0.3,
+        fat: 0.35,
+        carbs: 0.35,
+      };
+
+      switch (carbsType) {
+        case ECarbsType.LOWER_CARBS:
+          proportion = {
+            protein: 0.3,
+            fat: 0.35,
+            carbs: 0.35,
+          };
+          break;
+        case ECarbsType.MODERATE_CARBS:
+          proportion = {
+            protein: 0.4,
+            fat: 0.4,
+            carbs: 0.2,
+          };
+          break;
+        case ECarbsType.HIGHER_CARBS:
+          proportion = {
+            protein: 0.3,
+            fat: 0.2,
+            carbs: 0.5,
+          };
+          break;
+      }
+
+      macronutrient.protein = Math.round((calories * proportion.protein) / 4);
+      macronutrient.fat = Math.round((calories * proportion.fat) / 9);
+      macronutrient.carbs = Math.round((calories * proportion.carbs) / 4);
+      return macronutrient;
+    },
+    [],
+  );
+
+  const healthMetricsForGoals: THealthMetricsTarget = useMemo(() => {
+    let tdee = healthMetrics?.data.tdee || 0;
+    const macronutrient: TMacronutrient = {
+      protein:
+        healthMetrics?.data.macronutrients.maintenance.moderateCarbs.protein ||
+        0,
+      fat:
+        healthMetrics?.data.macronutrients.maintenance.moderateCarbs.fat || 0,
+      carbs:
+        healthMetrics?.data.macronutrients.maintenance.moderateCarbs.carbs || 0,
+    };
+
+    let detailCaloriesOfMeals: TDetailCaloriesOfMeals = {
+      breakfast: calDetailMacronutrientPerMeal(
+        healthMetrics?.data.mealCaloriesRecommendation.maintenance
+          .threeMealPerDay[0] || 0,
+        carbsType as ECarbsType,
+      ),
+      lunch: calDetailMacronutrientPerMeal(
+        healthMetrics?.data.mealCaloriesRecommendation.maintenance
+          .threeMealPerDay[1] || 0,
+        carbsType as ECarbsType,
+      ),
+      dinner: calDetailMacronutrientPerMeal(
+        healthMetrics?.data.mealCaloriesRecommendation.maintenance
+          .threeMealPerDay[2] || 0,
+        carbsType as ECarbsType,
+      ),
+    };
+
+    if (healthMetrics) {
+      if (goal === EGoal.CUTTING) {
+        tdee = healthMetrics.data.tdee - 500;
+      } else if (goal === EGoal.BULKING) {
+        tdee = healthMetrics.data.tdee + 500;
+      }
+
+      const goalType = goal.toLowerCase() as GoalType;
+      let carbsTypeData;
+
+      switch (carbsType) {
+        case ECarbsType.MODERATE_CARBS:
+          carbsTypeData =
+            healthMetrics.data.macronutrients[goalType].moderateCarbs;
+          break;
+        case ECarbsType.LOWER_CARBS:
+          carbsTypeData =
+            healthMetrics.data.macronutrients[goalType].lowerCarbs;
+          break;
+        case ECarbsType.HIGHER_CARBS:
+          carbsTypeData =
+            healthMetrics.data.macronutrients[goalType].higherCarbs;
+          break;
+        default:
+          carbsTypeData = { carbs: 0, protein: 0, fat: 0 };
+          break;
+      }
+
+      macronutrient.carbs = carbsTypeData.carbs || 0;
+      macronutrient.protein = carbsTypeData.protein || 0;
+      macronutrient.fat = carbsTypeData.fat || 0;
+
+      const numberOfMeals = tdee < 1200 ? "3" : tdee < 2000 ? "4" : "5";
+
+      switch (numberOfMeals) {
+        case "3":
+          detailCaloriesOfMeals.breakfast = calDetailMacronutrientPerMeal(
+            healthMetrics.data.mealCaloriesRecommendation[goalType]
+              .threeMealPerDay[0] || 0,
+            carbsType as ECarbsType,
+          );
+          detailCaloriesOfMeals.lunch = calDetailMacronutrientPerMeal(
+            healthMetrics.data.mealCaloriesRecommendation[goalType]
+              .threeMealPerDay[1] || 0,
+            carbsType as ECarbsType,
+          );
+          detailCaloriesOfMeals.dinner = calDetailMacronutrientPerMeal(
+            healthMetrics.data.mealCaloriesRecommendation[goalType]
+              .threeMealPerDay[2] || 0,
+            carbsType as ECarbsType,
+          );
+          break;
+        case "4":
+          detailCaloriesOfMeals.breakfast = calDetailMacronutrientPerMeal(
+            healthMetrics.data.mealCaloriesRecommendation[goalType]
+              .fourMealPerDay[0] || 0,
+            carbsType as ECarbsType,
+          );
+          detailCaloriesOfMeals.lunch = calDetailMacronutrientPerMeal(
+            healthMetrics.data.mealCaloriesRecommendation[goalType]
+              .fourMealPerDay[1] || 0,
+            carbsType as ECarbsType,
+          );
+          detailCaloriesOfMeals.dinner = calDetailMacronutrientPerMeal(
+            healthMetrics.data.mealCaloriesRecommendation[goalType]
+              .fourMealPerDay[2] || 0,
+            carbsType as ECarbsType,
+          );
+          detailCaloriesOfMeals.snacks = [
+            calDetailMacronutrientPerMeal(
+              healthMetrics.data.mealCaloriesRecommendation[goalType]
+                .fourMealPerDay[3] || 0,
+              carbsType as ECarbsType,
+            ),
+          ];
+          break;
+
+        case "5":
+          detailCaloriesOfMeals.breakfast = calDetailMacronutrientPerMeal(
+            healthMetrics.data.mealCaloriesRecommendation[goalType]
+              .fiveMealPerDay[0] || 0,
+            carbsType as ECarbsType,
+          );
+          detailCaloriesOfMeals.lunch = calDetailMacronutrientPerMeal(
+            healthMetrics.data.mealCaloriesRecommendation[goalType]
+              .fiveMealPerDay[1] || 0,
+            carbsType as ECarbsType,
+          );
+          detailCaloriesOfMeals.dinner = calDetailMacronutrientPerMeal(
+            healthMetrics.data.mealCaloriesRecommendation[goalType]
+              .fiveMealPerDay[2] || 0,
+            carbsType as ECarbsType,
+          );
+          detailCaloriesOfMeals.snacks = [
+            calDetailMacronutrientPerMeal(
+              healthMetrics.data.mealCaloriesRecommendation[goalType]
+                .fiveMealPerDay[3] || 0,
+              carbsType as ECarbsType,
+            ),
+            calDetailMacronutrientPerMeal(
+              healthMetrics.data.mealCaloriesRecommendation[goalType]
+                .fiveMealPerDay[4] || 0,
+              carbsType as ECarbsType,
+            ),
+          ];
+          break;
+      }
+    }
+
+    return {
+      tdee,
+      macronutrient,
+      detailCaloriesOfMeals,
+    };
+  }, [healthMetrics, goal, carbsType, tdee]);
+
   return (
     <div className="mb-10">
       <Tabs defaultValue="maintenance">
@@ -25,7 +239,14 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
               mỗi ngày.
             </span>
             <div className="mx-10 mt-2 flex justify-between">
-              <div className="relative w-fit rounded-b-xl rounded-tr-xl bg-gray-200">
+              <div
+                className="relative w-fit rounded-b-xl rounded-tr-xl bg-gray-200"
+                onClick={() => {
+                  setCarbsType(ECarbsType.MODERATE_CARBS);
+                  setGoal(EGoal.MAINTENANCE);
+                  toggle();
+                }}
+              >
                 <div className="flex w-72  flex-col items-center border-b-[1px] border-black py-3">
                   <span className="text-2xl font-bold">
                     {`${numberWithCommas(
@@ -345,6 +566,13 @@ export function Macronutrients({ tdee, macronutrients }: MacronutrientsProps) {
           </div>
         </Tabs.Panel>
       </Tabs>
+
+      <RecommendRecipesModal
+        opened={opened}
+        close={close}
+        meal={1}
+        healthMetricsForGoals={healthMetricsForGoals}
+      />
     </div>
   );
 }

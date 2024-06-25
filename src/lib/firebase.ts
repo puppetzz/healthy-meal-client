@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
+  AdditionalUserInfo,
+  getAdditionalUserInfo,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -22,14 +24,22 @@ export const firebase = initializeApp(firebaseConfig);
 export const auth = getAuth(firebase);
 const provider = new GoogleAuthProvider();
 
-export const signInWithGoogle = async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    GoogleAuthProvider.credentialFromResult(result);
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const signInWithGoogle =
+  async (): Promise<AdditionalUserInfo | null> => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+
+      GoogleAuthProvider.credentialFromResult(result);
+
+      const details = getAdditionalUserInfo(result);
+
+      return details;
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
+  };
 
 export const getCurrentUser = async () => {
   return new Promise<User | null>((resolve, reject) => {

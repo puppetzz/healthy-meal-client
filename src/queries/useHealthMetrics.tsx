@@ -4,9 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { QueryKey } from "../common/constants/queryKey";
 import { getHealthMetrics } from "../api/health-metrics";
 
-export const useHealthMetricsQuery = () => {
+export const useHealthMetricsQuery = (tdee: number) => {
   return useQuery({
-    queryKey: [QueryKey.GET_HEALTH_METRICS],
+    queryKey: [QueryKey.GET_HEALTH_METRICS, tdee],
     queryFn: async () => {
       const healthMetrics = await getHealthMetrics();
 

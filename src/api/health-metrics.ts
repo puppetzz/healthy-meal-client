@@ -18,7 +18,7 @@ export const calculateTDEE = async (
 
 export const getHealthMetrics = async () => {
   const response = await axiosClient<ResponseType<THealthMetricTDEEResponse>>({
-    url: API.GET_HEALTH_METRICS,
+    url: API.HEALTH_METRICS,
     method: "GET",
   });
 

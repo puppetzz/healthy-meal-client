@@ -1,5 +1,8 @@
 "use client";
 
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/mantine/style.css";
+import "../../styles/blocknote.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
 import { isJSON } from "../../utils/isJSON";
@@ -13,12 +16,5 @@ export default function BlockNoteViewOnly({ content }: BlockNoteViewOnlyProps) {
     initialContent: data,
   });
 
-  return (
-    <BlockNoteView
-      editor={editor}
-      editable={false}
-      theme="light"
-      className="p-0 pe-0 ps-0"
-    />
-  );
+  return <BlockNoteView editor={editor} editable={false} theme="light" />;
 }

@@ -7,6 +7,7 @@ import Image from "next/image";
 import { CommentForm } from "../form/CommentForm";
 import { useState } from "react";
 import { usePostCommentMutation } from "../../mutation/usePostComment";
+import { IconCornerUpLeft } from "@tabler/icons-react";
 
 type CommentBlockProps = {
   comment: Comment;
@@ -43,16 +44,16 @@ export function CommentBlock({
       </div>
       <p className={`mt-4 ${!allowReply ? "mb-3" : ""}`}>{comment.content}</p>
       {allowReply && (
-        <div className="ml-5 flex gap-2 pb-4 pt-2">
-          <Image src="/svg/reply.svg" alt="reply" height={17} width={17} />
-          <span
-            className="cursor-pointer text-sm font-semibold text-[#667085] underline"
-            onClick={() => {
-              setIsReply(true);
-              setIsReplyComment && setIsReplyComment(true);
-            }}
-          >
-            Reply
+        <div
+          className="ml-5 flex cursor-pointer pb-4 pt-2"
+          onClick={() => {
+            setIsReply(true);
+            setIsReplyComment && setIsReplyComment(true);
+          }}
+        >
+          <IconCornerUpLeft className="h-6 w-6 pb-1 text-[#667085]" />
+          <span className="pt-1 text-sm font-semibold text-[#667085] underline">
+            Phản hồi
           </span>
         </div>
       )}
@@ -60,7 +61,7 @@ export function CommentBlock({
       {isReply && (
         <div>
           <div className="mb-5">
-            <span className="text-xl font-semibold">{`Replay to ${comment.author.fullName}`}</span>
+            <span className="text-xl font-semibold">{`Phản hồi ${comment.author.fullName}`}</span>
             <span
               className="ml-10 cursor-pointer font-semibold text-[#667085] underline"
               onClick={() => {
@@ -68,7 +69,7 @@ export function CommentBlock({
                 setIsReplyComment && setIsReplyComment(false);
               }}
             >
-              Cancel Reply
+              Huỷ phản hồi
             </span>
           </div>
 
@@ -80,6 +81,7 @@ export function CommentBlock({
                 content: values.content,
               });
             }}
+            isReply={true}
           />
         </div>
       )}

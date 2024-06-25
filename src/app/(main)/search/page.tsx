@@ -25,8 +25,8 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { VerticalCard } from "../../../components/cards/VerticalCard";
 import { Post } from "../../../common/types/post";
-import { notifications } from "@mantine/notifications";
 import { destructFilterQueryString } from "../../../utils/destructFilterQueryString";
+import { Recipe } from "../../../common/types/recipes";
 
 const filterOptionDefaultValues = {
   calories: [0, 2400] as [number, number],
@@ -78,7 +78,7 @@ export default function Search() {
     search: searchParams.get("q") || "",
     page,
     pageSize: DEFAULT_PAGE_SIZE,
-    category: searchParams.get("category") || "",
+    categoryId: Number(searchParams.get("categoryId")) || 1,
     calories: destructFilterQueryString(searchParams.get("calories")),
     protein: destructFilterQueryString(searchParams.get("protein")),
     fat: destructFilterQueryString(searchParams.get("fat")),
@@ -96,7 +96,7 @@ export default function Search() {
     const queryString = createQueryString({
       q: search?.toString() || "",
       page: page.toString(),
-      category: searchParams.get("category") || "",
+      categoryId: searchParams.get("categoryId") || "",
       calories: searchParams.get("calories") || "",
       protein: searchParams.get("protein") || "",
       fat: searchParams.get("fat") || "",
@@ -113,7 +113,7 @@ export default function Search() {
     const queryString = createQueryString({
       q: value,
       page: page.toString(),
-      category: searchParams.get("category") || "",
+      categoryId: searchParams.get("categoryId") || "",
       calories: searchParams.get("calories") || "",
       protein: searchParams.get("protein") || "",
       fat: searchParams.get("fat") || "",
@@ -132,7 +132,7 @@ export default function Search() {
   const categorySelectBoxData = useMemo((): ComboboxData => {
     if (foodCategories) {
       return foodCategories.data.map((foodCategory) => ({
-        value: foodCategory.key,
+        value: foodCategory.id.toString(),
         label: foodCategory.name,
       }));
     }
@@ -153,7 +153,7 @@ export default function Search() {
     const queryString = createQueryString({
       q: searchBoxValue,
       page: page.toString(),
-      category: categoryFilterValue,
+      categoryId: categoryFilterValue,
       calories: `${caloriesFilterValue[0]}-${caloriesFilterValue[1]}`,
       protein: `${proteinFilterValue[0]}-${proteinFilterValue[1]}`,
       fat: `${fatFilterValue[0]}-${fatFilterValue[1]}`,
@@ -163,6 +163,7 @@ export default function Search() {
       sugar: `${sugarFilterValue[0]}-${sugarFilterValue[1]}`,
     });
     router.push(pathName + "?" + queryString);
+    closeDrawer();
   };
 
   return (
@@ -219,10 +220,10 @@ export default function Search() {
         </div>
         <div className="mt-3 flex flex-col items-center">
           <div className="grid w-full grid-cols-2 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {recipes?.data.data.map((recipe) => (
+            {recipes?.data.recipes.map((recipe) => (
               <VerticalCard
                 key={recipe.id}
-                post={recipe as Post}
+                recipe={recipe as Recipe}
                 onClick={() => {
                   handleClickCard(recipe.id);
                 }}

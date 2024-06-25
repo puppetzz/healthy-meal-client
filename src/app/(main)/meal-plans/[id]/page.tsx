@@ -128,11 +128,11 @@ export default function MealPlanDetail({ params }: { params: { id: number } }) {
               </div>
             ) : (
               <div className="text-sm font-semibold">
-                <span>Private Meal Plan</span>
+                <span>Kế hoạch cá nhân</span>
               </div>
             )}
             <div className="text-sm font-semibold">
-              <span className="mr-1">Last Update On:</span>
+              <span className="mr-1">Cập nhật lần cuối lúc:</span>
               <span className="text-[#9aa2b1]">
                 {dayjs(mealPlan?.data.updatedAt).format("MMM DD, YYYY")}
               </span>
@@ -147,7 +147,7 @@ export default function MealPlanDetail({ params }: { params: { id: number } }) {
               />
             </div>
             <div className="flex flex-col font-semibold ">
-              <span className="italic text-[#9aa2b1]">Author:</span>
+              <span className="italic text-[#9aa2b1]">Tác giả:</span>
               <span className="">{mealPlan?.data.author.fullName}</span>
             </div>
           </div>
@@ -170,8 +170,6 @@ export default function MealPlanDetail({ params }: { params: { id: number } }) {
                     onClick={() => {
                       setOpenedMealPlan((prev) => {
                         prev[index] = !prev[index];
-
-                        console.log(prev);
 
                         return [...prev];
                       });
@@ -198,7 +196,7 @@ export default function MealPlanDetail({ params }: { params: { id: number } }) {
 
         <div className="mt-5">
           <div className="flex items-center justify-between">
-            <span className="text-3xl font-bold">Reviews</span>
+            <span className="text-3xl font-bold">Đánh Giá</span>
             <div className="flex items-center gap-2">
               <span className="text-4xl font-bold">
                 {mealPlan?.data.rating}
@@ -224,11 +222,11 @@ export default function MealPlanDetail({ params }: { params: { id: number } }) {
           <div className="flex gap-2 text-gray-400">
             <Rating readOnly size="md" value={mealPlan?.data.rating || 0} />
             <span>{mealPlan?.data.rating || 0}</span>
-            <span>{`(${mealPlan?.data.numberOfReviews || 0} reviews)`}</span>
+            <span>{`(${mealPlan?.data.numberOfReviews || 0} đánh giá)`}</span>
           </div>
           <div className="flex flex-col">
             <div className="mb-3 mt-5">
-              <span className="font-bold">Details</span>
+              <span className="font-bold">Chi tiết</span>
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex justify-between">

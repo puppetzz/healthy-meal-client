@@ -1,36 +1,32 @@
 "use client";
 
-import { useUploadFile } from "../../../../../hooks/useUploadFile";
+import { useUploadFile } from "../../../../hooks/useUploadFile";
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { Anchor, Breadcrumbs, Group, Text } from "@mantine/core";
+import { Group, Text } from "@mantine/core";
 import { Image } from "@mantine/core";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useDisclosure } from "@mantine/hooks";
 import {
   useFoodCategoriesQuery,
-  usePostCategoriesQuery,
   useRecipeByIdQuery,
-} from "../../../../../queries";
-import { TFoodCategory } from "../../../../../common/types/FoodCategory";
-import { TPostCategory } from "../../../../../common/types/PostCategory";
+} from "../../../../queries";
+import { TFoodCategory } from "../../../../common/types/FoodCategory";
 import dynamic from "next/dynamic";
 import { notifications } from "@mantine/notifications";
-import { IngredientForm } from "../../../../../components/form/IngredientForm";
-import { TNutritionInputFields } from "../../../../../common/types/form/NutritionInputField";
-import { TRecipeOptionInputField } from "../../../../../common/types/form/RecipeOptionInputField";
+import { IngredientForm } from "../../../../components/form/IngredientForm";
+import { TNutritionInputFields } from "../../../../common/types/form/NutritionInputField";
+import { TRecipeOptionInputField } from "../../../../common/types/form/RecipeOptionInputField";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
-import { EditPostSidebar } from "../../../../../components/sidebar/EditPostSidebar";
-import { TUpdateRecipeRequest } from "../../../../../common/types/request/recipes/UpdateRecipe";
-import { useUpdateRecipeMutation } from "../../../../../mutation/useUpdateRecipe";
-import { TIngredientRequest } from "../../../../../common/types/request/recipes/Ingredient";
-import { routeModule } from "next/dist/build/templates/app-page";
+import { TUpdateRecipeRequest } from "../../../../common/types/request/recipes/UpdateRecipe";
+import { useUpdateRecipeMutation } from "../../../../mutation/useUpdateRecipe";
+import { TIngredientRequest } from "../../../../common/types/request/recipes/Ingredient";
 import { useRouter } from "next/navigation";
+import { Navbar } from "../../../../components/nav/Navbar";
+import { MutationRecipesSidebar } from "../../../../components/sidebar/CreatePostSidebar";
+import { EPostStatus } from "../../../../common/enums/PostStatus";
 
 const BlockNote = dynamic(
   () =>
-    import("../../../../../components/blog/BlockNote").then(
-      (mod) => mod.default,
-    ),
+    import("../../../../components/blog/BlockNote").then((mod) => mod.default),
   {
     ssr: false,
   },
@@ -42,7 +38,6 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
 
   const isInitialDataRef = useRef<boolean>(true);
 
-  const [opened, { toggle }] = useDisclosure(true);
   const uploadFile = useUploadFile();
 
   const [files, setFiles] = useState<FileWithPath[]>([]);
@@ -76,19 +71,15 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
     prepTime: 0,
     cookTime: 0,
     servings: 0,
+    servingSize: 0,
     unit: "",
     keeping: "",
-    freezer: "",
   });
   const [foodCategoriesSelected, setFoodCategoriesSelected] = useState<
     string[]
   >([]);
-  const [postCategoriesSelected, setPostCategoriesSelected] = useState<
-    string[]
-  >([]);
 
   const { data: foodCategories } = useFoodCategoriesQuery();
-  const { data: postCategories } = usePostCategoriesQuery();
 
   const updateRecipeMutation = useUpdateRecipeMutation();
 
@@ -127,7 +118,7 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
     setInputFields(data);
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (status: EPostStatus) => {
     const thumbnail =
       files.length > 0 ? await uploadFile(files[0]) : recipe?.data.thumbnail;
 
@@ -144,6 +135,15 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
       notifications.show({
         title: "Failed to save draft",
         message: "Content is required",
+        color: "red",
+      });
+      return;
+    }
+
+    if (!title) {
+      notifications.show({
+        title: "Failed to save draft",
+        message: "Title is required",
         color: "red",
       });
       return;
@@ -188,9 +188,9 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
       prepTime: recipeOptions.prepTime,
       cookTime: recipeOptions.cookTime,
       servings: recipeOptions.servings,
+      servingSize: recipeOptions.servingSize,
       calculationUnit: recipeOptions.unit,
       keeping: recipeOptions.keeping,
-      freezer: recipeOptions.freezer,
       calories: nutrition.calories,
       protein: nutrition.protein,
       carbohydrates: nutrition.carbohydrates,
@@ -241,9 +241,9 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
           prepTime: recipe.data.recipe.prepTime,
           cookTime: recipe.data.recipe.cookTime,
           servings: recipe.data.recipe.servings,
+          servingSize: recipe.data.recipe.servingSize,
           unit: recipe.data.recipe.calculationUnit,
           keeping: recipe.data.recipe.keeping,
-          freezer: recipe.data.recipe.freezer,
         });
 
         setFoodCategoriesSelected(
@@ -281,21 +281,16 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
 
   return (
     <>
+      <Navbar />
       <div className="flex justify-between border-t-[1px] bg-white">
         <div className="mt-2 h-full flex-1">
-          <div className="mb-3 ml-10">
-            <Breadcrumbs>
-              <Anchor href="/recipes" className="text-gray-500">
-                Công Thức
-              </Anchor>
-              <span className="w-[25vw] cursor-pointer overflow-hidden truncate">
-                Tạo Công Thức
-              </span>
-            </Breadcrumbs>
-          </div>
-          <div className="h-[calc(100vh-102px)] overflow-y-auto">
-            <div className="px-20">
-              <Dropzone onDrop={setFiles} accept={IMAGE_MIME_TYPE}>
+          <div className="h-[calc(100vh-110px)] overflow-y-auto">
+            <div className="flex w-full justify-center px-20">
+              <Dropzone
+                onDrop={setFiles}
+                accept={IMAGE_MIME_TYPE}
+                className="w-[85%]"
+              >
                 {previews ? (
                   previews
                 ) : (
@@ -354,23 +349,17 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
             )}
           </div>
         </div>
-        {opened && (
-          <EditPostSidebar
-            foodCategories={foodCategories?.data as TFoodCategory[]}
-            postCategories={postCategories?.data as TPostCategory[]}
-            setIsRecipe={setIsRecipe}
-            isRecipe={isRecipe}
-            nutrition={nutrition}
-            setNutrition={setNutrition}
-            recipeOptions={recipeOptions}
-            setRecipeOptions={setRecipeOptions}
-            foodCategoriesSelected={foodCategoriesSelected}
-            setFoodCategoriesSelected={setFoodCategoriesSelected}
-            postCategoriesSelected={postCategoriesSelected}
-            setPostCategoriesSelected={setPostCategoriesSelected}
-            handleUpdate={handleUpdate}
-          />
-        )}
+        <MutationRecipesSidebar
+          foodCategories={foodCategories?.data as TFoodCategory[]}
+          nutrition={nutrition}
+          setNutrition={setNutrition}
+          recipeOptions={recipeOptions}
+          setRecipeOptions={setRecipeOptions}
+          foodCategoriesSelected={foodCategoriesSelected}
+          setFoodCategoriesSelected={setFoodCategoriesSelected}
+          handleSubmit={handleUpdate}
+          isCreate={false}
+        />
       </div>
     </>
   );

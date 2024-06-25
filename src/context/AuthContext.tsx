@@ -3,7 +3,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { StatusCodes } from "http-status-codes";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import {
   auth,
@@ -16,6 +22,8 @@ import { notifications } from "@mantine/notifications";
 
 import { login } from "@/api/auth";
 import { QueryKey } from "@/common/constants/queryKey";
+import { UserInfoModal } from "../components/modals/UserInfoModal";
+import { useDisclosure } from "@mantine/hooks";
 
 type AuthContextType = {
   signInGoogle: () => Promise<void>;
@@ -30,6 +38,8 @@ export const AuthProvider = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+  const [opened, { toggle }] = useDisclosure(false);
+
   const {
     data: user,
     refetch,
@@ -77,15 +87,26 @@ export const AuthProvider = ({
     });
   }, []);
 
+  const handleSignInWithGoogle = useCallback(async () => {
+    const details = await signInWithGoogle();
+
+    if (details) {
+      if (details.isNewUser) {
+        toggle();
+      }
+    }
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
-        signInGoogle: signInWithGoogle,
+        signInGoogle: handleSignInWithGoogle,
         signOut: firebaseSignOut,
         user: user || null,
       }}
     >
       {children}
+      <UserInfoModal opened={opened} close={toggle} />
     </AuthContext.Provider>
   );
 };

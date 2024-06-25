@@ -1,260 +1,227 @@
 "use client";
-import { HorizontalCard } from "@/components/cards/HorizontalCard";
-import { Input } from "@mantine/core";
-import {
-  AdjustmentsHorizontalIcon,
-  ArrowLongRightIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/solid";
+
 import Image from "next/image";
 import { Navbar } from "../components/nav/Navbar";
+import { ActionIcon, Input, Pill } from "@mantine/core";
+import {
+  IconAdjustmentsHorizontal,
+  IconChevronRight,
+  IconSearch,
+} from "@tabler/icons-react";
+import { useLatestRecipeQuery } from "../queries/useLatestRecipe";
+import { useMemo } from "react";
+import { useRankingRecipesQuery } from "../queries/useRankingRecipes";
+
+import "../styles/home.css";
+import { useRouter } from "next/navigation";
+import { Footer } from "../components/footer/footer";
 
 export default function Home() {
+  const router = useRouter();
+  const { data: latestRecipe } = useLatestRecipeQuery();
+  const { data: rankingRecipes } = useRankingRecipesQuery();
+
+  const bannerRecipe = useMemo(() => {
+    if (!latestRecipe) return;
+
+    return {
+      id: latestRecipe.data.post.id,
+      thumbnail: latestRecipe.data.post.thumbnail,
+      categories: latestRecipe.data.recipeFoodCategory.map(
+        (foodCategory) => foodCategory.foodCategory.name,
+      ),
+      title: latestRecipe.data.post.title,
+      calories: latestRecipe.data.nutrition.calories,
+      protein: latestRecipe.data.nutrition.protein,
+      fat: latestRecipe.data.nutrition.fat,
+      carbs: latestRecipe.data.nutrition.carbohydrates,
+    };
+  }, [latestRecipe]);
+
   return (
     <>
       <Navbar />
-      <div className="">
-        <div className="pb-16">
-          <div className="mx-auto mt-4 flex max-w-[1200px] items-center justify-between">
-            <div className="flex flex-col text-lg font-semibold">
-              <span>Simple Recipes That</span>
-              <span>Make You Feel Good</span>
-            </div>
-            <span className="text-3xl font-semibold uppercase">Recipes</span>
-            <div className="flex cursor-pointer gap-1">
-              <span className="font-semibold uppercase">
-                Show me everything
+      <div className="mx-auto mb-10 flex min-h-screen max-w-[1200px] flex-col text-[#364052]">
+        <div className="relative">
+          <div className="absolute left-0 top-0 z-[20] w-[600px] pt-16">
+            <div className="flex flex-col">
+              <Pill className="mb-10 w-fit" size="lg">
+                Công thức nấu ăn mới
+              </Pill>
+              <span className="mb-5 rounded-xl bg-[rgba(255,255,255,0.6)] p-3 text-5xl font-bold">
+                Bạn đói bụng? Có tôi đây.
               </span>
-              <ArrowLongRightIcon className="h-6 w-6" />
+              <span className="mb-10 rounded-xl bg-[rgba(255,255,255,0.6)] p-3">
+                Cảm ơn bạn đã ghé qua! Hãy cùng nấu những món ăn thật ngon và
+                dinh dưỡng để khoẻ mạnh và có một cơ thể thật đẹp nhé.
+              </span>
+              <div className="flex rounded-xl bg-white p-2 shadow-md">
+                <ActionIcon
+                  variant="white"
+                  color="orange"
+                  size="xl"
+                  aria-label="Filter"
+                  className="h-[52px] w-[52px] rounded-xl"
+                >
+                  <IconAdjustmentsHorizontal
+                    style={{ width: "70%", height: "70%" }}
+                    stroke={1.5}
+                  />
+                </ActionIcon>
+                <div className="mx-2 flex-1">
+                  <Input
+                    variant="unstyled"
+                    size="lg"
+                    placeholder="Bạn muốn nấu món gì gì?"
+                  />
+                </div>
+                <ActionIcon
+                  variant="filled"
+                  color="orange"
+                  size="xl"
+                  aria-label="Settings"
+                  className="h-[52px] w-[52px] rounded-xl"
+                >
+                  <IconSearch
+                    style={{ width: "70%", height: "70%" }}
+                    stroke={1.5}
+                  />
+                </ActionIcon>
+              </div>
             </div>
           </div>
-          <div className="mx-auto mt-5 max-w-[1200px]">
-            <div className="grid grid-cols-4 gap-5">
-              <div className="flex flex-col items-center gap-5">
-                <div className="flex grow flex-col items-center gap-2">
-                  <img
-                    src="https://minimalistbaker.com/wp-content/uploads/2024/03/Best-Vegan-Gluten-Free-Vanilla-Cake-10-768x1152.jpg"
-                    alt=""
-                  />
-                  <span className="text-center text-xl font-bold">
-                    The BEST Gluten-Free Vanilla Cake (1 Bowl!)
-                  </span>
-                </div>
-                <div className="flex h-10 w-full cursor-pointer items-center justify-center rounded-sm bg-orange-400 text-xl font-bold">
-                  New Recipes
-                </div>
-              </div>
-              <div className="flex flex-col items-center gap-5">
-                <div className="flex grow flex-col items-center gap-2">
-                  <img
-                    src="https://minimalistbaker.com/wp-content/uploads/2018/02/DELICIOUS-Black-Bean-Plantain-Bowls-9-healthy-ingredients-BIG-flavor-SO-satisfying-vegan-glutenfree-plantains-beans-plantbased-minimalistbaker-10-768x1152.jpg"
-                    alt=""
-                  />
-                  <span className="text-center text-xl font-bold">
-                    Roasted Plantain & Black Bean Vegan Bowl
-                  </span>
-                </div>
-                <div className="flex h-10 w-full cursor-pointer items-center justify-center rounded-sm bg-orange-400 text-xl font-bold">
-                  New Recipes
-                </div>
-              </div>
-              <div className="flex flex-col items-center gap-5">
-                <div className="flex grow flex-col items-center gap-2">
-                  <img
-                    src="https://minimalistbaker.com/wp-content/uploads/2017/06/AMAZING-Cashew-Buttercream-Frosting-2-Ways-Easy-naturally-sweetened-PERFECT-for-frosting-cakes-and-more-vegan-glutenfree-frosting-6-768x1152.jpg"
-                    alt=""
-                  />
-                  <span className="text-center text-xl font-bold">
-                    Cashew Buttercream Frosting (2 Ways!)
-                  </span>
-                </div>
-                <div className="flex h-10 w-full cursor-pointer items-center justify-center rounded-sm bg-orange-400 text-xl font-bold">
-                  New Recipes
-                </div>
-              </div>
-              <div className="flex flex-col items-center gap-5">
-                <div className="flex grow flex-col items-center gap-2">
-                  <img
-                    src="https://minimalistbaker.com/wp-content/uploads/2020/05/CREAMY-Mango-Lassi-Smoothie-5-ingredients-5-minutes-SO-delicious-mango-smoothie-plantbased-glutenfree-recipe-minimalistbaker-13-768x1152.jpg"
-                    alt=""
-                  />
-                  <span className="text-center text-xl font-bold">
-                    Creamy Vegan Mango Lassi
-                  </span>
-                </div>
-                <div className="flex h-10 w-full cursor-pointer items-center justify-center rounded-sm bg-orange-400 text-xl font-bold">
-                  New Recipes
-                </div>
-              </div>
-            </div>
-            <div className="mt-5 flex cursor-pointer justify-center gap-1">
-              <span className="font-semibold uppercase text-orange-400">
-                Show me everything
-              </span>
-              <ArrowLongRightIcon className="h-6 w-6" />
-            </div>
-          </div>
-        </div>
-        <div className="mx-auto mb-10 h-[500px] max-w-[1200px] bg-[#fbf8f3] shadow-lg">
-          <div className="grid h-full grid-cols-2 gap-5">
-            <div className="flex h-full flex-col items-center justify-center px-10">
-              <span className="mb-10 text-xl uppercase">pick of the week</span>
-              <span className="mb-5 text-center text-5xl font-bold">
-                Chocolate Chocolate Chip Pancakes (GF)
-              </span>
-              <p className="mb-8 text-center">
-                Fluffy chocolate chocolate chip pancakes made in 20 minutes with
-                wholesome ingredients. The perfect vegan, gluten-free, naturally
-                sweetened breakfast!
-              </p>
-              <div className="flex h-16 w-48 cursor-pointer items-center justify-center rounded-sm border-2 border-solid border-black text-lg font-semibold uppercase hover:border-[#ffded6] hover:bg-[#ffded6]">
-                view recipe
-              </div>
-            </div>
-            <div className="relative h-full">
+          <div className="flex w-full justify-end">
+            <div className="relative rounded-xl">
               <img
-                src="https://minimalistbaker.com/wp-content/uploads/2017/07/AMAZING-Chocolate-Chocolate-Chip-Pancakes-20-minutes-naturally-sweetened-SO-fluffy-vegan-glutenfree-breakfast-chocolate-pancakes-recipe-5-600x900.jpg"
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover"
+                src={bannerRecipe?.thumbnail || ""}
+                alt="banner"
+                className="h-[500px] w-[800px] rounded-xl object-cover"
               />
-            </div>
-          </div>
-        </div>
-        <div className="mx-auto mb-10 flex max-w-[1200px] gap-5 bg-green-800 p-8">
-          <span className="flex-1 items-center text-3xl font-bold text-[#ffded6]">
-            *Want more deliciousness?
-          </span>
-          <p className="flex w-[40%] items-center text-lg font-semibold text-white">
-            Subscribe here and we’ll send you an email as new recipes are
-            published AND our fan favorites ebook!
-          </p>
-          <div className="flex w-[33%] items-center">
-            <Input
-              type="email"
-              className="h-[85%] rounded-none border-none pl-7 text-lg focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-              placeholder="Email Address..."
-            />
-            <div className="flex h-[85%] items-center justify-center bg-[#ffded6] px-4 uppercase hover:bg-[#ffb5a3]">
-              submit
-            </div>
-          </div>
-        </div>
-        <div className="mb-10 bg-[#fbf8f3] pb-16 pt-14">
-          <div className="mx-auto max-w-[1200px]">
-            <div className="mb-16 w-[70%]">
-              <div className="mb-10 flex h-16 w-full items-center justify-center bg-white">
-                <div className="ml-2 flex h-14 w-14 items-center justify-center">
-                  <AdjustmentsHorizontalIcon className="h-6 w-6" />
-                </div>
-                <Input
-                  type="text"
-                  placeholder="What would you like to cook?"
-                  className="rounded-none border-none placeholder:uppercase focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
-                <div className="mr-2 flex h-14 w-16 items-center justify-center rounded-md bg-[#ffded6]">
-                  <MagnifyingGlassIcon className="h-6 w-6" />
-                </div>
-              </div>
-              <div className="h-[1px] bg-black" />
-              <div>
-                <div className="flex justify-between pt-10">
-                  <span className="text-3xl font-bold uppercase">
-                    recent reader favorites
-                  </span>
-                  <div className="flex gap-1">
-                    {[...Array(5)].map((_, index) => (
-                      <Image
-                        src="/svg/star.svg"
-                        alt="Star"
-                        width={25}
-                        height={25}
-                      />
+              <div
+                className="tag absolute bottom-5 right-5 flex h-[170px] w-[350px] cursor-pointer rounded-xl border-2 bg-white"
+                onClick={() => router.push(`/recipes/${bannerRecipe?.id}`)}
+              >
+                <div className="flex h-full w-full flex-col px-5 py-3">
+                  <div className="flex flex-wrap gap-2 ">
+                    {bannerRecipe?.categories.map((category) => (
+                      <Pill className="w-fit" size="md">
+                        {category}
+                      </Pill>
                     ))}
                   </div>
+                  <div className="h-fit">
+                    <h3 className="title mt-1 flex-1 text-xl font-semibold">
+                      {bannerRecipe?.title}
+                    </h3>
+                  </div>
+                  <div className="mt-auto flex h-fit justify-between">
+                    <div>
+                      <span className="flex items-center gap-1 font-semibold text-[#9aa2b1]">
+                        <Image
+                          src="/svg/fire.svg"
+                          alt="fire"
+                          height={12}
+                          width={12}
+                        />
+                        Cal
+                      </span>
+                      <span className="text-lg font-semibold">
+                        {bannerRecipe?.calories}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="flex items-center gap-1 font-semibold text-[#9aa2b1]">
+                        Protein
+                      </span>
+                      <span className="text-lg font-semibold">
+                        {`${bannerRecipe?.protein}g`}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="flex items-center gap-1 font-semibold text-[#9aa2b1]">
+                        Fat
+                      </span>
+                      <span className="text-lg font-semibold">{`${bannerRecipe?.fat}g`}</span>
+                    </div>
+                    <div>
+                      <span className="flex items-center gap-1 font-semibold text-[#9aa2b1]">
+                        Carbs
+                      </span>
+                      <span className="text-lg font-semibold">
+                        {`${bannerRecipe?.carbs}g`}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-5 flex flex-col gap-2">
-                  <HorizontalCard
-                    title="Spicy Garlicky Sesame Tofu (30 Minutes!)"
-                    ImageSource="https://minimalistbaker.com/wp-content/uploads/2023/12/Spicy-Garlicky-Sticky-Baked-Sesame-Tofu-10-600x600.jpg"
-                    index={1}
-                  />
-                  <HorizontalCard
-                    title="Spicy Garlicky Sesame Tofu (30 Minutes!)"
-                    ImageSource="https://minimalistbaker.com/wp-content/uploads/2023/12/Spicy-Garlicky-Sticky-Baked-Sesame-Tofu-10-600x600.jpg"
-                    index={2}
-                  />
-                  <HorizontalCard
-                    title="Spicy Garlicky Sesame Tofu (30 Minutes!)"
-                    ImageSource="https://minimalistbaker.com/wp-content/uploads/2023/12/Spicy-Garlicky-Sticky-Baked-Sesame-Tofu-10-600x600.jpg"
-                    index={3}
-                  />
-                  <HorizontalCard
-                    title="Spicy Garlicky Sesame Tofu (30 Minutes!)"
-                    ImageSource="https://minimalistbaker.com/wp-content/uploads/2023/12/Spicy-Garlicky-Sticky-Baked-Sesame-Tofu-10-600x600.jpg"
-                    index={4}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="h-[1px] bg-black" />
-            <div className="pt-10">
-              <div className="flex justify-between">
-                <span className="text-3xl font-bold uppercase">
-                  recipe round-ups
-                </span>
-                <div className="flex cursor-pointer gap-1">
-                  <span className="font-semibold uppercase">
-                    Show me everything
-                  </span>
-                  <ArrowLongRightIcon className="h-6 w-6" />
-                </div>
-              </div>
-              <div className="grid grid-cols-4 gap-5 pt-10">
-                <div className="flex flex-col items-center gap-4">
-                  <img
-                    src="https://minimalistbaker.com/wp-content/uploads/2021/05/FLUFFY-Millet-Breakfast-Cake-with-Stone-Fruit-Gluten-free-plant-based-naturally-sweetened-adaptable-by-the-season-minimalistbaker-recipe-plantbased-glutenfree-millet-cake-8-768x1152.jpg"
-                    alt=""
-                    className="cursor-pointer"
-                  />
-                  <span className="cursor-pointer text-center text-xl font-bold hover:text-[#d56638]">
-                    32 Plant-Based Mother’s Day Brunch Recipes
-                  </span>
-                </div>
-                <div className="flex flex-col items-center gap-4">
-                  <img
-                    src="https://minimalistbaker.com/wp-content/uploads/2021/05/FLUFFY-Millet-Breakfast-Cake-with-Stone-Fruit-Gluten-free-plant-based-naturally-sweetened-adaptable-by-the-season-minimalistbaker-recipe-plantbased-glutenfree-millet-cake-8-768x1152.jpg"
-                    alt=""
-                    className="cursor-pointer"
-                  />
-                  <span className="cursor-pointer text-center text-xl font-bold hover:text-[#d56638]">
-                    32 Plant-Based Mother’s Day Brunch Recipes
-                  </span>
-                </div>
-                <div className="flex flex-col items-center gap-4">
-                  <img
-                    src="https://minimalistbaker.com/wp-content/uploads/2021/05/FLUFFY-Millet-Breakfast-Cake-with-Stone-Fruit-Gluten-free-plant-based-naturally-sweetened-adaptable-by-the-season-minimalistbaker-recipe-plantbased-glutenfree-millet-cake-8-768x1152.jpg"
-                    alt=""
-                    className="cursor-pointer"
-                  />
-                  <span className="cursor-pointer text-center text-xl font-bold hover:text-[#d56638]">
-                    32 Plant-Based Mother’s Day Brunch Recipes
-                  </span>
-                </div>
-                <div className="flex flex-col items-center gap-4">
-                  <img
-                    src="https://minimalistbaker.com/wp-content/uploads/2021/05/FLUFFY-Millet-Breakfast-Cake-with-Stone-Fruit-Gluten-free-plant-based-naturally-sweetened-adaptable-by-the-season-minimalistbaker-recipe-plantbased-glutenfree-millet-cake-8-768x1152.jpg"
-                    alt=""
-                    className="cursor-pointer"
-                  />
-                  <span className="cursor-pointer text-center text-xl font-bold hover:text-[#d56638]">
-                    32 Plant-Based Mother’s Day Brunch Recipes
-                  </span>
+                <div className="chevron flex w-[40px] items-center justify-center rounded-r-[0.6rem] border-l-[1px]">
+                  <IconChevronRight />
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div className="mt-7 grid grid-cols-3 gap-5">
+          {rankingRecipes?.data.slice(0, 3).map((recipe) => (
+            <div
+              className="flex h-[400px] cursor-pointer flex-col rounded-xl p-2 shadow-md"
+              onClick={() => router.push(`/recipes/${recipe.post.id}`)}
+            >
+              <div className="mb-3 h-[200px] w-full">
+                <img
+                  src={recipe.post.thumbnail}
+                  alt=""
+                  className="h-full w-full rounded-xl"
+                />
+              </div>
+              <div className="flex flex-wrap gap-2 ">
+                {recipe.recipeFoodCategory.map((category) => (
+                  <Pill className="w-fit" size="md">
+                    {category.foodCategory.name}
+                  </Pill>
+                ))}
+              </div>
+              <div>
+                <h3 className="mt-2 text-2xl font-semibold">
+                  {recipe.post.title}
+                </h3>
+              </div>
+              <div className="mx-1 mt-auto flex h-fit justify-between rounded-xl bg-[#FD7E14] p-2">
+                <div className="flex flex-1 flex-col items-center border-r-[0.5px] border-white">
+                  <span className="flex items-center gap-1 font-semibold text-[#efc9b6]">
+                    Calo
+                  </span>
+                  <span className="text-lg font-semibold text-white">
+                    {recipe.nutrition.calories}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col items-center border-x-[0.5px] border-white">
+                  <span className="flex items-center gap-1 font-semibold text-[#efc9b6]">
+                    Protein
+                  </span>
+                  <span className="text-lg font-semibold text-white">
+                    {`${recipe.nutrition.protein}g`}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col items-center border-x-[0.5px] border-white">
+                  <span className="flex items-center gap-1 font-semibold text-[#efc9b6]">
+                    Fat
+                  </span>
+                  <span className="text-lg font-semibold text-white">{`${recipe.nutrition.fat}g`}</span>
+                </div>
+                <div className="flex flex-1 flex-col items-center border-l-[0.5px] border-white">
+                  <span className="flex items-center gap-1 font-semibold text-[#efc9b6]">
+                    Carbs
+                  </span>
+                  <span className="text-lg font-semibold text-white">
+                    {`${recipe.nutrition.carbohydrates}g`}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+      <Footer />
     </>
   );
 }

@@ -1,19 +1,19 @@
 "use client";
 
 import { Button, Group, NumberInput, Radio, Select } from "@mantine/core";
-import { TActivityLevel } from "../../common/enums/ActivityLevel";
-import { TGender } from "../../common/enums/Gender";
+import { EActivityLevel } from "../../common/enums/ActivityLevel";
+import { EGender } from "../../common/enums/Gender";
 import { useForm } from "@mantine/form";
 import { useCalculateTDEEMutation } from "../../mutation";
 import { useCallback, useState } from "react";
 import { THealthMetricTDEEResponse } from "../../common/types/response/health-metric-tdee";
 
 type FormValues = {
-  gender: TGender;
+  gender: EGender;
   age: number;
   weight: number;
   height: number;
-  activityLevel: TActivityLevel;
+  activityLevel: EActivityLevel;
 };
 
 type HealthMetricsFormProps = {
@@ -25,11 +25,11 @@ export function HealthMetricsForm({
 }: HealthMetricsFormProps) {
   const form = useForm({
     initialValues: {
-      gender: TGender.MALE,
+      gender: EGender.MALE,
       age: undefined,
       weight: undefined,
       height: undefined,
-      activityLevel: TActivityLevel.SEDENTARY,
+      activityLevel: EActivityLevel.SEDENTARY,
     },
     validate: {
       age: (value) =>
@@ -72,8 +72,8 @@ export function HealthMetricsForm({
                 defaultValue={form.getValues().gender}
               >
                 <Group>
-                  <Radio label="Nam" value={TGender.MALE} color="orange" />
-                  <Radio label="Nữ" value={TGender.FEMALE} color="orange" />
+                  <Radio label="Nam" value={EGender.MALE} color="orange" />
+                  <Radio label="Nữ" value={EGender.FEMALE} color="orange" />
                 </Group>
               </Radio.Group>
             </div>
@@ -122,23 +122,23 @@ export function HealthMetricsForm({
                 className="w-72"
                 data={[
                   {
-                    value: TActivityLevel.SEDENTARY,
+                    value: EActivityLevel.SEDENTARY,
                     label: "Ít vận động (công việc văn phòng)",
                   },
                   {
-                    value: TActivityLevel.LIGHTLY_EXERCISE,
+                    value: EActivityLevel.LIGHTLY_EXERCISE,
                     label: "Tập luyện nhẹ (1-2 ngày/tuần)",
                   },
                   {
-                    value: TActivityLevel.MODERATELY_EXERCISE,
+                    value: EActivityLevel.MODERATELY_EXERCISE,
                     label: "Tập luyện vừa phải (3-5 ngày/tuần)",
                   },
                   {
-                    value: TActivityLevel.HEAVY_EXERCISE,
+                    value: EActivityLevel.HEAVY_EXERCISE,
                     label: "Tập luyện nặng (6-7 ngày/tuần)",
                   },
                   {
-                    value: TActivityLevel.ATHLETE,
+                    value: EActivityLevel.ATHLETE,
                     label: "Vận động viên (2x mỗi ngày)",
                   },
                 ]}
@@ -149,7 +149,7 @@ export function HealthMetricsForm({
             <div className="flex gap-5">
               <div className="w-28"></div>
               <Button color="orange" type="submit">
-                Calculate!
+                Xem Kết Quả
               </Button>
             </div>
           </div>

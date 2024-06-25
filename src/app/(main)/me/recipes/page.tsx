@@ -5,10 +5,11 @@ import { useRecipesByUserQuery } from "../../../../queries";
 import { useCreateQueryString } from "../../../../hooks/useCreateQueryString";
 import { useCallback, useEffect } from "react";
 import { VerticalCard } from "../../../../components/cards/VerticalCard";
-import { ActionIcon, Pagination } from "@mantine/core";
-import { FoodCategoriesSidebar } from "../../../../components/sidebar/FoodCategories";
-import { Post } from "../../../../common/types/post";
+import { ActionIcon, Anchor, Breadcrumbs, Pagination } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { Recipe } from "../../../../common/types/recipes";
+import { HomeIcon } from "@heroicons/react/24/solid";
+import { useDeleteRecipeMutation } from "../../../../mutation/useDeleteRecipe";
 
 export default function MyRecipes() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function MyRecipes() {
     page,
     pageSize: 12,
   });
+  const deleteRecipeMutation = useDeleteRecipeMutation();
 
   const onPageChange = useCallback((page: number) => {
     const queryString = createQueryString({
@@ -34,6 +36,10 @@ export default function MyRecipes() {
     router.push(`/recipes/${id}`);
   }, []);
 
+  const handleClickDeleteIcon = (id: number) => {
+    deleteRecipeMutation.mutate(id);
+  };
+
   useEffect(() => {
     refetch();
   }, [page]);
@@ -41,17 +47,27 @@ export default function MyRecipes() {
   return (
     <>
       <div className="mx-auto max-w-[1200px] px-5">
+        <div className="">
+          <Breadcrumbs>
+            <Anchor href="/" className="text-gray-500">
+              <HomeIcon className="h-5 w-5" />
+            </Anchor>
+            <span className="w-[25vw] cursor-pointer overflow-hidden truncate">
+              Kế Hoạch
+            </span>
+          </Breadcrumbs>
+        </div>
         <div className="py-8">
           <h2 className="mb-6 text-3xl font-bold">Công Thức Của Tôi</h2>
         </div>
         <div className="flex justify-between">
-          <div className="flex flex-col items-center">
+          <div className="flex w-full flex-col items-center">
             <div className="grid w-full grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-              {recipes?.data.data.map((recipe) => (
+              {recipes?.data.recipes.map((recipe) => (
                 <div className="relative">
                   <VerticalCard
                     key={recipe.id}
-                    post={recipe as Post}
+                    recipe={recipe as Recipe}
                     onClick={() => {
                       handleClickCard(recipe.id);
                     }}
@@ -63,7 +79,7 @@ export default function MyRecipes() {
                       aria-label="edit"
                       color="blue"
                       onClick={() =>
-                        router.push(`/recipes/${recipe.id}/update`)
+                        router.push(`/update/recipes/${recipe.id}`)
                       }
                     >
                       <IconEdit
@@ -71,7 +87,12 @@ export default function MyRecipes() {
                         stroke={1.5}
                       />
                     </ActionIcon>
-                    <ActionIcon variant="filled" aria-label="edit" color="red">
+                    <ActionIcon
+                      variant="filled"
+                      aria-label="edit"
+                      color="red"
+                      onClick={() => handleClickDeleteIcon(recipe.id)}
+                    >
                       <IconTrash
                         style={{ width: "70%", height: "70%" }}
                         stroke={1.5}
