@@ -10,35 +10,33 @@ import {
   Stepper,
 } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
-import { useDisclosure } from "@mantine/hooks";
-import { EMealPlanFrequency } from "../../../common/enums/MealPlanFrequency";
-import { EGoal } from "../../../common/enums/Goal";
-import { ECarbsType } from "../../../common/enums/CarbsType";
+import { EMealPlanFrequency } from "@/common/enums/MealPlanFrequency";
+import { EGoal } from "@/common/enums/Goal";
+import { ECarbsType } from "@/common/enums/CarbsType";
 import {
   TDetailCaloriesOfMeals,
   THealthMetricsTarget,
   TNutritionPerMeal,
-} from "../../../common/types/form/HealthMetricsTarget";
-import { TMacronutrient } from "../../../common/types/response/health-metric-tdee";
-import { MealMacronutrientBlock } from "../../../components/meal-plan/MealMacronutrientBlock";
-import { MealPlanSelect } from "../../../components/meal-plan/MealPlanSelect";
+} from "@/common/types/form/HealthMetricsTarget";
+import { TMacronutrient } from "@/common/types/response/health-metric-tdee";
+import { MealMacronutrientBlock } from "@/components/meal-plan/MealMacronutrientBlock";
+import { MealPlanSelect } from "@/components/meal-plan/MealPlanSelect";
 import dynamic from "next/dynamic";
-import { useHealthMetricsQuery } from "../../../queries";
-import { TMealPlanRecipeRequest } from "../../../common/types/request/meal-plan/CreateMealPlan";
-import { EMealPlanStatus } from "../../../common/enums/MealPlanStatus";
-import { Post } from "../../../common/types/post";
+import { useHealthMetricsQuery } from "@/queries";
+import { TMealPlanRecipeRequest } from "@/common/types/request/meal-plan/CreateMealPlan";
 import Image from "next/image";
-import { numberWithCommas } from "../../../utils/numberCommasFormat";
+import { numberWithCommas } from "@/utils/numberCommasFormat";
 import { notifications } from "@mantine/notifications";
-import { useMealPlanMutation } from "../../../mutation/useMealPlan";
-import { MealPlanPreviewBlock } from "../../../components/meal-plan/MealPlanPreviewBlock";
+import { useMealPlanMutation } from "@/mutation/useMealPlan";
+import { MealPlanPreviewBlock } from "@/components/meal-plan/MealPlanPreviewBlock";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
-import { Recipe } from "../../../common/types/recipes";
-import { Navbar } from "../../../components/nav/Navbar";
+import { Recipe } from "@/common/types/recipes";
+import { Navbar } from "@/components/nav/Navbar";
+import { ECreateStatus } from "../../../common/enums/CreateStatus";
 
 const BlockNote = dynamic(
-  () => import("../../../components/blog/BlockNote").then((mod) => mod.default),
+  () => import("@/components/blog/BlockNote").then((mod) => mod.default),
   {
     ssr: false,
   },
@@ -46,9 +44,7 @@ const BlockNote = dynamic(
 
 const BlockNoteViewOnly = dynamic(
   () =>
-    import("../../../components/blog/BlockNoteViewOnly").then(
-      (mod) => mod.default,
-    ),
+    import("@/components/blog/BlockNoteViewOnly").then((mod) => mod.default),
   {
     ssr: false,
   },
@@ -68,7 +64,6 @@ export default function MealPlanCreation() {
     [...Array(7)].map(() => true),
   );
 
-  const [opened, { toggle }] = useDisclosure(true);
   const [numberOfMeals, setNumberOfMeals] = useState<string>("3");
   const [goal, setGoal] = useState<string>(EGoal.MAINTENANCE);
   const [carbsType, setCarbsType] = useState<string>(ECarbsType.MODERATE_CARBS);
@@ -279,7 +274,7 @@ export default function MealPlanCreation() {
     };
   }, [healthMetrics, goal, carbsType, numberOfMeals]);
 
-  const handleCreateDraft = () => {
+  const handleCreate = (status: ECreateStatus) => {
     if (!title) {
       notifications.show({
         title: "Failed to save draft",
@@ -288,8 +283,6 @@ export default function MealPlanCreation() {
       });
       return;
     }
-
-    const status = EMealPlanStatus.DRAFT;
 
     const recipes = mealPlanRecipes.flat();
 
@@ -321,12 +314,12 @@ export default function MealPlanCreation() {
     <>
       <Navbar />
       <div className="mx-auto max-w-[1200px] p-2">
-        <Stepper active={active} onStepClick={setActive}>
+        <Stepper active={active} onStepClick={setActive} color="orange">
           <Stepper.Step label="Mô tả">
             <div className="mx-auto h-[calc(100vh-240px)] max-w-[1100px] overflow-auto">
               <input
                 type="text"
-                className="w-full px-[50px] text-5xl font-bold outline-none"
+                className="w-full text-5xl font-bold outline-none"
                 placeholder="Add Title"
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
@@ -335,19 +328,28 @@ export default function MealPlanCreation() {
             </div>
           </Stepper.Step>
           <Stepper.Step label="Nhu Cầu">
-            <div className="flex">
+            <div className="flex h-[calc(100vh-240px)]">
               <div className="flex-1">
                 <div className="m-5 flex flex-col gap-5 rounded-xl border-[1px] p-5 shadow-sm">
                   <div className="flex items-center">
                     <span className="mr-3 font-semibold">Bạn muốn:</span>
                     <Radio.Group value={goal} onChange={setGoal}>
                       <Group>
-                        <Radio value={EGoal.CUTTING} label="Giảm Cân" />
+                        <Radio
+                          value={EGoal.CUTTING}
+                          label="Giảm Cân"
+                          color="orange"
+                        />
                         <Radio
                           value={EGoal.MAINTENANCE}
                           label="Duy Trì Cân Nặng"
+                          color="orange"
                         />
-                        <Radio value={EGoal.BULKING} label="Tăng Cân" />
+                        <Radio
+                          value={EGoal.BULKING}
+                          label="Tăng Cân"
+                          color="orange"
+                        />
                       </Group>
                     </Radio.Group>
                   </div>
@@ -377,9 +379,9 @@ export default function MealPlanCreation() {
                         }}
                       >
                         <Group>
-                          <Radio value="3" label="3 bữa" />
-                          <Radio value="4" label="4 bữa" />
-                          <Radio value="5" label="5 bữa" />
+                          <Radio value="3" label="3 bữa" color="orange" />
+                          <Radio value="4" label="4 bữa" color="orange" />
+                          <Radio value="5" label="5 bữa" color="orange" />
                         </Group>
                       </Radio.Group>
                     </div>
@@ -409,12 +411,21 @@ export default function MealPlanCreation() {
                     <span className="mr-3 font-semibold">Lượng Carbs:</span>
                     <Radio.Group value={carbsType} onChange={setCarbsType}>
                       <Group>
-                        <Radio value={ECarbsType.LOWER_CARBS} label="Ít" />
+                        <Radio
+                          value={ECarbsType.LOWER_CARBS}
+                          label="Ít"
+                          color="orange"
+                        />
                         <Radio
                           value={ECarbsType.MODERATE_CARBS}
                           label="Vừa phải"
+                          color="orange"
                         />
-                        <Radio value={ECarbsType.HIGHER_CARBS} label="Nhiều" />
+                        <Radio
+                          value={ECarbsType.HIGHER_CARBS}
+                          label="Nhiều"
+                          color="orange"
+                        />
                       </Group>
                     </Radio.Group>
                   </div>
@@ -547,15 +558,15 @@ export default function MealPlanCreation() {
           </Stepper.Step>
           <Stepper.Completed>
             <div className="flex h-[calc(100vh-240px)] max-w-[1300px] overflow-auto rounded-xl border-[1px] px-3 py-5 shadow-md">
-              <div className="flex-1">
-                <div className="mb-3 px-[54px]">
+              <div className="flex-1 px-7 pb-5">
+                <div className="mb-3">
                   <h1 className=" text-5xl font-bold">{title}</h1>
                 </div>
                 <div>
                   <BlockNoteViewOnly content={content} />
                 </div>
                 {frequency === EMealPlanFrequency.DAILY ? (
-                  <div className="flex flex-col items-center gap-4 px-[52px]">
+                  <div className="flex flex-col items-center gap-4">
                     {selectedRecipes[0].map((recipe, index) => {
                       return (
                         <MealPlanPreviewBlock
@@ -656,12 +667,30 @@ export default function MealPlanCreation() {
 
       <Group justify="center" mt="sm">
         <Button variant="default" onClick={prevStep}>
-          Back
+          Quay Lại
         </Button>
         {active === 3 ? (
-          <Button onClick={handleCreateDraft}>Publish</Button>
+          <div className="flex">
+            <Button
+              onClick={() => handleCreate(ECreateStatus.DRAFT)}
+              color="orange"
+              variant="outline"
+              className="w-[95px] rounded-r-none"
+            >
+              Lưu
+            </Button>
+            <Button
+              onClick={() => handleCreate(ECreateStatus.PUBLISH)}
+              color="orange"
+              className="w-[95px] rounded-l-none"
+            >
+              Chia Sẻ
+            </Button>
+          </div>
         ) : (
-          <Button onClick={nextStep}>Next step</Button>
+          <Button onClick={nextStep} color="orange">
+            Tiếp Theo
+          </Button>
         )}
       </Group>
     </>

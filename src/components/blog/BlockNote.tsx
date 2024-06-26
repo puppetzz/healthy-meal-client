@@ -8,6 +8,7 @@ import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { POST_CONTENT_LOCAL_STORAGE_KEY } from "../../common/constants/general";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { isJSON } from "../../utils/isJSON";
+import "../../styles/blocknote.css";
 
 type BlockNoteProps = {
   className?: string;

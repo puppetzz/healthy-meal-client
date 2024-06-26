@@ -76,7 +76,7 @@ export default function MealPlans() {
                     aria-label="edit"
                     color="blue"
                     onClick={() =>
-                      router.push(`/meal-plans/${mealPlan.id}/update`)
+                      router.push(`/update/meal-plan/${mealPlan.id}`)
                     }
                   >
                     <IconEdit

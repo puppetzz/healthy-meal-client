@@ -15,8 +15,8 @@ export function MealPlanPreviewBlock({
 }: MealPlanPreviewBlockProps) {
   return (
     <div className="w-full rounded-xl border-[1px] p-5 ">
-      <div className="mb-5 flex justify-between">
-        <div className="flex gap-2">
+      <div className="mb-5 flex w-full justify-between">
+        <div className="flex flex-1 gap-2">
           <Image
             src="/svg/fork-and-knife.svg"
             alt="Fork and knife"

@@ -1,10 +1,11 @@
+import { ECreateStatus } from "../../../enums/CreateStatus";
 import { EMealPlanFrequency } from "../../../enums/MealPlanFrequency";
 import { EMealPlanStatus } from "../../../enums/MealPlanStatus";
 
 export type TCreateMealPlanRequest = {
   title: string;
   content: string;
-  status: EMealPlanStatus;
+  status: ECreateStatus;
   frequency: EMealPlanFrequency;
   mealPlanRecipes: TMealPlanRecipeRequest[];
   mealPerDay: number;
