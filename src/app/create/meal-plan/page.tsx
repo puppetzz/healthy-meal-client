@@ -286,6 +286,15 @@ export default function MealPlanCreation() {
 
     const recipes = mealPlanRecipes.flat();
 
+    if (recipes.length < Number(numberOfMeals)) {
+      notifications.show({
+        title: "Tạo Kế Hoạch Không Thành Công",
+        message: "Bạn phải chọn các bữa ăn cho kế hoạch",
+        color: "red",
+      });
+      return;
+    }
+
     mealPlanMutation
       .mutateAsync({
         title,
