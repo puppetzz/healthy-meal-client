@@ -10,6 +10,7 @@ import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { Recipe } from "../../../../common/types/recipes";
 import { HomeIcon } from "@heroicons/react/24/solid";
 import { useDeleteRecipeMutation } from "../../../../mutation/useDeleteRecipe";
+import { notifications } from "@mantine/notifications";
 
 export default function MyRecipes() {
   const router = useRouter();
@@ -37,7 +38,23 @@ export default function MyRecipes() {
   }, []);
 
   const handleClickDeleteIcon = (id: number) => {
-    deleteRecipeMutation.mutate(id);
+    deleteRecipeMutation
+      .mutateAsync(id)
+      .then(() => {
+        notifications.show({
+          title: "Xoá Công Thức",
+          color: "green",
+          message: "Xoá công thức thành công",
+        });
+        refetch();
+      })
+      .catch((error) => {
+        notifications.show({
+          title: "Xoá Công Thức",
+          color: "red",
+          message: `Đã có lỗi: ${error.response.data.message}`,
+        });
+      });
   };
 
   useEffect(() => {
@@ -79,7 +96,7 @@ export default function MyRecipes() {
                       aria-label="edit"
                       color="blue"
                       onClick={() =>
-                        router.push(`/update/recipes/${recipe.id}`)
+                        router.push(`/update/recipes/${recipe.post.id}`)
                       }
                     >
                       <IconEdit

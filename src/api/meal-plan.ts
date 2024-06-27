@@ -62,3 +62,12 @@ export const updateMealPlan = async (data: TUpdateMealPlanRequest) => {
 
   return response.data;
 };
+
+export const deleteMealPlan = async (id: number) => {
+  const response = await axiosClient({
+    url: `${API.MEAL_PLANS}/${id}`,
+    method: "DELETE",
+  });
+
+  return response.data;
+};

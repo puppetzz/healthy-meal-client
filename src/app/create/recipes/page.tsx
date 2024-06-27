@@ -275,6 +275,11 @@ export default function CreatePost() {
       foodCategoriesSelected,
       createRecipeMutation,
       getContent,
+      nutrition,
+      recipeOptions,
+      router,
+      title,
+      uploadFile,
     ],
   );
 

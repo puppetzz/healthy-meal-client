@@ -8,6 +8,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCreateQueryString } from "../../../../hooks/useCreateQueryString";
 import { useMealPlansByUserQuery } from "../../../../queries/useMealPlanByUser";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { useDeleteMealPlanMutation } from "../../../../mutation";
+import { notifications } from "@mantine/notifications";
 
 export default function MealPlans() {
   const router = useRouter();
@@ -21,6 +23,8 @@ export default function MealPlans() {
     page,
     pageSize: 8,
   });
+
+  const deleteMealPlanMutation = useDeleteMealPlanMutation();
 
   const mealPlans = useMemo(() => {
     if (mealPlansQuery.data) {
@@ -36,6 +40,26 @@ export default function MealPlans() {
     });
     router.push(pathName + "?" + queryString);
   }, []);
+
+  const handleDelete = (id: number) => {
+    deleteMealPlanMutation
+      .mutateAsync(id)
+      .then(() => {
+        notifications.show({
+          title: "Xoá Kế Hoạch",
+          color: "green",
+          message: "Xoá kế hoạch thành công",
+        });
+        mealPlansQuery.refetch();
+      })
+      .catch((error) => {
+        notifications.show({
+          title: "Xoá Kế Hoạch",
+          color: "red",
+          message: `Đã có lỗi: ${error.response.data.message}`,
+        });
+      });
+  };
 
   return (
     <div className="mx-auto flex max-w-[1200px] flex-col px-7">
@@ -84,7 +108,12 @@ export default function MealPlans() {
                       stroke={1.5}
                     />
                   </ActionIcon>
-                  <ActionIcon variant="filled" aria-label="edit" color="red">
+                  <ActionIcon
+                    variant="filled"
+                    aria-label="edit"
+                    color="red"
+                    onClick={() => handleDelete(mealPlan.id)}
+                  >
                     <IconTrash
                       style={{ width: "70%", height: "70%" }}
                       stroke={1.5}

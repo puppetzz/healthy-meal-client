@@ -124,8 +124,8 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
 
     if (!thumbnail) {
       notifications.show({
-        title: "Failed to save draft",
-        message: "Thumbnail is required",
+        title: "Cập nhật Công Thức Không Thành Công",
+        message: "Ảnh nền cho công thức không được để trống",
         color: "red",
       });
       return;
@@ -133,8 +133,8 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
 
     if (!content) {
       notifications.show({
-        title: "Failed to save draft",
-        message: "Content is required",
+        title: "Cập nhật Công Thức Không Thành Công",
+        message: "Nội dung của công thức không được để trống",
         color: "red",
       });
       return;
@@ -142,8 +142,8 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
 
     if (!title) {
       notifications.show({
-        title: "Failed to save draft",
-        message: "Title is required",
+        title: "Cập nhật Công Thức Không Thành Công",
+        message: "Tiêu đề của công thức không được để trống",
         color: "red",
       });
       return;
@@ -160,8 +160,8 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
 
     if (ingredients.length !== inputFields.length) {
       notifications.show({
-        title: "Failed to save draft",
-        message: "All ingredient fields are required",
+        title: "Cập nhật Công Thức Không Thành Công",
+        message: "Bạn Phải điền đầy đủ thông tin về thành phần công thức",
         color: "red",
       });
       return;
@@ -171,8 +171,8 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
 
     if (foodCategories.length < 1) {
       notifications.show({
-        title: "Failed to save draft",
-        message: "Food category is required",
+        title: "Cập nhật Công Thức Không Thành Công",
+        message: "Bạn phải chọn ít nhất 1 thể loại cho công thức",
         color: "red",
       });
       return;
@@ -211,14 +211,23 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
       foodCategoryIds: foodCategories,
     };
 
-    updateRecipeMutation.mutateAsync(data).then(() => {
-      router.push("/me/recipes");
-      notifications.show({
-        title: "Update Recipes",
-        color: "green",
-        message: "Update Successfully!",
+    updateRecipeMutation
+      .mutateAsync(data)
+      .then(() => {
+        router.push("/me/recipes");
+        notifications.show({
+          title: "Cập Nhật Công Thức",
+          color: "green",
+          message: "Cập nhật công thức thành công!",
+        });
+      })
+      .catch((error) => {
+        notifications.show({
+          title: "Cập Nhật Công Thức",
+          color: "red",
+          message: `Đã có lỗi xảy ra: ${error.response.data.message}`,
+        });
       });
-    });
   };
 
   useEffect(() => {
@@ -331,7 +340,9 @@ export default function EditRecipes({ params }: { params: { id: string } }) {
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
               />
-              <BlockNote content={content} setContent={setContent} />
+              <div className="px-[50px]">
+                <BlockNote content={content} setContent={setContent} />
+              </div>
             </div>
             {isRecipe && (
               <div className="mx-auto max-w-[1100px] px-10 pb-10">

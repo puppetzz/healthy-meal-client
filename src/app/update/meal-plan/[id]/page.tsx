@@ -281,8 +281,8 @@ export default function UpdateMealPlan({ params }: { params: { id: number } }) {
   const handleUpdate = () => {
     if (!title) {
       notifications.show({
-        title: "Failed to save draft",
-        message: "Content is required",
+        title: "Cập Nhật Kế Hoạch Không Thành Công",
+        message: "Bạn phải nhập tiêu đề cho kế hoạch",
         color: "red",
       });
       return;
@@ -292,9 +292,18 @@ export default function UpdateMealPlan({ params }: { params: { id: number } }) {
 
     if (!mealPlan?.data.id) {
       notifications.show({
-        title: "Meal Plan Error",
+        title: "Cập Nhật Kế Hoạch Không Thành Công",
         color: "red",
-        message: "Update Meal Plan Failed!",
+        message: "Cập Nhật Kế Hoạch Không Thành Công",
+      });
+      return;
+    }
+
+    if (recipes.length < Number(numberOfMeals)) {
+      notifications.show({
+        title: "Tạo Kế Hoạch Không Thành Công",
+        message: "Bạn phải chọn các bữa ăn cho kế hoạch",
+        color: "red",
       });
       return;
     }
