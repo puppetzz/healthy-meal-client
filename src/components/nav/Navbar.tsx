@@ -2,7 +2,7 @@
 
 import { UseAuth } from "@/context/AuthContext";
 import { Black_Ops_One } from "next/font/google";
-import { Button, Group, HoverCard, rem } from "@mantine/core";
+import { ActionIcon, Button, Group, HoverCard, rem } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { Menu } from "@mantine/core";
 import { Avatar } from "@mantine/core";
@@ -53,37 +53,37 @@ export const Navbar = () => {
           <div className="ml-5 flex">
             <ul className="flex">
               <li
-                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#ffa16c] hover:text-white"
+                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#FD7E14] hover:text-white"
                 onClick={() => router.push("/recipes")}
               >
                 Công Thức
               </li>
               <li
-                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#ffa16c] hover:text-white"
+                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#FD7E14] hover:text-white"
                 onClick={() => router.push("/meal-plans")}
               >
                 Kế Hoạch
               </li>
               <li
-                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#ffa16c] hover:text-white"
+                className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold hover:bg-[#FD7E14] hover:text-white"
                 onClick={() => router.push("/health-metrics")}
               >
                 TDEE
               </li>
               {!!user && (
-                <li className="group hover:bg-[#ffa16c] hover:text-white">
+                <li className="group hover:bg-[#FD7E14] hover:text-white">
                   <span className="flex h-10 w-32 cursor-pointer items-center justify-center text-lg font-semibold">
                     Của Tôi
                   </span>
-                  <div className="absolute hidden h-auto bg-[#ffa16c] group-hover:block">
-                    <ul className="top-0 w-48 bg-[#ffa16c]">
+                  <div className="absolute hidden h-auto bg-[#FD7E14] group-hover:block">
+                    <ul className="top-0 w-48 bg-[#FD7E14]">
                       <li onClick={() => router.push("/me/recipes")}>
-                        <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#ffa16c]">
+                        <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#FD7E14]">
                           Công Thức
                         </span>
                       </li>
                       <li onClick={() => router.push("/me/meal-plans")}>
-                        <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#ffa16c]">
+                        <span className="flex h-12 cursor-pointer items-center py-1 pl-8 text-lg font-bold text-white hover:bg-white hover:text-[#FD7E14]">
                           Kế Hoạch
                         </span>
                       </li>
@@ -112,14 +112,16 @@ export const Navbar = () => {
                     setSearchBoxValue(event.target.value);
                   }}
                 />
-                <div
-                  className="my-1 rounded-lg bg-[#ed8537] p-2"
+                <ActionIcon
+                  color="orange"
+                  radius="md"
+                  className="h-8 w-8"
                   onClick={() => {
                     router.push(`/search?q=${searchBoxValue}`);
                   }}
                 >
                   <MagnifyingGlassIcon className="h-5 w-5 text-white" />
-                </div>
+                </ActionIcon>
               </div>
             </div>
           ) : (

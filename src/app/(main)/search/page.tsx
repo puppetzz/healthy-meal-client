@@ -6,6 +6,7 @@ import { useCreateQueryString } from "../../../hooks/useCreateQueryString";
 import { useCallback, useMemo, useState } from "react";
 import { DEFAULT_PAGE_SIZE } from "../../../common/constants/general";
 import {
+  ActionIcon,
   Box,
   Button,
   Collapse,
@@ -27,6 +28,7 @@ import { VerticalCard } from "../../../components/cards/VerticalCard";
 import { Post } from "../../../common/types/post";
 import { destructFilterQueryString } from "../../../utils/destructFilterQueryString";
 import { Recipe } from "../../../common/types/recipes";
+import { IconAdjustmentsHorizontal, IconSearch } from "@tabler/icons-react";
 
 const filterOptionDefaultValues = {
   calories: [0, 2400] as [number, number],
@@ -147,6 +149,7 @@ export default function Search() {
     setSodiumFilterValue(filterOptionDefaultValues.sodium);
     setFiberFilterValue(filterOptionDefaultValues.fiber);
     setSugarFilterValue(filterOptionDefaultValues.sugar);
+    setCategoryFilterValue("");
   }, []);
 
   const handleClickSearchWithFilter = () => {
@@ -170,27 +173,39 @@ export default function Search() {
     <div>
       <div className="flex h-fit w-full flex-col items-center bg-[#f3f4f6] py-12">
         <h3 className="mb-4 text-2xl font-bold">Tìm Kiếm:</h3>
-        <div className="flex w-[550px] items-center rounded-lg bg-white shadow-lg">
-          <div
-            className="m-1 cursor-pointer rounded-lg border-[1px] p-3 shadow-sm"
+        <div className="flex w-[550px] rounded-xl bg-white p-2 shadow-md">
+          <ActionIcon
+            variant="white"
+            color="orange"
+            size="xl"
+            aria-label="Filter"
+            className="h-[52px] w-[52px] rounded-xl"
             onClick={toggleDrawer}
           >
-            <AdjustmentsHorizontalIcon className="h-6 w-6 text-[#ef8e66]" />
+            <IconAdjustmentsHorizontal
+              style={{ width: "70%", height: "70%" }}
+              stroke={1.5}
+            />
+          </ActionIcon>
+          <div className="mx-2 flex-1">
+            <Input
+              variant="unstyled"
+              size="lg"
+              placeholder="Bạn muốn nấu món gì gì?"
+              value={searchBoxValue}
+              onChange={(event) => handleSearchBoxChange(event.target.value)}
+            />
           </div>
-          <Input
-            placeholder="Bạn muốn nấu món gì?"
-            variant="unstyled"
-            size="lg"
-            value={searchBoxValue}
-            onChange={(event) => handleSearchBoxChange(event.target.value)}
-            className="flex-1"
-          />
-          <div
-            className="m-1 rounded-lg bg-[#ed8737] p-3 shadow-sm"
-            onClick={() => router.push(`/search?q=${searchBoxValue}`)}
+          <ActionIcon
+            variant="filled"
+            color="orange"
+            size="xl"
+            aria-label="Settings"
+            className="h-[52px] w-[52px] rounded-xl"
+            onClick={handleClickSearchWithFilter}
           >
-            <MagnifyingGlassIcon className="h-6 w-6 text-white" />
-          </div>
+            <IconSearch style={{ width: "70%", height: "70%" }} stroke={1.5} />
+          </ActionIcon>
         </div>
       </div>
       <div className="mx-auto mt-5 max-w-[1200px]">

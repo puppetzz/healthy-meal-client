@@ -1,25 +1,104 @@
 "use client";
 
 import Image from "next/image";
-import { Navbar } from "../components/nav/Navbar";
-import { ActionIcon, Input, Pill } from "@mantine/core";
+import { Navbar } from "@/components/nav/Navbar";
+import {
+  ActionIcon,
+  Button,
+  ComboboxData,
+  Drawer,
+  Input,
+  Pill,
+  RangeSlider,
+  Select,
+} from "@mantine/core";
 import {
   IconAdjustmentsHorizontal,
   IconChevronRight,
   IconSearch,
 } from "@tabler/icons-react";
-import { useLatestRecipeQuery } from "../queries/useLatestRecipe";
-import { useMemo } from "react";
-import { useRankingRecipesQuery } from "../queries/useRankingRecipes";
+import { useLatestRecipeQuery } from "@/queries/useLatestRecipe";
+import { useCallback, useMemo, useState } from "react";
+import { useRankingRecipesQuery } from "@/queries/useRankingRecipes";
 
 import "../styles/home.css";
-import { useRouter } from "next/navigation";
-import { Footer } from "../components/footer/footer";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Footer } from "@/components/footer/footer";
+import { useCreateQueryString } from "@/hooks/useCreateQueryString";
+import { useDisclosure } from "@mantine/hooks";
+import { useFoodCategoriesQuery } from "@/queries";
+
+const filterOptionDefaultValues = {
+  calories: [0, 2400] as [number, number],
+  protein: [0, 64] as [number, number],
+  fat: [0, 52] as [number, number],
+  Carbs: [0, 100] as [number, number],
+  sodium: [0, 1850] as [number, number],
+  fiber: [0, 42] as [number, number],
+  sugar: [0, 100] as [number, number],
+};
 
 export default function Home() {
   const router = useRouter();
   const { data: latestRecipe } = useLatestRecipeQuery();
   const { data: rankingRecipes } = useRankingRecipesQuery();
+
+  const searchParams = useSearchParams();
+  const createQueryString = useCreateQueryString();
+  const pathName = usePathname();
+
+  const [categoryFilterValue, setCategoryFilterValue] = useState<string>("");
+  const [caloriesFilterValue, setCaloriesFilterValue] = useState<
+    [number, number]
+  >(filterOptionDefaultValues.calories);
+  const [proteinFilterValue, setProteinFilterValue] = useState<
+    [number, number]
+  >(filterOptionDefaultValues.protein);
+  const [fatFilterValue, setFatFilterValue] = useState<[number, number]>(
+    filterOptionDefaultValues.fat,
+  );
+  const [CarbsFilterValue, setCarbsFilterValue] = useState<[number, number]>(
+    filterOptionDefaultValues.Carbs,
+  );
+  const [sodiumFilterValue, setSodiumFilterValue] = useState<[number, number]>(
+    filterOptionDefaultValues.sodium,
+  );
+  const [fiberFilterValue, setFiberFilterValue] = useState<[number, number]>(
+    filterOptionDefaultValues.fiber,
+  );
+  const [sugarFilterValue, setSugarFilterValue] = useState<[number, number]>(
+    filterOptionDefaultValues.sugar,
+  );
+
+  const [searchBoxValue, setSearchBoxValue] = useState<string>("");
+  const [openedDrawer, { toggle: toggleDrawer, close: closeDrawer }] =
+    useDisclosure(false);
+
+  const handelResetFilter = useCallback(() => {
+    setCaloriesFilterValue(filterOptionDefaultValues.calories);
+    setProteinFilterValue(filterOptionDefaultValues.protein);
+    setFatFilterValue(filterOptionDefaultValues.fat);
+    setCarbsFilterValue(filterOptionDefaultValues.Carbs);
+    setSodiumFilterValue(filterOptionDefaultValues.sodium);
+    setFiberFilterValue(filterOptionDefaultValues.fiber);
+    setSugarFilterValue(filterOptionDefaultValues.sugar);
+  }, []);
+
+  const handleClickSearchWithFilter = () => {
+    const queryString = createQueryString({
+      q: searchBoxValue,
+      categoryId: categoryFilterValue,
+      calories: `${caloriesFilterValue[0]}-${caloriesFilterValue[1]}`,
+      protein: `${proteinFilterValue[0]}-${proteinFilterValue[1]}`,
+      fat: `${fatFilterValue[0]}-${fatFilterValue[1]}`,
+      carbs: `${CarbsFilterValue[0]}-${CarbsFilterValue[1]}`,
+      sodium: `${sodiumFilterValue[0]}-${sodiumFilterValue[1]}`,
+      fiber: `${fiberFilterValue[0]}-${fiberFilterValue[1]}`,
+      sugar: `${sugarFilterValue[0]}-${sugarFilterValue[1]}`,
+    });
+    router.push("search" + "?" + queryString);
+    closeDrawer();
+  };
 
   const bannerRecipe = useMemo(() => {
     if (!latestRecipe) return;
@@ -37,6 +116,18 @@ export default function Home() {
       carbs: latestRecipe.data.nutrition.carbohydrates,
     };
   }, [latestRecipe]);
+
+  const { data: foodCategories } = useFoodCategoriesQuery();
+
+  const categorySelectBoxData = useMemo((): ComboboxData => {
+    if (foodCategories) {
+      return foodCategories.data.map((foodCategory) => ({
+        value: foodCategory.id.toString(),
+        label: foodCategory.name,
+      }));
+    }
+    return [];
+  }, [foodCategories]);
 
   return (
     <>
@@ -62,6 +153,7 @@ export default function Home() {
                   size="xl"
                   aria-label="Filter"
                   className="h-[52px] w-[52px] rounded-xl"
+                  onClick={toggleDrawer}
                 >
                   <IconAdjustmentsHorizontal
                     style={{ width: "70%", height: "70%" }}
@@ -73,6 +165,7 @@ export default function Home() {
                     variant="unstyled"
                     size="lg"
                     placeholder="Bạn muốn nấu món gì gì?"
+                    onChange={(event) => setSearchBoxValue(event.target.value)}
                   />
                 </div>
                 <ActionIcon
@@ -81,6 +174,7 @@ export default function Home() {
                   size="xl"
                   aria-label="Settings"
                   className="h-[52px] w-[52px] rounded-xl"
+                  onClick={handleClickSearchWithFilter}
                 >
                   <IconSearch
                     style={{ width: "70%", height: "70%" }}
@@ -110,7 +204,7 @@ export default function Home() {
                     ))}
                   </div>
                   <div className="h-fit">
-                    <h3 className="title mt-1 flex-1 text-xl font-semibold">
+                    <h3 className="title mt-1 max-h-14 w-full flex-1 overflow-hidden text-ellipsis text-xl font-semibold">
                       {bannerRecipe?.title}
                     </h3>
                   </div>
@@ -181,7 +275,7 @@ export default function Home() {
                 ))}
               </div>
               <div>
-                <h3 className="mt-2 text-2xl font-semibold">
+                <h3 className="mt-2 max-h-16 w-full overflow-hidden text-ellipsis text-2xl font-semibold">
                   {recipe.post.title}
                 </h3>
               </div>
@@ -221,6 +315,166 @@ export default function Home() {
           ))}
         </div>
       </div>
+
+      <Drawer
+        offset={8}
+        radius="md"
+        opened={openedDrawer}
+        onClose={closeDrawer}
+        title="Bộ Lọc"
+      >
+        <div>
+          <Select
+            label="Thể Loại"
+            data={categorySelectBoxData}
+            placeholder="Chọn Thể Loại"
+            value={categoryFilterValue}
+            onChange={(value) => {
+              if (value) {
+                setCategoryFilterValue(value);
+              }
+            }}
+          />
+        </div>
+        <div className="mt-5 flex flex-col">
+          <span>Calo</span>
+          <RangeSlider
+            value={caloriesFilterValue}
+            onChange={setCaloriesFilterValue}
+            color="orange"
+            min={filterOptionDefaultValues.calories[0]}
+            max={filterOptionDefaultValues.calories[1]}
+          />
+          <div className="mt-2 flex justify-between">
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {caloriesFilterValue[0]}
+            </span>
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {caloriesFilterValue[1]}
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 flex flex-col">
+          <span>Đạm</span>
+          <RangeSlider
+            value={proteinFilterValue}
+            onChange={setProteinFilterValue}
+            color="orange"
+            min={filterOptionDefaultValues.protein[0]}
+            max={filterOptionDefaultValues.protein[1]}
+          />
+          <div className="mt-2 flex justify-between">
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {proteinFilterValue[0]}
+            </span>
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {proteinFilterValue[1]}
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 flex flex-col">
+          <span>Chất béo</span>
+          <RangeSlider
+            value={fatFilterValue}
+            onChange={setFatFilterValue}
+            color="orange"
+            min={filterOptionDefaultValues.fat[0]}
+            max={filterOptionDefaultValues.fat[1]}
+          />
+          <div className="mt-2 flex justify-between">
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {fatFilterValue[0]}
+            </span>
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {fatFilterValue[1]}
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 flex flex-col">
+          <span>Carbs</span>
+          <RangeSlider
+            value={CarbsFilterValue}
+            onChange={setCarbsFilterValue}
+            color="orange"
+            min={filterOptionDefaultValues.Carbs[0]}
+            max={filterOptionDefaultValues.Carbs[1]}
+          />
+          <div className="mt-2 flex justify-between">
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {CarbsFilterValue[0]}
+            </span>
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {CarbsFilterValue[1]}
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 flex flex-col">
+          <span>Natri</span>
+          <RangeSlider
+            value={sodiumFilterValue}
+            onChange={setSodiumFilterValue}
+            color="orange"
+            min={filterOptionDefaultValues.sodium[0]}
+            max={filterOptionDefaultValues.sodium[1]}
+          />
+          <div className="mt-2 flex justify-between">
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {sodiumFilterValue[0]}
+            </span>
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {sodiumFilterValue[1]}
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 flex flex-col">
+          <span>Chất xơ</span>
+          <RangeSlider
+            value={fiberFilterValue}
+            onChange={setFiberFilterValue}
+            color="orange"
+            min={filterOptionDefaultValues.fiber[0]}
+            max={filterOptionDefaultValues.fiber[1]}
+          />
+          <div className="mt-2 flex justify-between">
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {fiberFilterValue[0]}
+            </span>
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {fiberFilterValue[1]}
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 flex flex-col">
+          <span>Đường</span>
+          <RangeSlider
+            value={sugarFilterValue}
+            onChange={setSugarFilterValue}
+            color="orange"
+            min={filterOptionDefaultValues.sugar[0]}
+            max={filterOptionDefaultValues.sugar[1]}
+          />
+          <div className="mt-2 flex justify-between">
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {sugarFilterValue[0]}
+            </span>
+            <span className="flex h-8 w-16 items-center justify-center rounded-lg bg-gray-200">
+              {sugarFilterValue[1]}
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 flex justify-between border-t-[1px] pt-3">
+          <Button
+            className="bg-gray-200 text-black"
+            onClick={handelResetFilter}
+          >
+            Đặt Lại
+          </Button>
+          <Button onClick={handleClickSearchWithFilter} color="orange">
+            Tìm Kiếm
+          </Button>
+        </div>
+      </Drawer>
+
       <Footer />
     </>
   );
