@@ -49,6 +49,9 @@ export function CommentForm({
               onChange={(event) => {
                 setIsCommentRating(event.target.checked);
                 form.setValues({ isReview: event.target.checked });
+
+                console.log();
+                if (!event.target.checked) form.setValues({ rating: 0 });
               }}
               key={form.key("isReview")}
               checked={form.getValues().isReview}
@@ -66,12 +69,13 @@ export function CommentForm({
                 onChange={(value) => {
                   form.setValues({ rating: value });
                 }}
+                value={form.getValues().rating}
               />
             </div>
           </>
         )}
 
-        <div className="flex justify-end">
+        <div className="mt-3 flex justify-end">
           <Button color="orange" type="submit">
             Đăng
           </Button>

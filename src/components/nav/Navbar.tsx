@@ -36,8 +36,6 @@ export const Navbar = () => {
     }
   }, [showSearchBox]);
 
-  console.log(user?.photoURL);
-
   return (
     <>
       <nav className="sticky top-0 z-[100] flex h-24 w-full items-center justify-between bg-white px-10">

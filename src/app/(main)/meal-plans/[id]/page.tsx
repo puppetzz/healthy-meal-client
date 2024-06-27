@@ -93,11 +93,15 @@ export default function MealPlanDetail({ params }: { params: { id: number } }) {
   const handleSubmitComment = (values: CommentInputField) => {
     const rating = values.isReview ? values.rating : undefined;
 
-    mealPlanComment.mutate({
-      mealPlanId: mealPlan?.data.id as number,
-      content: values.content,
-      rating,
-    });
+    mealPlanComment
+      .mutateAsync({
+        mealPlanId: mealPlan?.data.id as number,
+        content: values.content,
+        rating,
+      })
+      .then(() => {
+        setIsReplyComment(false);
+      });
   };
 
   return (

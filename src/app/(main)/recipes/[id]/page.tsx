@@ -3,12 +3,7 @@
 import "../../../../styles/recipe.css";
 import { Anchor, Breadcrumbs, Button, List, Pill, Rating } from "@mantine/core";
 import { useRecipeByIdQuery } from "../../../../queries/useRecipeById";
-import {
-  ClockIcon,
-  HeartIcon,
-  HomeIcon,
-  PrinterIcon,
-} from "@heroicons/react/24/solid";
+import { ClockIcon, HomeIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { ENutritionUnit } from "../../../../common/enums/NutritionUnit";
 import dayjs from "dayjs";
@@ -64,11 +59,15 @@ export default function RecipePage({ params }: { params: { id: string } }) {
   const handleSubmitComment = (values: CommentInputField) => {
     const rating = values.isReview ? values.rating : undefined;
 
-    postCommentMutation.mutate({
-      postId: recipe?.data.id as number,
-      content: values.content,
-      rating,
-    });
+    postCommentMutation
+      .mutateAsync({
+        postId: recipe?.data.id as number,
+        content: values.content,
+        rating,
+      })
+      .then(() => {
+        setIsReplyComment(false);
+      });
   };
 
   const isOwner = useMemo(() => {

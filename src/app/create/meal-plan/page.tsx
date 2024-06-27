@@ -277,8 +277,8 @@ export default function MealPlanCreation() {
   const handleCreate = (status: ECreateStatus) => {
     if (!title) {
       notifications.show({
-        title: "Failed to save draft",
-        message: "Content is required",
+        title: "Tạo Kế Hoạch Không Thành Công",
+        message: "Bạn Phải nhập Tiêu Đề Cho Kế Hoạch",
         color: "red",
       });
       return;
@@ -307,9 +307,16 @@ export default function MealPlanCreation() {
       .then(() => {
         router.push("/me/meal-plans");
         notifications.show({
-          title: "Create Meal Plan",
+          title: "Tạo Kế Hoạch",
           color: "green",
-          message: "Create Successfully!",
+          message: "Tạo Kế Hoạch Thành Công!",
+        });
+      })
+      .catch((error) => {
+        notifications.show({
+          title: "Đã Có Lỗi Xảy Ra",
+          color: "red",
+          message: error.response.data.message,
         });
       });
   };

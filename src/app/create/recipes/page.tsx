@@ -145,6 +145,39 @@ export default function CreatePost() {
         return;
       }
 
+      if (!nutrition.calories) {
+        notifications.show({
+          title: "Tạo Công Thức Không Thành Công",
+          message: "Bạn phải nhập lượng calo cho công thức",
+          color: "red",
+        });
+        return;
+      }
+      if (!nutrition.fat) {
+        notifications.show({
+          title: "Tạo Công Thức Không Thành Công",
+          message: "Bạn phải nhập lượng chất béo cho công thức",
+          color: "red",
+        });
+        return;
+      }
+      if (!nutrition.carbohydrates) {
+        notifications.show({
+          title: "Tạo Công Thức Không Thành Công",
+          message: "Bạn phải nhập lượng carbs cho công thức",
+          color: "red",
+        });
+        return;
+      }
+      if (!nutrition.protein) {
+        notifications.show({
+          title: "Tạo Công Thức Không Thành Công",
+          message: "Bạn phải nhập lượng protein cho công thức",
+          color: "red",
+        });
+        return;
+      }
+
       const ingredients: IngredientRequest[] = inputFields
         .filter((field) => field.name && field.amount && field.unit)
         .map((field) => ({
@@ -217,15 +250,24 @@ export default function CreatePost() {
         foodCategoryIds: foodCategories,
       };
 
-      createRecipeMutation.mutateAsync(data).then(() => {
-        router.push("/me/recipes");
-        notifications.show({
-          title: "Create Recipes",
-          color: "green",
-          message: "Create Successfully!",
+      createRecipeMutation
+        .mutateAsync(data)
+        .then(() => {
+          router.push("/me/recipes");
+          notifications.show({
+            title: "Tạo Công Thức",
+            color: "green",
+            message: "Tạo công thức thành công!",
+          });
+          localStorage.removeItem(POST_CONTENT_LOCAL_STORAGE_KEY);
+        })
+        .catch((error) => {
+          notifications.show({
+            title: "Đã Có Lỗi Xảy Ra",
+            color: "red",
+            message: error.response.data.message,
+          });
         });
-        localStorage.removeItem(POST_CONTENT_LOCAL_STORAGE_KEY);
-      });
     },
     [
       files,
@@ -287,7 +329,9 @@ export default function CreatePost() {
                 placeholder="Nhập Tiêu Đề"
                 onChange={(e) => setTitle(e.target.value)}
               />
-              <BlockNote />
+              <div className="px-[50px]">
+                <BlockNote />
+              </div>
             </div>
             <div className="mx-auto max-w-[1100px] px-10 pb-10">
               <div className="mb-5">

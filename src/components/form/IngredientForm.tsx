@@ -31,6 +31,15 @@ export function IngredientForm({
     const name: keyof IngredientInputField = event.target
       .name as keyof IngredientInputField;
 
+    if (
+      name === "amount" &&
+      event.target.value !== "" &&
+      isNaN(Number(event.target.value))
+    )
+      return;
+
+    console.log(isNaN(parseInt(event.target.value)));
+
     data[index][name] = event.target.value;
 
     setInputFields(data);

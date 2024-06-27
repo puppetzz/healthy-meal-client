@@ -74,11 +74,16 @@ export function MealPlanCommentBlock({
 
           <CommentForm
             onSubmit={(values) => {
-              mealPlanCommentMutation.mutate({
-                mealPlanId: comment.mealPlanId,
-                parentId: comment.id,
-                content: values.content,
-              });
+              mealPlanCommentMutation
+                .mutateAsync({
+                  mealPlanId: comment.mealPlanId,
+                  parentId: comment.id,
+                  content: values.content,
+                })
+                .then(() => {
+                  setIsReply(false);
+                  setIsReplyComment && setIsReplyComment(false);
+                });
             }}
           />
         </div>

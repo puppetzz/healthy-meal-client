@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useFoodCategoriesQuery, useRecipeQuery } from "../../../queries";
 import { useCreateQueryString } from "../../../hooks/useCreateQueryString";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { DEFAULT_PAGE_SIZE } from "../../../common/constants/general";
 import {
   ActionIcon,
@@ -80,7 +80,7 @@ export default function Search() {
     search: searchParams.get("q") || "",
     page,
     pageSize: DEFAULT_PAGE_SIZE,
-    categoryId: Number(searchParams.get("categoryId")) || 1,
+    categoryId: Number(searchParams.get("categoryId")),
     calories: destructFilterQueryString(searchParams.get("calories")),
     protein: destructFilterQueryString(searchParams.get("protein")),
     fat: destructFilterQueryString(searchParams.get("fat")),
@@ -133,10 +133,16 @@ export default function Search() {
 
   const categorySelectBoxData = useMemo((): ComboboxData => {
     if (foodCategories) {
-      return foodCategories.data.map((foodCategory) => ({
+      const data = foodCategories.data.map((foodCategory) => ({
         value: foodCategory.id.toString(),
         label: foodCategory.name,
       }));
+      data.push({
+        value: "",
+        label: "",
+      });
+
+      return data;
     }
     return [];
   }, [foodCategories]);
@@ -168,6 +174,22 @@ export default function Search() {
     router.push(pathName + "?" + queryString);
     closeDrawer();
   };
+
+  const handleClickCategory = async (id: number) => {
+    setCategoryFilterValue((prev) => {
+      if (!prev) return id.toString();
+
+      if (Number(prev) === id) return "";
+
+      return id.toString();
+    });
+  };
+
+  useEffect(() => {
+    if (!openedDrawer) {
+      handleClickSearchWithFilter();
+    }
+  }, [categoryFilterValue]);
 
   return (
     <div>
@@ -221,8 +243,12 @@ export default function Search() {
             </div>
             <Collapse in={opened}>
               <div className="mt-2 flex flex-wrap items-center justify-center gap-6">
-                {foodCategories?.data.map((category) => (
-                  <div className="flex cursor-pointer flex-col items-center gap-1 rounded-xl border-[1px] border-white px-7 py-4 font-semibold hover:border-[#e5e7eb] hover:shadow-sm">
+                {foodCategories?.data.map((category, index) => (
+                  <div
+                    key={index}
+                    className="flex cursor-pointer flex-col items-center gap-1 rounded-xl border-[1px] border-white px-7 py-4 font-semibold hover:border-[#e5e7eb] hover:shadow-sm"
+                    onClick={() => handleClickCategory(category.id)}
+                  >
                     <img src={category.icon} alt="" className="h-20 w-20" />
                     <span className="flex min-w-[80px]  justify-center text-sm">
                       {category.name}

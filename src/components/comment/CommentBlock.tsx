@@ -75,11 +75,16 @@ export function CommentBlock({
 
           <CommentForm
             onSubmit={(values) => {
-              postCommentMutation.mutate({
-                postId: comment.postId,
-                parentId: comment.id,
-                content: values.content,
-              });
+              postCommentMutation
+                .mutateAsync({
+                  postId: comment.postId,
+                  parentId: comment.id,
+                  content: values.content,
+                })
+                .then(() => {
+                  setIsReply(false);
+                  setIsReplyComment && setIsReplyComment(false);
+                });
             }}
             isReply={true}
           />
