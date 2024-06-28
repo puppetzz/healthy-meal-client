@@ -10,10 +10,7 @@ type CommentFormProps = {
   isReply?: boolean;
 };
 
-export function CommentForm({
-  onSubmit: handleSubmit,
-  isReply = false,
-}: CommentFormProps) {
+export function CommentForm({ onSubmit, isReply = false }: CommentFormProps) {
   const [isCommentRating, setIsCommentRating] = useState(false);
 
   const form = useForm({
@@ -25,10 +22,18 @@ export function CommentForm({
     },
   });
 
+  const handleSummit = (values: CommentInputField) => {
+    onSubmit(values);
+
+    form.reset();
+
+    setIsCommentRating(false);
+  };
+
   return (
     <div className="rounded-xl bg-[#f9fafb] p-4">
       <span className="text-lg font-semibold">Để lại bình luận của bạn</span>
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <form onSubmit={form.onSubmit(handleSummit)}>
         <div className="mt-4">
           <Textarea
             resize="vertical"
@@ -50,7 +55,6 @@ export function CommentForm({
                 setIsCommentRating(event.target.checked);
                 form.setValues({ isReview: event.target.checked });
 
-                console.log();
                 if (!event.target.checked) form.setValues({ rating: 0 });
               }}
               key={form.key("isReview")}

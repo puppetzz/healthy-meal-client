@@ -18,7 +18,10 @@ export const usePostCommentMutation = () => {
     },
     onSuccess: () => {
       queryClient.refetchQueries({
-        queryKey: [QueryKey.GET_COMMENTS_BY_POST_ID],
+        queryKey: [QueryKey.GET_COMMENTS_BY_POST_ID, QueryKey.GET_RECIPE_BY_ID],
+      });
+      queryClient.refetchQueries({
+        queryKey: [QueryKey.GET_RECIPE_BY_ID],
       });
     },
   });

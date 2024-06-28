@@ -21,6 +21,9 @@ export const useMealPlanCommentMutation = () => {
       queryClient.refetchQueries({
         queryKey: [QueryKey.GET_MEAL_PLAN_COMMENTS],
       });
+      queryClient.refetchQueries({
+        queryKey: [QueryKey.GET_MEAL_PLAN_BY_ID],
+      });
     },
   });
 };
