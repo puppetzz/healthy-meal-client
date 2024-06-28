@@ -197,7 +197,7 @@ export default function Home() {
                 onClick={() => router.push(`/recipes/${bannerRecipe?.id}`)}
               >
                 <div className="flex h-full w-full flex-col px-5 py-3">
-                  <div className="flex flex-wrap gap-2 ">
+                  <div className="flex max-h-[30px] flex-wrap gap-2 overflow-hidden">
                     {bannerRecipe?.categories.map((category) => (
                       <Pill className="w-fit" size="md">
                         {category}
