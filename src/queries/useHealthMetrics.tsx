@@ -1,11 +1,11 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { QueryKey } from "../common/constants/queryKey";
 import { getHealthMetrics } from "../api/health-metrics";
 
 export const useHealthMetricsQuery = (tdee: number) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: [QueryKey.GET_HEALTH_METRICS, tdee],
     queryFn: async () => {
       const healthMetrics = await getHealthMetrics();

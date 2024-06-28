@@ -3,7 +3,10 @@
 import { EActivityLevel } from "../../../common/enums/ActivityLevel";
 import { EGender } from "../../../common/enums/Gender";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { THealthMetricTDEEResponse } from "../../../common/types/response/health-metric-tdee";
+import {
+  THealthMetricTDEEResponse,
+  TMacronutrientsForGoals,
+} from "../../../common/types/response/health-metric-tdee";
 import { HealthMetricsForm } from "../../../components/form/HealthMetricsForm";
 import { useForm } from "@mantine/form";
 import { Button, NumberInput, Select, Table, TableData } from "@mantine/core";
@@ -12,6 +15,7 @@ import { TDEECalculatorRequest } from "../../../common/types/request/health-metr
 import { numberWithCommas } from "../../../utils/numberCommasFormat";
 import { getBMIStatus } from "../../../utils/getBMIStatus";
 import { Macronutrients } from "../../../components/macronutrients/macronutrients";
+import { useHealthMetricsQuery } from "../../../queries";
 
 type FormValues = {
   gender: EGender;
@@ -22,10 +26,12 @@ type FormValues = {
 };
 
 export default function HealthMetrics() {
-  const [healthMetricsResponse, setHealthMetricsResponse] =
-    useState<THealthMetricTDEEResponse | null>(null);
-
   const calculateTDEEMutation = useCalculateTDEEMutation();
+  const userHealthMetrics = useHealthMetricsQuery(1);
+
+  const [healthMetricsResponse, setHealthMetricsResponse] = useState<
+    THealthMetricTDEEResponse | null | undefined
+  >(userHealthMetrics.data?.data);
 
   const form = useForm<FormValues>({
     initialValues: {
@@ -127,6 +133,10 @@ export default function HealthMetrics() {
     };
   }, [healthMetricsResponse]);
 
+  useEffect(() => {
+    setHealthMetricsResponse(userHealthMetrics.data?.data);
+  }, [userHealthMetrics.data]);
+
   return (
     <>
       {!healthMetricsResponse ? (
@@ -156,7 +166,7 @@ export default function HealthMetrics() {
                       label: "Nữ",
                     },
                   ]}
-                  defaultValue={healthMetricsResponse.gender}
+                  defaultValue={healthMetricsResponse?.gender}
                   key={form.key("gender")}
                   {...form.getInputProps("gender")}
                 />
@@ -164,7 +174,7 @@ export default function HealthMetrics() {
                   className="mr-2 w-[70px]"
                   key={form.key("age")}
                   {...form.getInputProps("age")}
-                  defaultValue={healthMetricsResponse.age}
+                  defaultValue={healthMetricsResponse?.age}
                 />
                 <span className="pr-2">Tuổi,</span>
 
@@ -173,14 +183,14 @@ export default function HealthMetrics() {
                   className="mr-1 w-20"
                   key={form.key("height")}
                   {...form.getInputProps("height")}
-                  defaultValue={healthMetricsResponse.height}
+                  defaultValue={healthMetricsResponse?.height}
                 />
                 <span className="mr-2">cm và nặng</span>
                 <NumberInput
                   className="mr-1 w-20"
                   key={form.key("weight")}
                   {...form.getInputProps("weight")}
-                  defaultValue={healthMetricsResponse.weight}
+                  defaultValue={healthMetricsResponse?.weight}
                 />
                 <span className="mr-2">kg, với</span>
                 <Select
@@ -209,7 +219,7 @@ export default function HealthMetrics() {
                   ]}
                   key={form.key("activityLevel")}
                   {...form.getInputProps("activityLevel")}
-                  defaultValue={healthMetricsResponse.activityLevel}
+                  defaultValue={healthMetricsResponse?.activityLevel}
                 />
                 <Button type="submit" color="orange">
                   <span>Tính toán lại</span>
@@ -223,13 +233,13 @@ export default function HealthMetrics() {
               <div className="flex w-60 flex-col items-center rounded-xl bg-gray-200">
                 <div className="flex flex-col items-center border-b-[1px] border-black py-9">
                   <span className="text-4xl font-bold">
-                    {numberWithCommas(healthMetricsResponse.tdee)}
+                    {numberWithCommas(healthMetricsResponse?.tdee || 0)}
                   </span>
                   <span>calories một ngày</span>
                 </div>
                 <div className="flex flex-col items-center py-9">
                   <span className="text-4xl font-bold">
-                    {numberWithCommas(healthMetricsResponse.tdee * 7)}
+                    {numberWithCommas(healthMetricsResponse?.tdee || 0 * 7)}
                   </span>
                   <span>calories một tuần</span>
                 </div>
@@ -239,7 +249,9 @@ export default function HealthMetrics() {
               <p className="mb-5">
                 Dựa vào số liệu trên, ước tính tốt nhất về lượng calo duy trì
                 của bạn là{" "}
-                <strong>{numberWithCommas(healthMetricsResponse.tdee)}</strong>{" "}
+                <strong>
+                  {numberWithCommas(healthMetricsResponse?.tdee || 0)}
+                </strong>{" "}
                 calo mỗi ngày dựa trên công thức Katch-McArdle. Bảng dưới đây
                 cho thấy sự khác biệt nếu bạn chọn các cấp độ hoạt động khác
                 nhau:
@@ -267,11 +279,11 @@ export default function HealthMetrics() {
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="mb-2 text-lg font-semibold">{`Chỉ số BMI: ${healthMetricsResponse.bmi}`}</span>
+              <span className="mb-2 text-lg font-semibold">{`Chỉ số BMI: ${healthMetricsResponse?.bmi}`}</span>
               <p>
-                Chỉ số BMI của bạn là {healthMetricsResponse.bmi}, với chỉ số
+                Chỉ số BMI của bạn là {healthMetricsResponse?.bmi}, với chỉ số
                 này cho thấy bạn{" "}
-                <strong>{getBMIStatus(healthMetricsResponse.bmi)}</strong>
+                <strong>{getBMIStatus(healthMetricsResponse?.bmi || 0)}</strong>
               </p>
               <div className="mt-auto border-t-[1px]">
                 <Table data={bmiTableData} />
@@ -287,8 +299,10 @@ export default function HealthMetrics() {
             </div>
             <div>
               <Macronutrients
-                tdee={healthMetricsResponse.tdee}
-                macronutrients={healthMetricsResponse.macronutrients}
+                tdee={healthMetricsResponse?.tdee || 0}
+                macronutrients={
+                  healthMetricsResponse?.macronutrients as TMacronutrientsForGoals
+                }
               />
             </div>
           </div>
