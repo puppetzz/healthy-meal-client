@@ -96,7 +96,8 @@ export default function Home() {
       fiber: `${fiberFilterValue[0]}-${fiberFilterValue[1]}`,
       sugar: `${sugarFilterValue[0]}-${sugarFilterValue[1]}`,
     });
-    router.push("search" + "?" + queryString);
+
+    router.push("/search" + "?" + queryString);
     closeDrawer();
   };
 

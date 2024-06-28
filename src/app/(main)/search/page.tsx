@@ -46,12 +46,16 @@ export default function Search() {
   const createQueryString = useCreateQueryString();
   const pathName = usePathname();
 
-  const [searchBoxValue, setSearchBoxValue] = useState<string>("");
+  const [searchBoxValue, setSearchBoxValue] = useState<string>(
+    searchParams.get("q") || "",
+  );
   const [opened, { toggle }] = useDisclosure(false);
   const [openedDrawer, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
 
-  const [categoryFilterValue, setCategoryFilterValue] = useState<string>("");
+  const [categoryFilterValue, setCategoryFilterValue] = useState<string>(
+    searchParams.get("categoryId") || "",
+  );
   const [caloriesFilterValue, setCaloriesFilterValue] = useState<
     [number, number]
   >(filterOptionDefaultValues.calories);
