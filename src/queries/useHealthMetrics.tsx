@@ -5,7 +5,7 @@ import { QueryKey } from "../common/constants/queryKey";
 import { getHealthMetrics } from "../api/health-metrics";
 
 export const useHealthMetricsQuery = (tdee: number) => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [QueryKey.GET_HEALTH_METRICS, tdee],
     queryFn: async () => {
       const healthMetrics = await getHealthMetrics();
